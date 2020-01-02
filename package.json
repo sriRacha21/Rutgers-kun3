@@ -1,0 +1,29 @@
+{
+  "name": "rutgers-kun3",
+  "version": "1.0.0",
+  "description": "A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports discord server.",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sriRacha21/Rutgers-kun3.git"
+  },
+  "keywords": [
+    "Discord",
+    "Rutgers",
+    "bot"
+  ],
+  "author": "Arjun Srivastav",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sriRacha21/Rutgers-kun3/issues"
+  },
+  "homepage": "https://github.com/sriRacha21/Rutgers-kun3#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "discord.js-commando": "^0.10.0",
+    "sqlite": "^3.0.3"
+  }
+}
