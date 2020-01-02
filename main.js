@@ -19,7 +19,7 @@ const Client = new Commando.Client(ClientOptions)
 Client.on('error', console.error)
 Client.on('warn', console.warn)
 Client.on('debug', console.debug)
-Client.on('disconnect', consolw.warn('Websocket disconnected!'))
+Client.on('disconnect', console.warn('Websocket disconnected!'))
 Client.on('reconnecting', console.)
 // emitted when bot starts
 Client.on('ready', () => {
