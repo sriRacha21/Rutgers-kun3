@@ -19,8 +19,8 @@ const Client = new Commando.Client(ClientOptions)
 Client.on('error', console.error)
 Client.on('warn', console.warn)
 Client.on('debug', console.debug)
-Client.on('disconnect', console.warn('Websocket disconnected!'))
-Client.on('reconnecting', console.)
+Client.on('disconnect', () => console.warn('Websocket disconnected!'))
+Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
 // emitted when bot starts
 Client.on('ready', () => {
     let outStr = "I'm alive! and running on " + __dirname
@@ -39,6 +39,9 @@ Client.setProvider(
 )
 // set up client's command registry
 Client.registry
+    .registerGroups([
+        ['fun', 'Fun']
+    ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname,'commands'))
 // log in
