@@ -8,8 +8,8 @@ module.exports = class LoveCommand extends Commando.Command {
             group: 'fun',
             memberName: 'love',
             description: 'Find out how much one person loves another! :heart:',
-            details: `Supply two string arguments to get a percentage of how much one argument loves another! Calculations 
-are performed without regard to case or order.`,
+            details: oneLine`Supply two string arguments to get a percentage of how much one argument loves another! Calculations 
+                    are performed without regard to case or order.`,
             examples: ['love person one, person two'],
             args: [
                 {
@@ -31,7 +31,7 @@ are performed without regard to case or order.`,
 
     async run( msg, args ) {
         // let percent be 100 if the strings match or they pass easterEgg compare, otherwise calculate
-        let percent = args.one.localeCompare(args.two) == 0 || this.easterEggStrCompare(args.one, args.two)
+        const percent = args.one.localeCompare(args.two) == 0 || this.easterEggStrCompare(args.one, args.two)
             ? 100
             : this.loveCalculation(
                 this.calcValFromStr(args.one), this.calcValFromStr(args.two)
@@ -55,7 +55,7 @@ are performed without regard to case or order.`,
 
     // writing the progress bar to a message
     generateProgressBar( percent ) {
-        let numHashes = percent/5;
+        const numHashes = percent/5;
         let probar = `[`;
 
         for( let i = 0; i < 20; i++ ) {
@@ -71,9 +71,9 @@ are performed without regard to case or order.`,
 
     // easter egg string compare
     easterEggStrCompare( strOne, strTwo ) {
-        let orderingOne = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kathryn malin');
+        const orderingOne = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kate malin' || strTwo == 'kathryn malin');
         strTwo = [strOne, strOne = strTwo][0];
-        let orderingTwo = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kathryn malin');
+        const orderingTwo = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kate malin' || strTwo == 'kathryn malin');
         return orderingOne || orderingTwo;
     }
 }

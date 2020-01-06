@@ -25,6 +25,7 @@
     "discord.js": "^11.5.1",
     "discord.js-commando": "^0.10.0",
     "oneline": "^1.0.3",
+    "parse-git-config": "^3.0.0",
     "sqlite": "^3.0.3"
   }
 }

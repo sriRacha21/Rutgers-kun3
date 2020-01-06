@@ -5,11 +5,11 @@ const sqlite = require('sqlite')
 const path = require('path')
 // prepare to read in data from JSON files
 const fs = require('fs')
-const default_encoding = 'utf-8'
+const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
 // read in data from JSON file containing default settings for the bot (ClientOptions object)
-const ClientOptions = JSON.parse(fs.readFileSync('default_settings.json', default_encoding))
+const ClientOptions = JSON.parse(fs.readFileSync('bot_settings.json', defaults.encoding))
 // read in data from JSON file containing API keys
-const API_Keys = JSON.parse(fs.readFileSync('api_keys.json', default_encoding))
+const API_Keys = JSON.parse(fs.readFileSync('api_keys.json', defaults.encoding))
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
@@ -40,7 +40,8 @@ Client.setProvider(
 // set up client's command registry
 Client.registry
     .registerGroups([
-        ['fun', 'Fun']
+        ['fun', 'Fun'],
+        ['information', 'Info']
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname,'commands'))

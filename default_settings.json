@@ -1,8 +1,5 @@
-{  
-    "disableEveryone": true,
-    "commandPrefix": "!",
-    "commandEditableDuration": 10,
-    "nonCommandEditable": true,
-    "owner": "87525135241728000",
-    "invite": "https://discord.gg/rutgersesports"
+{
+    "path": "/root/Rutgers-kun3",
+    "richembed_color": "0xFF0000",
+    "encoding": "utf-8"
 }
