@@ -10,7 +10,7 @@ module.exports = class LoveCommand extends Commando.Command {
             description: 'Find out how much one person loves another! :heart:',
             details: oneLine`Supply two string arguments to get a percentage of how much one argument loves another! Calculations 
                     are performed without regard to case or order.`,
-            examples: ['love person one, person two'],
+            examples: [`love elijah matt`, `love 'person one' 'person two'`],
             args: [
                 {
                     key: 'one',
@@ -35,7 +35,7 @@ module.exports = class LoveCommand extends Commando.Command {
             ? 100
             : this.loveCalculation(
                 this.calcValFromStr(args.one), this.calcValFromStr(args.two)
-            );
+            )
 
         // form calculation string
         return msg.channel.send( oneLine`${args.one} loves ${args.two}
@@ -46,34 +46,29 @@ module.exports = class LoveCommand extends Commando.Command {
     calcValFromStr( str ) {
         let total = 0
         for( let i = 0; i < str.length; i++ )
-            total += str.charCodeAt(i);
-        return total;
+            total += str.charCodeAt(i)
+        return total
     }
 
     // get a percent from two integers
-    loveCalculation( intOne, intTwo ) { return (intOne+intTwo)%100 };
+    loveCalculation( intOne, intTwo ) { return (intOne+intTwo)%100 }
 
     // writing the progress bar to a message
     generateProgressBar( percent ) {
-        const numHashes = percent/5;
-        let probar = `[`;
+        const numHashes = percent/5
+        let probar = `[`
 
-        for( let i = 0; i < 20; i++ ) {
-            if( i < numHashes )
-                probar += '#';
-            else
-                probar += ' ';
-        }
-        probar += ']';
+        for( let i = 0; i < 20; i++ ) probar += i < numHashes ? '#' : ' '
+        probar += ']'
 
-        return '`' + probar + '`';
+        return '`' + probar + '`'
     }
 
     // easter egg string compare
     easterEggStrCompare( strOne, strTwo ) {
-        const orderingOne = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kate malin' || strTwo == 'kathryn malin');
-        strTwo = [strOne, strOne = strTwo][0];
-        const orderingTwo = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kate malin' || strTwo == 'kathryn malin');
-        return orderingOne || orderingTwo;
+        const orderingOne = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kate malin' || strTwo == 'kathryn malin')
+        strTwo = [strOne, strOne = strTwo][0]
+        const orderingTwo = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kate malin' || strTwo == 'kathryn malin')
+        return orderingOne || orderingTwo
     }
 }

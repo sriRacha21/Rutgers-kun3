@@ -10,6 +10,8 @@ const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
 const ClientOptions = JSON.parse(fs.readFileSync('bot_settings.json', defaults.encoding))
 // read in data from JSON file containing API keys
 const API_Keys = JSON.parse(fs.readFileSync('api_keys.json', defaults.encoding))
+// get method for setting up command fields asynchronously
+const { setCommandFields } = require('./helpers/setCommandFields')
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
@@ -23,9 +25,15 @@ Client.on('disconnect', () => console.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
 // emitted when bot starts
 Client.on('ready', () => {
-    let outStr = "I'm alive! and running on " + __dirname
-    console.log(outStr)
-    Client.guilds.first().channels.first().send( outStr )
+    
+})
+Client.on('message', () => {
+    console.log( 'oneOf: ' + Client.registry.commands
+    .filter(command => command.name == 'woof' )
+    .first()
+    .argsCollector
+    .args[0]
+    .oneOf )
 })
 
 /*  CLEAN UP    */
@@ -45,5 +53,7 @@ Client.registry
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname,'commands'))
+// set some command fields asynchronously
+setCommandFields(Client.registry)
 // log in
 Client.login(API_Keys.token)

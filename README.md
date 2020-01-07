@@ -13,9 +13,9 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [x] help (done by default with commando)
 - [x] role (skipping in favor of role reactions from yagpdb)
 - [x] ping (done by default with commando)
-- [ ] 8ball 
+- [x] 8ball 
 - [x] love
-- [ ] roll
+- [x] roll
 - [ ] woof
 - [ ] meow
 - [x] execute (skipping in favor of built-in eval for now)
