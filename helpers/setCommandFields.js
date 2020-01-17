@@ -13,7 +13,7 @@ async function setCommandFields(registry) {
     const breeds = (await requestBreeds()).map( str => str.toLowerCase() )
 
     woofCommand.details += breeds.join(', ')
-    firstWoofArg.oneOf.push( breeds )
+    // firstWoofArg.oneOf.push( breeds )
 }
 
 exports.setCommandFields = setCommandFields;

@@ -5,7 +5,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 ### What do I do?
 Right now the bot only has a few fun commands and a "who am I" command but it is being worked on constantly to replace the old bot. It is intended to be a complete replacement for the old bot so it will end up of having many of the features of the old one.
 
-### How to use
+### How to Use
 [Click me to add me to your server!](https://discordapp.com/api/oauth2/authorize?client_id=662131823278817280&permissions=0&scope=bot)
 
 ## TODO List
@@ -16,8 +16,8 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [x] 8ball 
 - [x] love
 - [x] roll
-- [ ] woof
-- [ ] meow
+- [x] woof
+- [x] meow
 - [x] execute (skipping in favor of built-in eval for now)
 - [ ] play (soundboard commands in general)
 - [ ] leave

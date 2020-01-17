@@ -27,13 +27,9 @@ Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
 Client.on('ready', () => {
     
 })
+// emmitted on message send
 Client.on('message', () => {
-    console.log( 'oneOf: ' + Client.registry.commands
-    .filter(command => command.name == 'woof' )
-    .first()
-    .argsCollector
-    .args[0]
-    .oneOf )
+
 })
 
 /*  CLEAN UP    */
