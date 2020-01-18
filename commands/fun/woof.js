@@ -11,27 +11,18 @@ module.exports = class WoofCommand extends Commando.Command {
             memberName: 'woof',
             description: 'Cute dog.',
             details: 'Output a picture of a cute dog chosen at random. Available breeds are: ',
+            examples: [
+                'woof',
+                'bark',
+                'woof shiba',
+                'woof german shepherd'
+            ],
             args: [
                 {
                     key: 'breed',
                     type: 'string',
                     default: 'any',
                     prompt: 'Enter a dog breed.',
-                    oneOf: [
-                        "Corgi",
-                        "Shiba",
-                        "Golden Retriever",
-                        "Pitbull",
-                        "Husky",
-                        "Samoyed",
-                        "Beagle",
-                        "Cocker Spaniel",
-                        "German Shepherd",
-                        "Greyhound",
-                        "Pomeranian",
-                        "Dachshund",
-                        "Boxer"
-                    ].map( str => str.toLowerCase() )
                 }
             ],
             argsPromptLimit: 1,

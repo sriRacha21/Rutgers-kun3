@@ -19,7 +19,7 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [x] woof
 - [x] meow
 - [x] execute (skipping in favor of built-in eval for now)
-- [ ] play (soundboard commands in general)
+- [ ] play (soundboard commands in general) - working on this
 - [ ] leave
 - [ ] command
 - [ ] addemote
