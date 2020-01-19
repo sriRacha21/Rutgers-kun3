@@ -1,9 +1,11 @@
-const exec = require('child_process').execSync
 const { requestBreeds } = require('./requestBreeds')
+const { getSoundsArr } = require('./sounds')
+const { getCommandByName } = require('./registryUtility')
 
 async function setCommandFields(registry) {
     setWoofCommandFields(registry)
     setPlayCommandFields(registry)
+    setAddSoundCommandFields(registry)
 }
 
 async function setWoofCommandFields(registry) {
@@ -16,44 +18,38 @@ async function setWoofCommandFields(registry) {
 
     const breeds = (await requestBreeds()).map( str => str.toLowerCase() )
 
-    woofCommand.details += `${breeds.join(', ')}. Choosing a breed is optional.`
+    woofCommand.details = `Output a picture of a cute dog chosen at random. Available breeds are: ${breeds.join(', ')}. Choosing a breed is optional.`
     firstWoofArg.oneOf = breeds
 }
 
 async function setPlayCommandFields(registry) {
     /*  Set play command details and prompt */
     const playCommand = getCommandByName(registry, 'play')
-    const command = 'ls sounds'
-    
-    const soundsArr = exec(command)
-    .toString()
-    .split('\n')
 
-    const availSounds = `\n\`\`\`${
-        exec(command)
-        .toString()
-    }\`\`\``
-
+    // manipulate details of play command
     playCommand
-    .details += availSounds
+    .details = `Available sounds:${getSoundsArr(true)}`
 
+    // manipulate fields of first arg of play command
     const firstPlayArg = playCommand
     .argsCollector
     .args[0]
 
     firstPlayArg
-    .prompt += availSounds
+    .prompt = `Enter the name of a sound file. Available sounds are:'${getSoundsArr(true)}`
 
     firstPlayArg
-    .oneOf = soundsArr
+    .oneOf = getSoundsArr()
 }
 
-function getCommandByName(registry, name) {
-    const command = registry.commands
-    .filter(command => command.name == name)
-    .first()
+async function setAddSoundCommandFields(registry) {
+    /*  Set addsound command details    */
+    const addSoundCommand = getCommandByName(registry, 'addsound')
 
-    return command
+    addSoundCommand.details = `Sounds so far are:${getSoundsArr(true)}`
 }
 
 exports.setCommandFields = setCommandFields
+exports.setWoofCommandFields = setWoofCommandFields
+exports.setPlayCommandFields = setPlayCommandFields
+exports.setAddSoundCommandFields = setAddSoundCommandFields

@@ -8,7 +8,7 @@ module.exports = class EightBallCommand extends Commando.Command {
             aliases: ['eightball'],
             group: 'fun',
             memberName: '8ball',
-            description: 'Ask the mysterious eight ball yes or no questions,',
+            description: 'Ask the mysterious eight-ball yes or no questions.',
             examples: [`8ball 'Will I pass Calc 2?'`],
             args: [
                 {

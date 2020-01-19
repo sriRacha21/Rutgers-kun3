@@ -10,7 +10,6 @@ module.exports = class WoofCommand extends Commando.Command {
             group: 'fun',
             memberName: 'woof',
             description: 'Cute dog.',
-            details: 'Output a picture of a cute dog chosen at random. Available breeds are: ',
             examples: [
                 'woof',
                 'bark',

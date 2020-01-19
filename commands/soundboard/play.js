@@ -1,20 +1,24 @@
 const Commando = require('discord.js-commando')
+const path = require('path')
+const fs = require('fs')
+const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
 
 module.exports = class PlayCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'play',
-            group: 'fun',
+            group: 'soundboard',
             memberName: 'play',
             description: "Play a sound from the bot's soundboard.",
-            details: 'Available sounds: ',
             args: [
                 {
                     key: 'filename',
                     type: 'string',
-                    prompt: 'Enter the name of a sound file. Available sounds are:',
+                    prompt: '',
+                    parse: str => `${str.toLowerCase()}.mp3`
                 }
-            ]
+            ],
+            argsPromptlimit: 1,
         })
     }
 
@@ -25,12 +29,14 @@ module.exports = class PlayCommand extends Commando.Command {
         // Check if user is in voice channel, if not reply
         if( !msg.member.voiceChannel )
             return msg.reply( 'You must join a voice channel first.' )
-        
+    
         // otherwise join the voice channel and play a file
         msg.member.voiceChannel.join()
         .then( connection => {
-            connection.playFile('sounds/doriyah.mp3')
+            msg.react( '👏' )
+            console.log( path.join( defaults.path, 'sounds', args.filename ))
+            connection.playFile(path.join(defaults.path, 'sounds', args.filename))
         })
-        .catch( console.log )
+        .catch( console.error )
     }
 }

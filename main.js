@@ -1,7 +1,7 @@
 /*  IMPORTS AND GENERAL SETUP   */
 // import sqlite to use as SettingsProvider 
 const sqlite = require('sqlite')
-// import path to join paths in a platform-independent way
+// import path to join paths in a platform-dependent way
 const path = require('path')
 // prepare to read in data from JSON files
 const fs = require('fs')
@@ -45,10 +45,12 @@ Client.setProvider(
 Client.registry
     .registerGroups([
         ['fun', 'Fun'],
-        ['information', 'Info']
+        ['information', 'Info'],
+        ['soundboard', 'Soundboard']
     ])
     .registerDefaults()
-    .registerCommandsIn(path.join(__dirname,'commands'))
+    .registerTypesIn(path.join(__dirname, 'types'))
+    .registerCommandsIn(path.join(__dirname, 'commands'))
 // set some command fields asynchronously
 setCommandFields(Client.registry)
 // log in

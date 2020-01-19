@@ -6,4 +6,4 @@ async function requestBreeds() {
     return json.response.breeds
 }
 
-exports.requestBreeds = requestBreeds;
+exports.requestBreeds = requestBreeds
