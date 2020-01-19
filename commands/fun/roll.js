@@ -19,13 +19,15 @@ module.exports = class RollCommand extends Commando.Command {
                     key: 'dice',
                     prompt: 'Enter the number of dice you want to roll.',
                     type: 'integer',
-                    min: 1
+                    min: 1,
+                    max: 1000
                 },
                 {
                     key: 'faces',
                     prompt: 'Enter the number of faces you want on each die.',
                     type: 'integer',
-                    min: 1
+                    min: 1,
+                    max: 1000
                 }
             ],
             argsPromptLimit: 1,
