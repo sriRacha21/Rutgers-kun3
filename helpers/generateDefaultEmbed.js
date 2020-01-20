@@ -3,8 +3,14 @@ const oneLine = require('oneline');
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
 
-function generateDefaultEmbed( author, title, clientUser, msg ) {
-    const embed = new RichEmbed()
+function generateDefaultEmbed( requiredEmbedInfo ) {
+    const author = requiredEmbedInfo.author
+    const title = requiredEmbedInfo.title
+    const clientUser = requiredEmbedInfo.clientUser
+    const msg = requiredEmbedInfo.msg
+    const startingEmbed = requiredEmbedInfo.startingEmbed ? requiredEmbedInfo.startingEmbed : new RichEmbed()
+
+    startingEmbed
         .setAuthor( author, clientUser.displayAvatarURL )
         .setTitle( title )
         .setThumbnail( clientUser.displayAvatarURL )
@@ -12,7 +18,7 @@ function generateDefaultEmbed( author, title, clientUser, msg ) {
                     , clientUser.displayAvatarURL )
         .setColor( defaults.richembed_color )
 
-    return embed;
+    return startingEmbed
 }
 
 exports.generateDefaultEmbed = generateDefaultEmbed;

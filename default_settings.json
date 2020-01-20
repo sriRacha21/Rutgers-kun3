@@ -1,5 +1,9 @@
 {
     "path": "/root/Rutgers-kun3",
     "richembed_color": "0xFF0000",
-    "encoding": "utf-8"
+    "encoding": "utf-8",
+    "admin_permission": "ADMINISTRATOR",
+    "moderator_permission": "KICK_MEMBERS",
+    "officer_permission": "MENTION_EVERYONE",
+    "trusted_permission": "PRIORITY_SPEAKER"
 }

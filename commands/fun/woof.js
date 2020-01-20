@@ -16,6 +16,10 @@ module.exports = class WoofCommand extends Commando.Command {
                 'woof shiba',
                 'woof german shepherd'
             ],
+            throttling: { 
+                usages: 1, 
+                duration: 3
+            },
             args: [
                 {
                     key: 'breed',

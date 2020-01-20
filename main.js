@@ -23,13 +23,33 @@ Client.on('warn', console.warn)
 Client.on('debug', console.debug)
 Client.on('disconnect', () => console.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
-// emitted when bot starts
-Client.on('ready', () => {
-    
-})
-// emmitted on message send
-Client.on('message', () => {
 
+// emitted on adding a reaction to a message
+Client.on('messageReactionAdd', (messageReaction, user) => {
+    // ignore reactions by the bot
+    if( user.id == Client.user.id )
+        return;
+
+    // check if message is in the approval and run the containing function if its there
+    const approvalInfo = Client.settings.get(`request:${messageReaction.message.id}`)
+    // find user by ID
+    const userToDM = Client.users.find( u => u.id == approvalInfo.userToNotify )
+    if( approvalInfo ) {
+        Client.settings.remove(`request:${messageReaction.message.id}`)
+        if( messageReaction.emoji.name == '👍' ) {
+            approvalInfo.approveRequest()
+            if( userToDM )
+                userToDM.send( approvalInfo.messageToSend + 'approved.' )
+            else
+                console.warn( `Cache miss on user ID: ${approvalInfo.userToNotify}! Ignoring...` )
+        }
+        if( messageReaction.emoji.name == '👎' ) {
+            if( userToDM )
+                userToDM.send( approvalInfo.messageToSend + 'rejected.' )
+            else
+                console.warn( `Cache miss on user ID: ${approvalInfo.userToNotify}! Ignoring...` )
+        }
+    }
 })
 
 /*  CLEAN UP    */
@@ -46,7 +66,8 @@ Client.registry
     .registerGroups([
         ['fun', 'Fun'],
         ['information', 'Info'],
-        ['soundboard', 'Soundboard']
+        ['soundboard', 'Soundboard'],
+        ['settings', 'Settings']
     ])
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))

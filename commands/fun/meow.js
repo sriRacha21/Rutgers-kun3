@@ -9,6 +9,10 @@ module.exports = class MeowCommand extends Commando.Command {
             memberName: 'meow',
             description: 'Cute kitty.',
             details: 'Ouput a picture of a cute kitty chosen at random.',
+            throttling: { 
+                usages: 1, 
+                duration: 3
+            },
         })
     }
     

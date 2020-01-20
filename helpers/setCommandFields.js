@@ -36,7 +36,7 @@ async function setPlayCommandFields(registry) {
     .args[0]
 
     firstPlayArg
-    .prompt = `Enter the name of a sound file. Available sounds are:'${getSoundsArr(true)}`
+    .prompt = `Enter the name of a sound file. Available sounds are:${getSoundsArr(true)}`
 
     firstPlayArg
     .oneOf = getSoundsArr()

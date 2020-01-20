@@ -35,7 +35,7 @@ module.exports = class RollCommand extends Commando.Command {
     }
     
     async run( msg, args ) {
-        const embed = generateDefaultEmbed( 'Rolls Command', 'Rolls:', this.client.user, msg )
+        const embed = generateDefaultEmbed( 'Rolls Command', 'Rolls:', { clientUser: this.client.user, msg: msg } )
                         .setThumbnail() // remove the thumbnail to save on space
         const dice = args.dice
         const faces = args.faces
