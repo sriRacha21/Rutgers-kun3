@@ -105,3 +105,6 @@ dist
 
 # API Keys file
 api_keys.json
+
+# VSCode folder
+.vscode/
