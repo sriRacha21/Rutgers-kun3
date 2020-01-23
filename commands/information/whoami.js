@@ -15,12 +15,17 @@ module.exports = class WhoAmICommand extends Commando.Command {
     }
 
     async run( msg, args ) {
-        const embed = generateDefaultEmbed( 'Who am I?', `I'm ${this.client.user.username}!`, this.client.user, msg )
-            .setDescription('I am a bot specially designed for the Rutgers Esports Discord, built on discord.js and Commando.')
-            .addField('Programmer:', oneLine`I was written by Arjun Srivastav, <@${this.client.owners[0].id}>. He wrote this as a member of the Systems
+        const embed = generateDefaultEmbed({
+            author: 'Who am I?',
+            title: `I'm ${this.client.user.username}!`,
+            clientUser: this.client.user,
+            msg: msg
+        })
+        .setDescription('I am a bot specially designed for the Rutgers Esports Discord, built on discord.js and Commando.')
+        .addField('Programmer:', oneLine`I was written by Arjun Srivastav, <@${this.client.owners[0].id}>. He wrote this as a member of the Systems
                         and Tech committee at Rutgers Esports.`)
-            .addField("I'm open source!", `I'm hosted at ${parse.sync()['remote "origin"'].url}.`)
-            .addField('Thanks!', 'API for woof command by joey#1337 hosted at https://woofbot.io/')
+        .addField("I'm open source!", `I'm hosted at ${parse.sync()['remote "origin"'].url}.`)
+        .addField('Thanks!', 'API for woof command by joey#1337 hosted at https://woofbot.io/')
         
         return msg.channel.send( embed )
     }

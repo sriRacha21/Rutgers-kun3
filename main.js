@@ -32,22 +32,21 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
 
     // check if message is in the approval and run the containing function if its there
     const approvalInfo = Client.settings.get(`request:${messageReaction.message.id}`)
-    // find user by ID
-    const userToDM = Client.users.find( u => u.id == approvalInfo.userToNotify )
     if( approvalInfo ) {
+        // find user by ID
+        const userToDM = Client.users.find( u => u.id == approvalInfo.userToNotify )
         Client.settings.remove(`request:${messageReaction.message.id}`)
+        // unable to find user, don't dm but continue adding the sound
+        if( !userToDM )
+            console.warn( `Cache miss on user ID: ${approvalInfo.userToNotify}! Ignoring...` )
         if( messageReaction.emoji.name == '👍' ) {
             approvalInfo.approveRequest()
             if( userToDM )
                 userToDM.send( approvalInfo.messageToSend + 'approved.' )
-            else
-                console.warn( `Cache miss on user ID: ${approvalInfo.userToNotify}! Ignoring...` )
         }
         if( messageReaction.emoji.name == '👎' ) {
             if( userToDM )
                 userToDM.send( approvalInfo.messageToSend + 'rejected.' )
-            else
-                console.warn( `Cache miss on user ID: ${approvalInfo.userToNotify}! Ignoring...` )
         }
     }
 })
@@ -65,9 +64,11 @@ Client.setProvider(
 Client.registry
     .registerGroups([
         ['fun', 'Fun'],
+        ['customcommands', 'Custom Comamnds'],
         ['information', 'Info'],
         ['soundboard', 'Soundboard'],
-        ['settings', 'Settings']
+        ['settings', 'Settings'],
+        ['owner', 'Owner-Only Commands']
     ])
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))

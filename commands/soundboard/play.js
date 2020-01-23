@@ -10,6 +10,7 @@ module.exports = class PlayCommand extends Commando.Command {
             group: 'soundboard',
             memberName: 'play',
             description: "Play a sound from the bot's soundboard.",
+            guildOnly: true,
             args: [
                 {
                     key: 'filename',

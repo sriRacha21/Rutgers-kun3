@@ -8,6 +8,13 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 ### How to Use
 [Click me to add me to your server!](https://discordapp.com/api/oauth2/authorize?client_id=662131823278817280&permissions=0&scope=bot)
 
+### How to run me locally!
+1. Clone me somewhere you feel comfortable keeping Github projects: `git clone https://github.com/sriRacha21/Rutgers-kun3.git`
+2. Edit `api_keys.json.dist` and replace the "your token here text" with your API token (surrounded by double quotation marks), obtained from the Discord developer portal. Rename the file to `api_keys.json`
+3. cd to root directory of the project.
+4. `npm install`
+5. `node main.js`
+
 ## TODO List
 ### Reimplementing unprivileged old commands
 - [x] help (done by default with commando)
@@ -47,3 +54,9 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [ ] setautoverify
 - [ ] settransactionchannel
 - [x] djs (replaced by eval)
+### New command ideas
+- [ ] latex interpreter
+### Extra
+- [ ] Live role
+- [ ] chain counting
+- [ ] verify competitive roles (use approval framework)
