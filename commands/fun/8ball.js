@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando')
-const { getRandomInt } = require('../../helpers/getRandom')
+const { getRandomElement } = require('../../helpers/getRandom')
 
 module.exports = class EightBallCommand extends Commando.Command {
     constructor(client) {
@@ -38,6 +38,6 @@ module.exports = class EightBallCommand extends Commando.Command {
         ]
 
         return msg.reply(`**Answering question:** ${question}
-**Response:** ${eightBallResponses[getRandomInt(0,eightBallResponses.length)]}`)
+**Response:** ${getRandomElement(eightBallResponses)}`)
     }
 }
