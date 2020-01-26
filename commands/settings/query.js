@@ -4,15 +4,14 @@ module.exports = class QueryCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'query',
-            group: 'owner',
+            group: 'settings',
             memberName: 'query',
-            description: 'Query the SQLite database directly.',
+            description: 'Query the SQLite database directly. Only table name is \`settings\`.',
             examples: [
                 'query',
                 'query show tables;',
                 'query select * from table-name',
             ],
-            ownerOnly: true,
             args: [
                 {
                     key: 'query',
@@ -22,6 +21,7 @@ module.exports = class QueryCommand extends Commando.Command {
                 }
             ],
             argsPromptLimit: 1,
+            ownerOnly: true,
         })
     }
 

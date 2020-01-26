@@ -53,7 +53,7 @@ module.exports = class AddSoundCommand extends Commando.Command {
                     
                     msg.react( '👍' )
                 },
-                guildSettings: this.client.settings,
+                settings: this.client.provider,
                 attachments: [ sound ],
                 errChannel: msg.channel
             },

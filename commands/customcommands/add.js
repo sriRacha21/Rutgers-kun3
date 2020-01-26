@@ -1,4 +1,6 @@
 const Commando = require('discord.js-commando')
+const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy')
+const RichEmbed = require('discord.js').RichEmbed;
 
 module.exports = class AddCommandCommand extends Commando.Command {
     constructor(client) {
@@ -11,14 +13,14 @@ module.exports = class AddCommandCommand extends Commando.Command {
             guildOnly: true,
             examples: [
                 `addcommand`,
-                `addcommand commandname 'example command text'`,
-                `customcommands:add whenarjuntypes ':Pog:'`
+                `addcommand commandname example command text`,
+                `customcommands:add whenarjuntypes :Pog:`
             ],
             args: [
                 {
                     key: 'name',
                     label: 'command name',
-                    prompt: 'Enter the name of the command.',
+                    prompt: 'Enter the name of the command you want to create.',
                     type: 'string',
                     error: 'You provided an invalid command name. Command names cannot contain spaces.',
                     validate: str => !str.includes(' '), //command name can't have a space
@@ -36,13 +38,36 @@ module.exports = class AddCommandCommand extends Commando.Command {
     }
 
     async run( msg, { name, text } ) {
-        const guildSettings = this.client.settings
+        implementApprovalPolicy(
+            {
+                type: 'command',
+                submissionName: `${msg.guild.commandPrefix}${name}`,
+                member: msg.member,
+                runNoPerms: () => {
+                    msg.channel.send( 'Your command suggestion has been sent to mods and is pending approval. You will be notified by DM if it is approved.' )
+                },
+                runHasPerms: () => {
+                    const settings = this.client.provider
 
-        guildSettings.set( `commands:${name}`, {
-            text: text,
-            userID: msg.author.id,
-            timestamp: msg.createdAt.toLocaleString(),
-        } )
-        .then( msg.channel.send(`Command \`${msg.guild.commandPrefix}${name}\` successfully created!`) )
+                    settings.set( msg.guild, `commands:${name}`, {
+                        text: text,
+                        userID: msg.author.id,
+                        timestamp: msg.createdAt.toLocaleString(),
+                    })
+                    .then( msg.channel.send(`Command \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}${name}\` successfully created!`) )
+                },
+                settings: this.client.provider,
+                errChannel: msg.channel
+            },
+            {
+                author: 'Command add attempt:',
+                title: msg.author.tag,
+                clientUser: this.client.user,
+                msg: msg,
+                startingEmbed: new RichEmbed()
+                    .addField( 'Command name:', name )
+                    .addField( 'Command text:', text )
+            }
+        )
     }
 }

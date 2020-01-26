@@ -1,4 +1,3 @@
-const request = require('request-promise')
 const { stripIndents } = require('common-tags')
 
 async function latexInterpreter( msgContent, channel ) {
@@ -19,11 +18,14 @@ async function latexInterpreter( msgContent, channel ) {
         return
     }
 
-    // remove brackets from matches
-    matches = matches.map(match => match.substring(2,match.length-2))
+    // remove brackets from matches and trim them
+    matches = matches
+    .map(match => match.substring(2,match.length-2))
+    .map(match => match.trim())
 
-    // map matches to urls
-    let urls = matches.map(match => `https://www.wiris.net/demo/editor/render?format=png&latex=${encodeURI(match)}&backgroundColor=%23fff&redherring=default.png`)
+    // map matches to urls, encodeURI doesn't properly parse +, so manually replace with .replace
+    let urls = matches
+    .map(match => `https://www.wiris.net/demo/editor/render?format=png&latex=${encodeURI(match).replace(/\+/g,'%2B')}&backgroundColor=%23fff&redherring=default.png`)
 
     // return array of URL's to images or a message if a channel is supplied
     return channel 

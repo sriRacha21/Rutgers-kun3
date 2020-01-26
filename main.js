@@ -28,15 +28,15 @@ Client.on('debug', console.debug)
 Client.on('disconnect', () => console.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
 
-// emmitted on message send
+// emitted on message send
 Client.on('message', msg => {
     // ignore messages by all bots
     if( msg.author.bot )
         return
 
     // parse a custom command if the message starts with it, send the first word after the prefix to the method
-    if( msg.cleanContent.startsWith(msg.guild.commandPrefix) )
-        parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.settings, msg.channel )
+    if( msg.cleanContent.startsWith(msg.guild && msg.guild.commandPrefix) )
+        parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.provider, msg.channel )
     // check if message contains latex formatting, also suggest using latex formatting
     latexInterpreter( msg.cleanContent, msg.channel )
 })
@@ -47,7 +47,7 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
         return
 
     // if the reaction was thumbs up approve, otherwise reject
-    parseApprovalReaction( Client.settings, Client.users, messageReaction )
+    parseApprovalReaction( Client.provider, Client.users, messageReaction )
 })
 
 /*  CLEAN UP    */
@@ -67,7 +67,6 @@ Client.registry
         ['information', 'Info'],
         ['soundboard', 'Soundboard'],
         ['settings', 'Settings'],
-        ['owner', 'Owner-Only Commands'],
     ])
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))

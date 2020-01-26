@@ -12,7 +12,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     let member
     let runNoPerms
     let runHasPerms
-    let guildSettings
+    let settings
     let attachments
     let errChannel
     // extract fields from object, throw errors or use defaults if fields aren't provided
@@ -22,11 +22,11 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     if( approvalPolicyOptions.member ) { member = approvalPolicyOptions.member } else { throw "Member is a required field." }
     if( approvalPolicyOptions.runNoPerms ) { runNoPerms = approvalPolicyOptions.runNoPerms } else { throw "A function to run if a member has no perms is required." }
     if( approvalPolicyOptions.runHasPerms ) { runHasPerms = approvalPolicyOptions.runHasPerms } else { throw "A function to run if a member has perms is required." }
-    if( approvalPolicyOptions.guildSettings ) { guildSettings = approvalPolicyOptions.guildSettings } else { throw "The GuildSettingsHelper is required." }
+    if( approvalPolicyOptions.settings ) { settings = approvalPolicyOptions.settings } else { throw "The GuildSettingsHelper is required." }
     attachments = approvalPolicyOptions.attachments ? approvalPolicyOptions.attachments : []
-    errChannel = getDefaultErrChannel( approvalPolicyOptions.errChannel, guildSettings )
+    errChannel = getDefaultErrChannel( approvalPolicyOptions.errChannel, settings )
     // check if there's an approval channel
-    const approvalChannelID = guildSettings.get('approvalChannel')
+    const approvalChannelID = settings.get( member.guild, 'approvalChannel')
     // run appropriate function, run it normally if the user has proper perms or there's no approval channel, with approval otherwise
     if( member.hasPermission( permissions ) || !approvalChannelID ) {
         runHasPerms()
@@ -41,14 +41,14 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
             runHasPerms: runHasPerms,
             attachments: attachments,
             errChannel: errChannel
-        }, guildSettings)
+        }, settings)
         runNoPerms()
     }
     
     return member.hasPermission( permissions )
 }
 
-function submitRequestToChannel( requestSubmissionInfo, guildSettings ) {
+function submitRequestToChannel( requestSubmissionInfo, settings ) {
     const type = requestSubmissionInfo.type
     const submissionName = requestSubmissionInfo.submissionName
     const user = requestSubmissionInfo.user
@@ -75,10 +75,10 @@ function submitRequestToChannel( requestSubmissionInfo, guildSettings ) {
     .then( m => {
         m.react('👍')
         m.react('👎')
-        guildSettings.set(`request:${m.id}`, {
+        settings.set( channel.guild, `request:${m.id}`, {
             approveRequest: () => { runHasPerms() },
             userToNotify: user.id,
-            messageToSend: `Your ${type+' '} submission${', `' + submissionName + '`,'} has been `
+            messageToSend: `Your ${type} submission${', `' + submissionName + '`,'} has been `
         })
     })
     // send attachment(s) if the URL resolves
@@ -88,12 +88,12 @@ function submitRequestToChannel( requestSubmissionInfo, guildSettings ) {
     }
 }
 
-function parseApprovalReaction( guildSettings, usersCache, messageReaction ) {
-    const approvalInfo = guildSettings.get(`request:${messageReaction.message.id}`)
+function parseApprovalReaction( settings, usersCache, messageReaction ) {
+    const approvalInfo = settings.get( messageReaction.message.guild, `request:${messageReaction.message.id}`)
     if( approvalInfo ) {
         // find user by ID
         const userToDM = usersCache.find( u => u.id == approvalInfo.userToNotify )
-        guildSettings.remove(`request:${messageReaction.message.id}`)
+        settings.remove( messageReaction.message.guild, `request:${messageReaction.message.id}`)
         // unable to find user, don't dm but continue adding the sound
         if( !userToDM )
             console.warn( `Cache miss on user ID: ${approvalInfo.userToNotify}! Ignoring...` )

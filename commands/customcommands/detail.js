@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando')
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
+const { oneLine } = require('common-tags')
 
 module.exports = class DetailCommandCommand extends Commando.Command {
     constructor(client) {
@@ -10,11 +11,11 @@ module.exports = class DetailCommandCommand extends Commando.Command {
             memberName: 'detail',
             description: 'Show details about a custom command.',
             details: 'This command shows various information about a command, such as when it was created and who created it.',
+            guildOnly: true,
             examples: [
                 'detailcommand',
                 'detailcommand testcommand',
             ],
-            guildOnly: true,
             args: [
                 {
                     key: 'name',
@@ -27,12 +28,13 @@ module.exports = class DetailCommandCommand extends Commando.Command {
     }
 
     async run( msg, { name } ) {
-        const guildSettings = this.client.settings
+        const settings = this.client.provider
 
         // check if command exists
-        const commandInfo = guildSettings.get(`commands:${name}`)
+        const commandInfo = settings.get(msg.guild, `commands:${name}`)
         if( !commandInfo )
-            return msg.channel.send( `A custom command by this name could not be found. Run ${this.client.commandPrefix}listcommands to see a list of all commands.` )
+            return msg.channel.send( oneLine`A custom command by this name could not be found. 
+Run \`${msg.guild.commandPrefix}listcommand\` to see a list of all commands.` )
 
         const retEmbed = generateDefaultEmbed({
             author: 'Command details:',

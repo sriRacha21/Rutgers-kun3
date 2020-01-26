@@ -1,5 +1,5 @@
-function parseCustomCommand( commandName, guildSettings, channel ) {
-    const commandInfo = guildSettings.get(`commands:${commandName}`)
+function parseCustomCommand( commandName, settings, channel ) {
+    const commandInfo = settings.get(channel.guild, `commands:${commandName}`)
 
     if( commandInfo )
         channel.send( commandInfo.text )

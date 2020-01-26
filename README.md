@@ -28,7 +28,7 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [x] execute (skipping in favor of built-in eval for now)
 - [x] play (soundboard commands in general) - working on this
 - [x] leave
-- [ ] custom commands
+- [x] custom commands
 - [ ] addemote
 - [ ] huh
 - [ ] quote
