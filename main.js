@@ -13,7 +13,7 @@ const API_Keys = JSON.parse(fs.readFileSync('api_keys.json', defaults.encoding))
 // get methods for setting up command fields asynchronously
 const { setCommandFields } = require('./helpers/setCommandFields')
 // get methods for event helpers
-const { latexInterpreter, suggestLatex } = require('./helpers/latexInterpreter')
+const { latexInterpreter } = require('./helpers/latexInterpreter')
 const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy')
 // initialize the Discord client
 const Commando = require('discord.js-commando')
@@ -28,12 +28,11 @@ Client.on('disconnect', () => console.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
 
 // emmitted on message send
-Client.on('message', msg => {
+Client.on('message', async msg => {
     // ignore messages by all bots
     if( msg.author.bot )
         return
-    
-    suggestLatex( msg )
+
     latexInterpreter( msg.cleanContent, msg.channel )
 })
 // emitted on adding a reaction to a message
