@@ -38,6 +38,7 @@ module.exports = class ClearSettingsCommand extends Commando.Command {
         if( sureness ) {
             this.client.settings.clear()
             .then( msg.channel.send( `Settings for guild ${msg.guild.name} cleared.` ) )
+            .catch( msg.channel.send( `Could not clear settings for guild ${msg.guild}.`) )
         } else {
             return msg.channel.send( 'Exiting.' )
         }

@@ -8,10 +8,11 @@ module.exports = class AddCommandCommand extends Commando.Command {
             memberName: 'add',
             description: 'Add a custom command to the bot.',
             details: 'Attachments to the message calling the command will be attached to subsequent calls of the custom command.',
+            guildOnly: true,
             examples: [
                 `addcommand`,
-                `addcommand 'commandname' 'example command text'`,
-                `customcommands:add 'whenarjuntypes' ':Pog:'`
+                `addcommand commandname 'example command text'`,
+                `customcommands:add whenarjuntypes ':Pog:'`
             ],
             args: [
                 {
@@ -24,18 +25,24 @@ module.exports = class AddCommandCommand extends Commando.Command {
                     parse: str => str.toLowerCase()
                 },
                 {
-                    key: 'value',
+                    key: 'text',
                     label: 'command text',
                     prompt: 'Enter the text you want the command to output.',
                     type: 'string',
                 },
             ],
             argsPromptLimit: 1,
-
         })
     }
 
-    async run( msg, args ) {
-        msg.channel.send( "I'm still being worked on!" )
+    async run( msg, { name, text } ) {
+        const guildSettings = this.client.settings
+
+        guildSettings.set( `commands:${name}`, {
+            text: text,
+            userID: msg.author.id,
+            timestamp: msg.createdAt.toLocaleString(),
+        } )
+        .then( msg.channel.send(`Command \`${msg.guild.commandPrefix}${name}\` successfully created!`) )
     }
 }

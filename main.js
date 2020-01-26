@@ -15,6 +15,7 @@ const { setCommandFields } = require('./helpers/setCommandFields')
 // get methods for event helpers
 const { latexInterpreter } = require('./helpers/latexInterpreter')
 const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy')
+const { parseCustomCommand } = require('./helpers/parseCustomCommand')
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
@@ -28,11 +29,15 @@ Client.on('disconnect', () => console.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
 
 // emmitted on message send
-Client.on('message', async msg => {
+Client.on('message', msg => {
     // ignore messages by all bots
     if( msg.author.bot )
         return
 
+    // parse a custom command if the message starts with it, send the first word after the prefix to the method
+    if( msg.cleanContent.startsWith(msg.guild.commandPrefix) )
+        parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.settings, msg.channel )
+    // check if message contains latex formatting, also suggest using latex formatting
     latexInterpreter( msg.cleanContent, msg.channel )
 })
 // emitted on adding a reaction to a message
@@ -62,7 +67,8 @@ Client.registry
         ['information', 'Info'],
         ['soundboard', 'Soundboard'],
         ['settings', 'Settings'],
-        ['owner', 'Owner-Only Commands']
+        ['owner', 'Owner-Only Commands'],
+        ['rutgers-kun-util', 'Rutgers-kun Utility Commands']
     ])
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))

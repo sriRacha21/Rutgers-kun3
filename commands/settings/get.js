@@ -10,13 +10,13 @@ module.exports = class GetSettingCommand extends Commando.Command {
             group: 'settings',
             memberName: 'get',
             description: 'Get a setting in the settings provider for this guild in the CommandoClient.',
-            examples: [ 'get key', 'get approvalChannel' ],
+            examples: [ 'settings:get key', 'get-guild-setting approvalChannel' ],
             guildOnly: true,
             userPermissions: [ defaults.admin_permission ],
             args: [
                 {
                     key: 'key',
-                    prompt: 'Enter the key for the setting.',
+                    prompt: 'Enter the key for the setting you wan tot retrieve.',
                     type: 'string'
                 }
             ],
@@ -26,6 +26,7 @@ module.exports = class GetSettingCommand extends Commando.Command {
     
     async run( msg, { key } ) {
         const value = this.client.settings.get( key )
-        return msg.channel.send( 'Value: ```' + util.inspect(value) + '\n```' )
+
+        return msg.channel.send( value ? 'Value: ```' + util.inspect(value) + '\n```' : `Could not get value by key, \`${key}\`, from settings.` )
     }
 }

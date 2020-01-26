@@ -35,11 +35,17 @@ module.exports = class RollCommand extends Commando.Command {
     }
     
     async run( msg, args ) {
-        const embed = generateDefaultEmbed( 'Rolls Command', 'Rolls:', { clientUser: this.client.user, msg: msg } )
-                        .setThumbnail() // remove the thumbnail to save on space
         const dice = args.dice
         const faces = args.faces
         let sum = 0
+
+        const embed = generateDefaultEmbed({
+            author: 'Rolls Command',
+            title: `Rolling ${dice} D${faces}'s:`,
+            clientUser: this.client.user,
+            msg: msg,
+        })
+        .setThumbnail() // remove the thumbnail to save on space
 
         for( let i = 0; i < dice; i++ ) {
             const random = getRandomInt( 1, faces+1 )

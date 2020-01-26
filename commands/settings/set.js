@@ -29,8 +29,13 @@ module.exports = class SetSettingCommand extends Commando.Command {
     }
 
     async run( msg, { key, value } ) {
-        this.client.settings.set( key, value )
-        .then( msg.channel.send(`Setting has been successfully set for guild ${msg.guild.name}.
+        const valPromise = this.client.settings.set( key, value )
+
+        if( valPromise )
+            valPromise.then( msg.channel.send(`Setting has been successfully set for guild ${msg.guild.name}.
 \`\`\`key: ${key}\nvalue: ${value}\`\`\``) )
+            .catch( e => msg.channel.send(`Could not set value, \`${value}\`, by key, \`${key}\`, from settings: ${e}`) )
+        else
+            return msg.channel.send(`Could not set value, \`${value}\`, by key, \`${key}\`, from settings.`)
     }
 }
