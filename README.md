@@ -28,12 +28,12 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [x] execute (skipping in favor of built-in eval for now)
 - [x] play (soundboard commands in general) - working on this
 - [x] leave
-- [ ] command
+- [ ] custom commands
 - [ ] addemote
 - [ ] huh
 - [ ] quote
 - [ ] chain
-- [ ] settings
+- [ ] settings - replace with config command that'll help the user configure fields such as the approval channel
 - [ ] setword (think about rename)
 - [x] whoami
 ### Reimplenting privileged old commands
@@ -55,7 +55,7 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [ ] settransactionchannel
 - [x] djs (replaced by eval)
 ### New command ideas
-- [ ] latex interpreter
+- [x] latex interpreter
 ### Extra
 - [ ] Live role
 - [ ] chain counting

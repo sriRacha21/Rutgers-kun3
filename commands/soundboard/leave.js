@@ -6,7 +6,8 @@ module.exports = class LeaveCommand extends Commando.Command {
             name: 'leave',
             group: 'soundboard',
             memberName: 'leave',
-            description: 'Make the bot leave a voice channel.'
+            description: 'Make the bot leave a voice channel.',
+            guildOnly: true,
         })
     }
 

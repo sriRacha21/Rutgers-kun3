@@ -10,8 +10,11 @@ const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
 const ClientOptions = JSON.parse(fs.readFileSync('bot_settings.json', defaults.encoding))
 // read in data from JSON file containing API keys
 const API_Keys = JSON.parse(fs.readFileSync('api_keys.json', defaults.encoding))
-// get method for setting up command fields asynchronously
+// get methods for setting up command fields asynchronously
 const { setCommandFields } = require('./helpers/setCommandFields')
+// get methods for event helpers
+const { latexInterpreter, suggestLatex } = require('./helpers/latexInterpreter')
+const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy')
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
@@ -24,31 +27,23 @@ Client.on('debug', console.debug)
 Client.on('disconnect', () => console.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
 
+// emmitted on message send
+Client.on('message', msg => {
+    // ignore messages by all bots
+    if( msg.author.bot )
+        return
+    
+    suggestLatex( msg )
+    latexInterpreter( msg.cleanContent, msg.channel )
+})
 // emitted on adding a reaction to a message
 Client.on('messageReactionAdd', (messageReaction, user) => {
-    // ignore reactions by the bot
+    // ignore reactions by this bot
     if( user.id == Client.user.id )
-        return;
+        return
 
-    // check if message is in the approval and run the containing function if its there
-    const approvalInfo = Client.settings.get(`request:${messageReaction.message.id}`)
-    if( approvalInfo ) {
-        // find user by ID
-        const userToDM = Client.users.find( u => u.id == approvalInfo.userToNotify )
-        Client.settings.remove(`request:${messageReaction.message.id}`)
-        // unable to find user, don't dm but continue adding the sound
-        if( !userToDM )
-            console.warn( `Cache miss on user ID: ${approvalInfo.userToNotify}! Ignoring...` )
-        if( messageReaction.emoji.name == '👍' ) {
-            approvalInfo.approveRequest()
-            if( userToDM )
-                userToDM.send( approvalInfo.messageToSend + 'approved.' )
-        }
-        if( messageReaction.emoji.name == '👎' ) {
-            if( userToDM )
-                userToDM.send( approvalInfo.messageToSend + 'rejected.' )
-        }
-    }
+    // if the reaction was thumbs up approve, otherwise reject
+    parseApprovalReaction( Client.settings, Client.users, messageReaction )
 })
 
 /*  CLEAN UP    */

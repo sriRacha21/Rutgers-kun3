@@ -6,7 +6,8 @@ module.exports = class JoinCommand extends Commando.Command {
             name: 'join',
             group:'soundboard',
             memberName: 'join',
-            description: 'Make the bot join a voice channel and do nothing.'
+            description: 'Make the bot join a voice channel and do nothing.',
+            guildOnly: true,
         })
     }
 

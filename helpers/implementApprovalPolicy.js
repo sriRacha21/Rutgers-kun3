@@ -88,4 +88,26 @@ function submitRequestToChannel( requestSubmissionInfo, guildSettings ) {
     }
 }
 
+function parseApprovalReaction( guildSettings, usersCache, messageReaction ) {
+    const approvalInfo = guildSettings.get(`request:${messageReaction.message.id}`)
+    if( approvalInfo ) {
+        // find user by ID
+        const userToDM = usersCache.find( u => u.id == approvalInfo.userToNotify )
+        guildSettings.remove(`request:${messageReaction.message.id}`)
+        // unable to find user, don't dm but continue adding the sound
+        if( !userToDM )
+            console.warn( `Cache miss on user ID: ${approvalInfo.userToNotify}! Ignoring...` )
+        if( messageReaction.emoji.name == '👍' ) {
+            approvalInfo.approveRequest()
+            if( userToDM )
+                userToDM.send( approvalInfo.messageToSend + 'approved.' )
+        }
+        if( messageReaction.emoji.name == '👎' ) {
+            if( userToDM )
+                userToDM.send( approvalInfo.messageToSend + 'rejected.' )
+        }
+    }
+}
+
 exports.implementApprovalPolicy = implementApprovalPolicy
+exports.parseApprovalReaction = parseApprovalReaction
