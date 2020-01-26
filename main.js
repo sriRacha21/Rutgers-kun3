@@ -1,5 +1,5 @@
 /*  IMPORTS AND GENERAL SETUP   */
-// import sqlite to use as SettingsProvider 
+// import sqlite to use as SettingsProvider
 const sqlite = require('sqlite')
 // import path to join paths in a platform-dependent way
 const path = require('path')
@@ -68,7 +68,6 @@ Client.registry
         ['soundboard', 'Soundboard'],
         ['settings', 'Settings'],
         ['owner', 'Owner-Only Commands'],
-        ['rutgers-kun-util', 'Rutgers-kun Utility Commands']
     ])
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))
