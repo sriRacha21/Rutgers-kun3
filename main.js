@@ -5,11 +5,11 @@ const sqlite = require('sqlite')
 const path = require('path')
 // prepare to read in data from JSON files
 const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 // read in data from JSON file containing default settings for the bot (ClientOptions object)
-const ClientOptions = JSON.parse(fs.readFileSync('bot_settings.json', defaults.encoding))
+const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', defaults.encoding))
 // read in data from JSON file containing API keys
-const API_Keys = JSON.parse(fs.readFileSync('api_keys.json', defaults.encoding))
+const API_Keys = JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding))
 // get methods for setting up command fields asynchronously
 const { setCommandFields } = require('./helpers/setCommandFields')
 // get methods for event helpers

@@ -1,7 +1,7 @@
 const RichEmbed = require('discord.js').RichEmbed;
 const oneLine = require('oneline');
 const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
 function generateDefaultEmbed( requiredEmbedInfo ) {
     const author = requiredEmbedInfo.author

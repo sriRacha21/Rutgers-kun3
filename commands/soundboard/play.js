@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const path = require('path')
 const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
 module.exports = class PlayCommand extends Commando.Command {
     constructor(client) {
@@ -35,7 +35,6 @@ module.exports = class PlayCommand extends Commando.Command {
         msg.member.voiceChannel.join()
         .then( connection => {
             msg.react( '👏' )
-            console.log( path.join( defaults.path, 'sounds', args.filename ))
             connection.playFile(path.join(defaults.path, 'sounds', args.filename))
         })
         .catch( console.error )

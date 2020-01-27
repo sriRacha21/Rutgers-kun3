@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const https = require('https')
 const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('default_settings.json', 'utf-8'))
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 const path = require('path')
 const { setPlayCommandFields, setAddSoundCommandFields } = require('../../helpers/setCommandFields')
 const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy')
