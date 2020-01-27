@@ -39,9 +39,6 @@ module.exports = class AddSoundCommand extends Commando.Command {
                 type: 'sound',
                 submissionName: name,
                 member: msg.member,
-                runNoPerms: () => {
-                    msg.channel.send( 'Your soundboard suggestion has been sent to mods and is pending approval. You will be notified by DM if it is approved.' )
-                },
                 runHasPerms: () => {
                     const filename = path.join(defaults.path, 'sounds', name )
                     const file = fs.createWriteStream(filename)

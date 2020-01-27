@@ -20,7 +20,10 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     submissionName = approvalPolicyOptions.submissionName ? approvalPolicyOptions.submissionName : null
     permissions = approvalPolicyOptions.permission ? approvalPolicyOptions.permission : defaults.moderator_permission // by default moderator (kick permission)
     if( approvalPolicyOptions.member ) { member = approvalPolicyOptions.member } else { throw "Member is a required field." }
-    if( approvalPolicyOptions.runNoPerms ) { runNoPerms = approvalPolicyOptions.runNoPerms } else { throw "A function to run if a member has no perms is required." }
+    if( approvalPolicyOptions.runNoPerms ) { runNoPerms = approvalPolicyOptions.runNoPerms } 
+    else { runNoPerms = () => { 
+        errChannel.send(  `Your ${type} suggestion has been sent to mods and is pending approval. You will be notified by DM if it is approved.` ) 
+    } }
     if( approvalPolicyOptions.runHasPerms ) { runHasPerms = approvalPolicyOptions.runHasPerms } else { throw "A function to run if a member has perms is required." }
     if( approvalPolicyOptions.settings ) { settings = approvalPolicyOptions.settings } else { throw "The GuildSettingsHelper is required." }
     attachments = approvalPolicyOptions.attachments ? approvalPolicyOptions.attachments : []

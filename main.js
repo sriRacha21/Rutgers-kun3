@@ -63,9 +63,11 @@ Client.setProvider(
 Client.registry
     .registerGroups([
         ['fun', 'Fun'],
-        ['customcommands', 'Custom Comamnds'],
-        ['information', 'Info'],
+        ['customcommands', 'Custom Commands'],
+        ['emotes', 'Emotes'],
+        ['quotes', 'Quotes'],
         ['soundboard', 'Soundboard'],
+        ['information', 'Info'],
         ['settings', 'Settings'],
     ])
     .registerDefaults()

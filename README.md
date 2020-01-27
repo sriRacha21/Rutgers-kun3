@@ -29,9 +29,9 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [x] play (soundboard commands in general) - working on this
 - [x] leave
 - [x] custom commands
-- [ ] addemote
-- [ ] huh
-- [ ] quote
+- [x] addemote
+- [x] huh (skipping because of lack of importance and potential load on db)
+- [x] quote
 - [ ] chain
 - [ ] settings - replace with config command that'll help the user configure fields such as the approval channel
 - [ ] setword (think about rename)
@@ -60,3 +60,4 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [ ] Live role
 - [ ] chain counting
 - [ ] verify competitive roles (use approval framework)
+- [ ] karma system for helpful users

@@ -43,9 +43,6 @@ module.exports = class AddCommandCommand extends Commando.Command {
                 type: 'command',
                 submissionName: `${msg.guild.commandPrefix}${name}`,
                 member: msg.member,
-                runNoPerms: () => {
-                    msg.channel.send( 'Your command suggestion has been sent to mods and is pending approval. You will be notified by DM if it is approved.' )
-                },
                 runHasPerms: () => {
                     const settings = this.client.provider
 
