@@ -16,6 +16,8 @@ const { setCommandFields } = require('./helpers/setCommandFields')
 const { latexInterpreter } = require('./helpers/latexInterpreter')
 const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy')
 const { parseCustomCommand } = require('./helpers/parseCustomCommand')
+const { rutgersChan } = require('./helpers/rutgersChan')
+const { reroll } = require('./helpers/reroll')
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
@@ -39,6 +41,9 @@ Client.on('message', msg => {
         parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.provider, msg.channel )
     // check if message contains latex formatting, also suggest using latex formatting
     latexInterpreter( msg.cleanContent, msg.channel )
+    // react with rutgerschan, do reroll
+    rutgersChan( msg )
+    reroll( msg )
 })
 // emitted on adding a reaction to a message
 Client.on('messageReactionAdd', (messageReaction, user) => {
