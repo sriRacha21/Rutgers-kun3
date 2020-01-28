@@ -34,7 +34,7 @@ Right now the bot only has a few fun commands and a "who am I" command but it is
 - [x] quote
 - [ ] chain
 - [ ] settings - replace with config command that'll help the user configure fields such as the approval channel
-- [ ] setword (think about rename)
+- [x] setword (think about rename)
 - [x] whoami
 ### Reimplenting privileged old commands
 - [ ] mute

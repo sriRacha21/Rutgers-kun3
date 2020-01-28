@@ -25,10 +25,19 @@ module.exports = class DeleteWordCommand extends Commando.Command {
     }
 
     async run( msg, { word } ) {
-        if( !this.client.settings.get( `countword:${msg.author.id}` ) )
+        // get array to check
+        const arr = this.client.settings.get( `countword:${msg.author.id}` )
+        ? this.client.settings.get( `countword:${msg.author.id}` )
+        : []
+
+        // filter array
+        const newArr = arr.filter( wordCountInfo => wordCountInfo.word != word )
+
+        // return word not being tracked if there's nothing in db or if the array is empty
+        if( arr.length == 0 || arr.length == newArr.length )
             return msg.channel.send( `This word was not being tracked.` )
         
-        this.client.settings.remove( `countword:${msg.author.id}` )
+        this.client.settings.set( `countword:${msg.author.id}`, newArr )
         .then( msg.channel.send( `Successfully removed word \`${word}\` from being tracked.` ) )
     }
 }
