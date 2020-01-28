@@ -18,6 +18,7 @@ const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy')
 const { parseCustomCommand } = require('./helpers/parseCustomCommand')
 const { rutgersChan } = require('./helpers/rutgersChan')
 const { reroll } = require('./helpers/reroll')
+const { checkWordCount } = require('./helpers/checkWordCount')
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
@@ -41,6 +42,8 @@ Client.on('message', msg => {
         parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.provider, msg.channel )
     // check if message contains latex formatting, also suggest using latex formatting
     latexInterpreter( msg.cleanContent, msg.channel )
+    // check if word counters need to be incremented
+    checkWordCount( msg, Client.settings )
     // react with rutgerschan, do reroll
     rutgersChan( msg )
     reroll( msg )
@@ -53,6 +56,7 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
 
     // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
+
 })
 
 /*  CLEAN UP    */
