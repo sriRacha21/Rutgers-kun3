@@ -1,7 +1,6 @@
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 const { generateDefaultEmbed } = require('./generateDefaultEmbed')
-const { getDefaultErrChannel } = require('./getDefaultErrChannel')
 const oneLine = require('oneline')
 
 function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
@@ -19,17 +18,19 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     type = approvalPolicyOptions.type ? approvalPolicyOptions.type : null
     submissionName = approvalPolicyOptions.submissionName ? approvalPolicyOptions.submissionName : null
     permissions = approvalPolicyOptions.permission ? approvalPolicyOptions.permission : defaults.moderator_permission // by default moderator (kick permission)
-    if( approvalPolicyOptions.member ) { member = approvalPolicyOptions.member } else { throw "Member is a required field." }
+    if( approvalPolicyOptions.member ) { member = approvalPolicyOptions.member } else { throw "member is a required field." }
     if( approvalPolicyOptions.runNoPerms ) { runNoPerms = approvalPolicyOptions.runNoPerms } 
     else { runNoPerms = () => { 
         errChannel.send(  `Your ${type} suggestion has been sent to mods and is pending approval. You will be notified by DM if it is approved.` ) 
     } }
     if( approvalPolicyOptions.runHasPerms ) { runHasPerms = approvalPolicyOptions.runHasPerms } else { throw "A function to run if a member has perms is required." }
-    if( approvalPolicyOptions.settings ) { settings = approvalPolicyOptions.settings } else { throw "The GuildSettingsHelper is required." }
+    if( approvalPolicyOptions.settings ) { settings = approvalPolicyOptions.settings } else { throw "GuildSettingsHelper is required." }
     attachments = approvalPolicyOptions.attachments ? approvalPolicyOptions.attachments : []
-    errChannel = getDefaultErrChannel( approvalPolicyOptions.errChannel, settings )
+    if( approvalPolicyOptions.errChannel ) { errChannel = approvalPolicyOptions.errChannel } else { throw 'errChannel is a required field.' }
     // check if there's an approval channel
     const approvalChannelID = settings.get( member.guild, 'approvalChannel')
+    // adjust RequiredEmbedInfo to defaults
+    requiredEmbedInfo.author = requiredEmbedInfo.author ? requiredEmbedInfo.author : `${type.charAt(0).toUpperCase() + type.slice(1)} add attempt by`
     // run appropriate function, run it normally if the user has proper perms or there's no approval channel, with approval otherwise
     if( member.hasPermission( permissions ) || !approvalChannelID ) {
         runHasPerms()
@@ -72,6 +73,7 @@ function submitRequestToChannel( requestSubmissionInfo, settings ) {
 
     // generate request embed
     const reRequest = generateDefaultEmbed( requiredEmbedInfo )
+    .setThumbnail( user.displayAvatarURL )
 
     // send request embed with reactions
     channel.send( reRequest )

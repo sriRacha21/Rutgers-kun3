@@ -51,13 +51,12 @@ module.exports = class AddCommandCommand extends Commando.Command {
                         userID: msg.author.id,
                         timestamp: msg.createdAt.toLocaleString(),
                     })
-                    .then( msg.channel.send(`Command \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}${name}\` successfully created!`) )
+                    .then( msg.react('👍') )
                 },
                 settings: this.client.provider,
                 errChannel: msg.channel
             },
             {
-                author: 'Command add attempt:',
                 title: msg.author.tag,
                 clientUser: this.client.user,
                 msg: msg,

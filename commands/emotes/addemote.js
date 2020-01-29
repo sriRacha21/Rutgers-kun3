@@ -31,7 +31,7 @@ module.exports = class AddEmoteCommand extends Commando.Command {
         implementApprovalPolicy(
             {
                 type: 'emote',
-                submissionName: name,
+                submissionName: `:${name}:`,
                 member: msg.member,
                 runHasPerms: () => {
                     msg.guild.createEmoji( image.proxyURL, name, null, `Created by ${this.client.user.tag}.` )
@@ -43,12 +43,11 @@ module.exports = class AddEmoteCommand extends Commando.Command {
                 errChannel: msg.channel
             },
             {
-                author: 'Emote add attempt:',
                 title: msg.author.tag,
                 clientUser: this.client.user,
                 msg: msg,
                 startingEmbed: new RichEmbed()
-                    .addField('Emote name:', name)
+                    .addField('Emote name:', `:${name}:`)
             }
         )
     }

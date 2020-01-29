@@ -55,7 +55,6 @@ module.exports = class AddSoundCommand extends Commando.Command {
                 errChannel: msg.channel
             },
             {
-                author: 'Sound add attempt:',
                 title: msg.author.tag,
                 clientUser: this.client.user,
                 msg: msg,

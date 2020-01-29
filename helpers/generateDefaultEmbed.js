@@ -8,12 +8,13 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
     const title = requiredEmbedInfo.title
     const clientUser = requiredEmbedInfo.clientUser
     const msg = requiredEmbedInfo.msg
+    const thumbnail = requiredEmbedInfo.thumbnail ? requiredEmbedInfo.thumbnail : clientUser.displayAvatarURL
     const startingEmbed = requiredEmbedInfo.startingEmbed ? requiredEmbedInfo.startingEmbed : new RichEmbed()
 
     startingEmbed
         .setAuthor( author, clientUser.displayAvatarURL )
         .setTitle( title )
-        .setThumbnail( clientUser.displayAvatarURL )
+        .setThumbnail( thumbnail )
         .setFooter( oneLine`${msg ? `Requested ${msg.createdAt.toLocaleString()} by ${msg.author.tag}` : clientUser.tag }`
                     , clientUser.displayAvatarURL )
         .setColor( defaults.richembed_color )
