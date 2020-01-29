@@ -7,7 +7,7 @@ async function latexInterpreter( msgContent, channel ) {
     // was there a match?
     const matchFound = matches && matches.length > 0
     // decide if we want to suggest using latex functionality
-    const suggestMatch = msgContent.match(/\^|sqrt|sin\(|cos\(|tan\(/g)
+    const suggestMatch = msgContent.match(/sqrt|sin\(|cos\(|tan\(/g)
 
     // ignore no matches
     if( !matchFound ) {

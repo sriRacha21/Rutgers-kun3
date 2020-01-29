@@ -11,41 +11,45 @@ module.exports = class AddQuoteCommand extends Commando.Command {
             guildOnly: true,
             examples: [
                 'quote',
+                'quote sriracha',
                 `quote <@87525135241728000>`
             ],
             args: [
                 {
-                    key: 'member',
+                    key: 'user',
                     label: 'user',
                     prompt: 'Enter the user you want to quote.',
-                    type: 'member',
+                    type: 'user',
                 }
             ],
             argsPromptLimit: 1,
         })
     }
 
-    async run( msg, { member } ) {
+    async run( msg, { user } ) {
         const settings = this.client.settings
 
         // don't quote yourself or a bot u monkey
-        if( msg.author.id == member.user.id )
+        if( msg.author.id == user.id )
             return msg.channel.send( `You can't quote yourself.` )
-        if( member.user.bot )
+        if( user.bot )
             return msg.channel.send( `You can't quote a bot.` )
 
         // push quote to settings
-        const maybeQuotes = settings.get( `quotes:${member.user.id}` )
+        const maybeQuotes = settings.get( `quotes:${user.id}` )
         const quotes = maybeQuotes ? maybeQuotes : []
-        const message = member.lastMessage
+        const message = msg.channel.messages.filter(message => message.author.id == user.id).last()
         // check if message could be found
         if( !message )
-            return msg.channel.send( `${member.displayName}'s last message could not be found.` )
+            return msg.channel.send( `${user.username}'s last message could not be found in this channel.` )
+        // check if there are 25 quotes already, if so remove the first one and add the last one
+        while( quotes.length >= 25 )
+            quotes.shift()
         // make sure we include attachments
         quotes.push( message.cleanContent.concat(message.attachments ? '\n'.concat(message.attachments.map(attachment => attachment.proxyURL).join('\n')) : '') )
 
         // set setting after push
-        settings.set( `quotes:${member.user.id}`, quotes )
-        .then( msg.channel.send( `Successfully saved quote for user @${member.displayName}!` ) )
+        settings.set( `quotes:${user.id}`, quotes )
+        .then( msg.channel.send( `Successfully saved quote for user @${user.username}!` ) )
     }
 }
