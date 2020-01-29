@@ -8,7 +8,7 @@ module.exports = class DeleteQuoteCommand extends Commando.Command {
             aliases: [ 'deletequotes' ],
             group: 'quotes',
             memberName: 'delete',
-            description: 'Delete your own quotes',
+            description: 'Delete your own quotes.',
             examples: [
                 `deletequote`,
                 `deletequote 9`,

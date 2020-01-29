@@ -13,7 +13,7 @@ module.exports = class AddSoundCommand extends Commando.Command {
             name: 'addsound',
             group: 'soundboard',
             memberName: 'add',
-            description: 'Add a custom sound to the bot\'s soundboard',
+            description: 'Add a custom sound to the bot\'s soundboard.',
             guildOnly: true,
             args: [
                 {
