@@ -77,7 +77,9 @@ Client.registry
         ['quotes', 'Quotes'],
         ['soundboard', 'Soundboard'],
         ['information', 'Info'],
+        ['config', 'Configure Server Settings'],
         ['settings', 'Settings'],
+        ['verification', 'Verification']
     ])
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))

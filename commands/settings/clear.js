@@ -15,7 +15,7 @@ module.exports = class ClearSettingsCommand extends Commando.Command {
             args: [
                 {
                     key: 'sureness',
-                    prompt: oneLine`Are you sure you want to do clear all
+                    prompt: oneLine`Are you sure you want to clear all
                     saved settings for your guild? (y/N)`,
                     type: 'string',
                     oneOf: [
