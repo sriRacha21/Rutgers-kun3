@@ -20,18 +20,40 @@ const { rutgersChan } = require('./helpers/rutgersChan')
 const { reroll } = require('./helpers/reroll')
 const { checkWordCount } = require('./helpers/checkWordCount')
 // set up winston logging
-const logger = require('winston')
+const winston = require('winston')
+require('winston-daily-rotate-file')
+const logger = winston.createLogger({
+    level: 'debug',
+    transports: [
+        new winston.transports.DailyRotateFile({ 
+            filename: 'loggers/rutgers-kun-info-%DATE%.log',
+            level: 'info',
+            maxFiles: '14d',
+        }),
+        new winston.transports.DailyRotateFile({ 
+            filename: 'loggers/rutgers-kun-debug-%DATE%.log',
+            level: 'debug',
+            maxFiles: '14d',
+        }),
+        new winston.transports.DailyRotateFile({ 
+            filename: 'loggers/rutgers-kun-error-%DATE%.log',
+            level: 'error',
+            maxFiles: '14d',
+        }),
+    ]
+})
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
 
 /*  EVENTS  */
 // emitted on error, warn, debug
-Client.on('error', console.error)
-Client.on('warn', console.warn)
-Client.on('debug', console.debug)
-Client.on('disconnect', () => console.warn('Websocket disconnected!'))
-Client.on('reconnecting', () => console.warn('Websocket reconnecting...'))
+Client.on('error', (info) => logger.log('error', `From Discord.js: ${info}`))
+Client.on('warn', (info) => logger.log('warn', `From Discord.js: ${info}`))
+Client.on('debug', (info) => logger.log('debug', `From Discord.js: ${info}`) )
+Client.on('disconnect', () => logger.warn('Websocket disconnected!'))
+Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'))
+Client.on('ready', () => logger.info( `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`) )
 
 // emitted on message send
 Client.on('message', msg => {
