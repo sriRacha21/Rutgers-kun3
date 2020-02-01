@@ -19,6 +19,8 @@ const { parseCustomCommand } = require('./helpers/parseCustomCommand')
 const { rutgersChan } = require('./helpers/rutgersChan')
 const { reroll } = require('./helpers/reroll')
 const { checkWordCount } = require('./helpers/checkWordCount')
+// set up winston logging
+const logger = require('winston')
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
