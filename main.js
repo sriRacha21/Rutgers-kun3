@@ -19,41 +19,33 @@ const { parseCustomCommand } = require('./helpers/parseCustomCommand')
 const { rutgersChan } = require('./helpers/rutgersChan')
 const { reroll } = require('./helpers/reroll')
 const { checkWordCount } = require('./helpers/checkWordCount')
+const { setupWinstonTransports } = require('./helpers/setupWinstonTransports')
+// get method for looking into objects (used for error logging)
+const { inspect } = require('util')
 // set up winston logging
 const winston = require('winston')
-require('winston-daily-rotate-file')
-const logger = winston.createLogger({
-    level: 'debug',
-    transports: [
-        new winston.transports.DailyRotateFile({ 
-            filename: 'loggers/rutgers-kun-info-%DATE%.log',
-            level: 'info',
-            maxFiles: '14d',
-        }),
-        new winston.transports.DailyRotateFile({ 
-            filename: 'loggers/rutgers-kun-debug-%DATE%.log',
-            level: 'debug',
-            maxFiles: '14d',
-        }),
-        new winston.transports.DailyRotateFile({ 
-            filename: 'loggers/rutgers-kun-error-%DATE%.log',
-            level: 'error',
-            maxFiles: '14d',
-        }),
-    ]
-})
+const logger = winston.createLogger()
+setupWinstonTransports(logger)
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
-
 /*  EVENTS  */
 // emitted on error, warn, debug
-Client.on('error', (info) => logger.log('error', `From Discord.js: ${info}`))
-Client.on('warn', (info) => logger.log('warn', `From Discord.js: ${info}`))
-Client.on('debug', (info) => logger.log('debug', `From Discord.js: ${info}`) )
+Client.on('error', (info) => logger.log('error', info))
+Client.on('commandError', (command, err, message, args, fromPattern, result) => {
+    logger.log('error', 
+`<b>Command:</b> ${message.guild.commandPrefix}${command.groupID}:${command.memberName} or ${message.guild.commandPrefix}${command.name}
+<br><b>Guild:</b> ${message.guild.name}
+<br><b>Error:</b> ${err.name}: ${err.message}
+<br><b>Arguments:</b> ${inspect(args)}
+<br><b>fromPattern:</b> ${fromPattern}
+<br><b>Result:</b> ${result}`)
+})
+Client.on('warn', (info) => logger.log('warn', info))
+Client.on('debug', (info) => logger.log('debug', info) )
 Client.on('disconnect', () => logger.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'))
-Client.on('ready', () => logger.info( `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`) )
+Client.on('ready', () => { logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`) })
 
 // emitted on message send
 Client.on('message', msg => {

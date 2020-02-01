@@ -107,5 +107,8 @@ dist
 # API Keys file
 api_keys.json
 
+# Private Info
+email_logging.json
+
 # VSCode folder
 .vscode/

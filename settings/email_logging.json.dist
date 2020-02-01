@@ -1,0 +1,9 @@
+{
+    "error": { "email": null },
+    "warn": { "email": null },
+    "info": { "email": null },
+    "http": { "email": null },
+    "verbose": { "email": null },
+    "debug": { "email": null },
+    "silly": { "email": null }
+}

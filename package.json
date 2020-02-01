@@ -32,6 +32,7 @@
     "request-promise": "^4.2.5",
     "sqlite": "^3.0.3",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^4.4.2"
+    "winston-daily-rotate-file": "^4.4.2",
+    "winston-mail": "^2.0.0"
   }
 }
