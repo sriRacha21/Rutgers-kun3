@@ -29,8 +29,8 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] addemote
 - [x] huh (skipping because of lack of importance and potential load on db)
 - [x] quote
-- [ ] chain
-- [ ] settings - replace with config command that'll help the user configure fields such as the approval channel
+- [ ] chain - almost done, still need highscore
+- [ ] config
 - [x] setword (think about rename)
 - [x] whoami
 ### Reimplenting privileged old commands
@@ -58,3 +58,5 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [ ] chain counting
 - [ ] verify competitive roles (use approval framework)
 - [ ] karma system for helpful users
+- [x] send email on error through winston
+- [x] write function to turn object fields into email body

@@ -19,27 +19,27 @@ const { parseCustomCommand } = require('./helpers/parseCustomCommand')
 const { rutgersChan } = require('./helpers/rutgersChan')
 const { reroll } = require('./helpers/reroll')
 const { checkWordCount } = require('./helpers/checkWordCount')
-const { setupWinstonTransports } = require('./helpers/setupWinstonTransports')
-// get method for looking into objects (used for error logging)
-const { inspect } = require('util')
+const { getWinstonTransports } = require('./helpers/getWinstonTransports')
+const { objToEmailBody } = require('./helpers/objToEmailBody')
+const { detectChain } = require('./helpers/detectChain')
 // set up winston logging
-const winston = require('winston')
-const logger = winston.createLogger()
-setupWinstonTransports(logger)
+const logger = require('./logger')
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
 /*  EVENTS  */
 // emitted on error, warn, debug
-Client.on('error', (info) => logger.log('error', info))
+Client.on('error', (error) => logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}`))
 Client.on('commandError', (command, err, message, args, fromPattern, result) => {
-    logger.log('error', 
-`<b>Command:</b> ${message.guild.commandPrefix}${command.groupID}:${command.memberName} or ${message.guild.commandPrefix}${command.name}
-<br><b>Guild:</b> ${message.guild.name}
-<br><b>Error:</b> ${err.name}: ${err.message}
-<br><b>Arguments:</b> ${inspect(args)}
-<br><b>fromPattern:</b> ${fromPattern}
-<br><b>Result:</b> ${result}`)
+    logger.log('error', objToEmailBody({
+        command: `${message.guild.commandPrefix}${command.groupID}:${command.memberName} or ${message.guild.commandPrefix}${command.name}`,
+        guild: message.guild.name,
+        message_link: message.url,
+        error: `${err.name}: ${err.message}`,
+        arguments: args,
+        fromPattern: fromPattern,
+        result: result
+    }))
 })
 Client.on('warn', (info) => logger.log('warn', info))
 Client.on('debug', (info) => logger.log('debug', info) )
@@ -63,6 +63,8 @@ Client.on('message', msg => {
     // react with rutgerschan, do reroll
     rutgersChan( msg )
     reroll( msg )
+    // detect chains
+    detectChain( msg, Client.provider )
 })
 // emitted on adding a reaction to a message
 Client.on('messageReactionAdd', (messageReaction, user) => {
