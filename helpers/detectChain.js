@@ -21,8 +21,6 @@ function detectChain( msg, settings ) {
     // add to buffer if the message matches the other ones, ensure buffer is mainainted by key value channel id
     const bufferMatchSize = checkBufferMatch( msg )
 
-    logger.debug( `bufferMatchSize: ${bufferMatchSize}` )
-
     if( bufferMatchSize ) {
         // cover special case of needing to label first message with 1
         if( bufferMatchSize == 2 )
@@ -37,7 +35,6 @@ function checkBufferMatch( msg ) {
     let isBufferMatch = false
     const maybeMsgArr = msgChainTable.get(msg.channel.id)
     if( maybeMsgArr ) {
-        maybeMsgArr.push( msg )
         isBufferMatch = maybeMsgArr.reduce( (accumulator, message) => {
             return accumulator 
             &&  (
@@ -46,6 +43,7 @@ function checkBufferMatch( msg ) {
                     && message.content != ''
                 )
         }, true)
+        maybeMsgArr.push( msg )
         // reset the entry in the hashtable if the chain is broken
         if( !isBufferMatch )
             msgChainTable.put( msg.channel.id, [ msg ] )
