@@ -55,7 +55,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] latex interpreter
 ### Extra
 - [ ] Live role
-- [ ] chain counting
+- [x] chain counting
 - [ ] verify competitive roles (use approval framework)
 - [ ] karma system for helpful users
 - [x] send email on error through winston

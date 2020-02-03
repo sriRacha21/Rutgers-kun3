@@ -1,11 +1,16 @@
 const HashTable = require('hashtable')
 const logger = require('../logger')
 const msgChainTable = new HashTable()
+const { getRandomElement } = require('./getRandom')
 
 const numberEmotes = [
     '0️⃣', '1️⃣', '2️⃣', '3️⃣', 
     '4️⃣', '5️⃣', '6️⃣', '7️⃣', 
     '8️⃣', '9️⃣', '🔢',
+]
+
+const angery = [
+    '😠', '😡', '💢'
 ]
 
 function detectChain( msg, settings ) {
@@ -19,9 +24,27 @@ function detectChain( msg, settings ) {
 
     // in order to start the chain properly a buffer of messages must be maintained
     // add to buffer if the message matches the other ones, ensure buffer is mainainted by key value channel id
-    const bufferMatchSize = checkBufferMatch( msg )
+    // pass a function that happens when the chain is broken
+    const bufferMatchSize = checkBufferMatch(msg, (bufferMatchSize) => {
+        // react to chain breaking message with an angry face
+        msg.react(getRandomElement(angery))
+        // if the chain was the highest ever recorded in the server set the new record and output a message
+        // but only if the score is 2 or higher.
+        const maybeHighscore = settings.get( msg.guild, 'chain:highscore' ) 
+        // if there is no current high score or the current score is higher than the current high score, set the new record and output a message
+        if( !maybeHighscore || bufferMatchSize > maybeHighscore.score ) {
+            settings.set( msg.guild, 'chain:highscore', {
+                message: msg.content,
+                channel: msg.channel.id,
+                score: bufferMatchSize,
+                breaker: msg.author.id,
+            })
+            msg.channel.send( `New chain highscore for server \`${msg.guild.name}\` of ${bufferMatchSize}!` )
+        }
+    })
 
     if( bufferMatchSize ) {
+        // react with numbers appropriately
         // cover special case of needing to label first message with 1
         if( bufferMatchSize == 2 )
             msgChainTable.get(msg.channel.id)[0].react(numberEmotes[1])
@@ -31,7 +54,7 @@ function detectChain( msg, settings ) {
     return
 }
 
-function checkBufferMatch( msg ) {
+function checkBufferMatch( msg, breakingFunction ) {
     let isBufferMatch = false
     const maybeMsgArr = msgChainTable.get(msg.channel.id)
     if( maybeMsgArr ) {
@@ -45,8 +68,11 @@ function checkBufferMatch( msg ) {
         }, true)
         maybeMsgArr.push( msg )
         // reset the entry in the hashtable if the chain is broken
-        if( !isBufferMatch )
+        if( !isBufferMatch ) {
             msgChainTable.put( msg.channel.id, [ msg ] )
+            if( maybeMsgArr.length > 2 )
+                breakingFunction(maybeMsgArr.length - 1)
+        }
     } else
         msgChainTable.put( msg.channel.id, [ msg ] )
 
