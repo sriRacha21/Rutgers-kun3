@@ -29,7 +29,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] addemote
 - [x] huh (skipping because of lack of importance and potential load on db)
 - [x] quote
-- [ ] chain - almost done, still need highscore
+- [x] chain
 - [ ] config
 - [x] setword (think about rename)
 - [x] whoami
