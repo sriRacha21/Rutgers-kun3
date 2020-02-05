@@ -8,7 +8,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 ### How to run me locally!
 1. Clone me somewhere you feel comfortable keeping Github projects: `git clone https://github.com/sriRacha21/Rutgers-kun3.git`
 2. Edit `api_keys.json.dist` and replace the "your token here text" with your API token (surrounded by double quotation marks), obtained from the Discord developer portal. Rename the file to `api_keys.json`.
-3. Edit `email_logging.json.dist` and rename it `email_logging.json.dist`. If you are forking the project, you can edit this file to email you on errors.
+3. Edit `email_logging.json.dist` and rename it `email_logging.json`. If you are forking the project, you can edit this file to email you on errors.
 4. cd to root directory of the project.
 5. `npm install`
 6. `node main.js`
