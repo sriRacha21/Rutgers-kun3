@@ -19,9 +19,9 @@ const { parseCustomCommand } = require('./helpers/parseCustomCommand')
 const { rutgersChan } = require('./helpers/rutgersChan')
 const { reroll } = require('./helpers/reroll')
 const { checkWordCount } = require('./helpers/checkWordCount')
-const { getWinstonTransports } = require('./helpers/getWinstonTransports')
 const { objToEmailBody } = require('./helpers/objToEmailBody')
 const { detectChain } = require('./helpers/detectChain')
+const { agreeHelper } = require('./helpers/agreeHelper')
 // set up winston logging
 const logger = require('./logger')
 // initialize the Discord client
@@ -53,6 +53,15 @@ Client.on('message', msg => {
     if( msg.author.bot )
         return
 
+    // delete messages in #agreement if they're made by non-admins or bots
+    if( msg.guild ) {
+        const agreementChannel = Client.provider.get( msg.guild, `agreementChannel` )
+        if( agreementChannel == msg.channel.id && (msg.author.bot || !msg.member.hasPermission(defaults.admin_permission)) )
+            msg.delete()
+    }
+
+    // agreement process, we need the settings and settingsprovider to access guild and universal settings
+    agreeHelper( msg, Client.guilds, Client.settings, Client.provider )
     // parse a custom command if the message starts with it, send the first word after the prefix to the method
     if( msg.cleanContent.startsWith(msg.guild && msg.guild.commandPrefix) )
         parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.provider, msg.channel )
@@ -98,7 +107,7 @@ Client.registry
         ['config', 'Configure Server Settings'],
         ['settings', 'Settings'],
         ['verification', 'Verification']
-    ])
+])
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))
     .registerCommandsIn(path.join(__dirname, 'commands'))

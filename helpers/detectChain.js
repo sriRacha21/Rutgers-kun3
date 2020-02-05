@@ -1,5 +1,4 @@
 const HashTable = require('hashtable')
-const logger = require('../logger')
 const msgChainTable = new HashTable()
 const { getRandomElement } = require('./getRandom')
 
