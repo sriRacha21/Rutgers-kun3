@@ -5,6 +5,7 @@ const SMTP_Server = JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf
 const { generateVerificationCode } = require('./getRandom')
 const { idsToValues } = require('./idsToValues')
 const { isValidnetID } = require('./isValidnetID')
+const { sendWelcomeMessage } = require('./sendWelcomeMessage')
 const { oneLine } = require('common-tags')
 const logger = require('../logger')
 const { inspect } = require('util')
@@ -54,6 +55,8 @@ function agreeHelper( msg, guilds, settings, provider ) {
             if( permissionRole )
                 rolesToAdd.push( permissionRole )
             guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
+            settings.remove( `agree:${msg.author.id}` )
+            sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel'), provider.get( guild, 'welcomeText' ) )
             return msg.author.send( `You have successfully been given the ${agreementRole.name} role in ${guild.name}!` )
         }
         // otherwise set the setting
@@ -115,6 +118,8 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         if( permissionRole )
             rolesToAdd.push(permissionRole)
         guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
+        // send welcome message
+        sendWelcomeMessage( guild, msg.author, provider.get( msg.guild, 'welcomeChannel' ), provider.get( msg.guild, 'welcomeText' ) )
         // clean the database
         settings.remove( `agree:${msg.author.id}` )
         return msg.author.send( `You have successfully been given the ${agreementRoleToAdd.name} role in ${guild.name}!` )
