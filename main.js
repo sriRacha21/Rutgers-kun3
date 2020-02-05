@@ -22,6 +22,7 @@ const { checkWordCount } = require('./helpers/checkWordCount')
 const { objToEmailBody } = require('./helpers/objToEmailBody')
 const { detectChain } = require('./helpers/detectChain')
 const { agreeHelper } = require('./helpers/agreeHelper')
+const { flushAgreements } = require('./helpers/flushAgreements')
 // set up winston logging
 const logger = require('./logger')
 // initialize the Discord client
@@ -45,7 +46,11 @@ Client.on('warn', (info) => logger.log('warn', info))
 Client.on('debug', (info) => logger.log('debug', info) )
 Client.on('disconnect', () => logger.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'))
-Client.on('ready', () => { logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`) })
+Client.on('ready', () => { 
+    logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`)
+    // periodically flush messages in #agreement in all servers
+    flushAgreements( Client.guilds, Client.provider ) 
+})
 
 // emitted on message send
 Client.on('message', msg => {

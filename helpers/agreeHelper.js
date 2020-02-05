@@ -75,6 +75,10 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         // turn the role ID into a role
         const role = guild.roles.find( role => role.id == roleID )
         // now that we know the netID is valid, send them an email with a verification code
+        if( !API_Keys.smtp_password ) {
+            logger.log( 'error', `SMTP password not set!` )
+            msg.author.send( 'The password for the SMTP server was not set. Please notify an administrator in your server.' )
+        }
         const transporter = nodemailer.createTransport({
             host: 'smtp.mailgun.org',
             port: 587,

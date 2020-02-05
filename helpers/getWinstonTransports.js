@@ -26,6 +26,10 @@ function getWinstonTransports() {
     for( const level in emails ) {
         const email = emails[level].email
         if( email ) {
+            if( !API_Keys.smtp_password ) {
+                logger.log( 'error', 'SMTP password not set!' )
+                continue
+            }
             transports.push(new Mail({
                 to: email,
                 from: "winston-error@mailgun.rutgersesports.com", // think about making this configurable

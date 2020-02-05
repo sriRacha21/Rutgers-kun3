@@ -1,3 +1,4 @@
 {
 	"token": "your token goes here"
+	"smtp_password": null
 }
