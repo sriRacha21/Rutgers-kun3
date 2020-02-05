@@ -45,6 +45,9 @@ If you want to designate this as the agreement channel please use ${msg.guild.co
                 step: 1
             })
         })
-        .catch( msg.channel.send(`Your DM's are turned off so I can't DM you the instructions to help you get verified. Please enable your DM's momentarily.`) )
+        .catch( err => {
+            if( err )
+                msg.channel.send(`Error: ${e}`)
+        })
     }
 }
