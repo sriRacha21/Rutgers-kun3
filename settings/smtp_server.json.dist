@@ -1,0 +1,7 @@
+{
+    "host": "host here",
+    "port": port number here (null defaults to 587),
+    "domain": "domain here",
+    "username": "username for smtp server here",
+    "password": "password for smtp server here"
+}

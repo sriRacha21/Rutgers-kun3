@@ -1,12 +1,12 @@
 // sending emails
 const nodemailer = require('nodemailer')
 const fs = require('fs')
-const API_Keys = JSON.parse(fs.readFileSync('settings/api_keys.json', 'utf-8'))
+const SMTP_Server = JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8'))
 const { generateVerificationCode } = require('./getRandom')
 const { idsToValues } = require('./idsToValues')
 const { isValidnetID } = require('./isValidnetID')
 const { oneLine } = require('common-tags')
-const { logger } = require('../logger')
+const logger = require('../logger')
 const { inspect } = require('util')
 
 function agreeHelper( msg, guilds, settings, provider ) {
@@ -75,21 +75,17 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         // turn the role ID into a role
         const role = guild.roles.find( role => role.id == roleID )
         // now that we know the netID is valid, send them an email with a verification code
-        if( !API_Keys.smtp_password ) {
-            logger.log( 'error', `SMTP password not set!` )
-            msg.author.send( 'The password for the SMTP server was not set. Please notify an administrator in your server.' )
-        }
         const transporter = nodemailer.createTransport({
-            host: 'smtp.mailgun.org',
-            port: 587,
+            host: SMTP_Server.host,
+            port: SMTP_Server.port ? SMTP_Server.port : 587,
             auth: {
-                user: 'postmaster@mailgun.rutgersesports.com',
-                pass: API_Keys.smtp_password,
+                user: SMTP_Server.username,
+                pass: SMTP_Server.password,
             }
         })
         const verificationCode = generateVerificationCode()
         const emailInfo = {
-            from: 'server-verification@mailgun.rutgersesports.com',
+            from: `server-verification@${SMTP_Server.domain}`,
             to: `${maybeNetID}@scarletmail.rutgers.edu`,
             subject: `Verify your ${role.name} role in ${guild.name}!`,
             text: `Your verification code is:\n${verificationCode}`

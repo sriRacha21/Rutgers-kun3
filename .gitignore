@@ -109,6 +109,7 @@ api_keys.json
 
 # Private Info
 email_logging.json
+smtp_server.json
 
 # VSCode folder
 .vscode/
