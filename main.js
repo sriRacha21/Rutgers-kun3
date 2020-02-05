@@ -35,11 +35,9 @@ Client.on('commandError', (command, err, message, args, fromPattern, result) => 
     logger.log('error', objToEmailBody({
         command: `${message.guild.commandPrefix}${command.groupID}:${command.memberName} or ${message.guild.commandPrefix}${command.name}`,
         guild: message.guild.name,
-        message_link: message.url,
         error: `${err.name}: ${err.message}`,
         arguments: args,
         fromPattern: fromPattern,
-        result: result
     }))
 })
 Client.on('warn', (info) => logger.log('warn', info))

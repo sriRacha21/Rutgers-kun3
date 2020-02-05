@@ -2,6 +2,7 @@ const Commando = require('discord.js-commando')
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
+const { idsToValues } = require('../../helpers/idsToValues')
 
 module.exports = class ListConfigCommand extends Commando.Command {
     constructor(client) {
@@ -21,6 +22,10 @@ module.exports = class ListConfigCommand extends Commando.Command {
 
         // get fields we're putting in the embed
         const approvalChannelID = settings.get( msg.guild, `approvalChannel` )
+        const agreementChannelID = settings.get( msg.guild, `agreementChannel` )
+        const welcomeChannelID = settings.get( msg.guild, `welcomeChannel` )
+        const welcomeText = settings.get( msg.guild, `welcomeText` )
+        const agreementRoles = settings.get( msg.guild, `agreementRoles` )
         const rolesList = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
 
         // generate embed
@@ -34,6 +39,18 @@ module.exports = class ListConfigCommand extends Commando.Command {
 
         if( approvalChannelID )
             embed.addField( `Approval channel:`, `<#${approvalChannelID}>` )
+        if( agreementChannelID )
+            embed.addField( `Agreement channel:`, `<#${agreementChannelID}>` )
+        if( welcomeChannelID )
+            embed.addField( `Welcome channel:`, `<#${welcomeChannelID}>` )
+        if( welcomeText )
+            embed.addField( `Welcome text:`, welcomeText )
+        if( agreementRoles && agreementRoles.length > 0 ) {
+            agreementRoles.forEach( agreementRole => {
+                agreementRole.roleID = msg.guild.roles.find(role => role.id == agreementRole.roleID)
+            })
+            embed.addField( `Agreement Roles:`, agreementRoles.map(role => `${role.roleID}, ${role.authenticate}`).join('\n') )
+        }
         if( rolesList.length > 0 )
             embed.addField( 'Protected Roles:', rolesList.map(role => `<@${role}>`).join('\n') )
 
