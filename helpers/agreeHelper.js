@@ -34,7 +34,10 @@ function agreeHelper( msg, guilds, settings, provider ) {
     const agreementRoleObjs = provider.get( guild, `agreementRoles` )
     const agreementRoles = idsToValues( agreementRoleObjs.map(agreementRoleObj => agreementRoleObj.roleID), guild.roles )
     const agreementRoleToAdd = guild.roles.find( role => role.id == roleID )
-    const permissionRole = guild.roles.find( role => role.id == agreementRoleObjs.find(obj => obj.authenticate == 'permission').roleID )
+    const permissionRoleObj = agreementRoleObjs.find(obj => obj.authenticate == 'permission')
+    let permissionRole
+    if( permissionRoleObj )
+        permissionRole = guild.roles.find( role => role.id == permissionRoleObj.roleID )
 
     // if the user is on step 1, look for the role they want to add
     if( step == 1 ) {
