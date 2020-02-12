@@ -1,5 +1,4 @@
 const Commando = require('discord.js-commando')
-const util = require('util')
 
 class SoundArgumentType extends Commando.ArgumentType {
     constructor(client) { super(client, 'sound') }
@@ -21,4 +20,4 @@ class SoundArgumentType extends Commando.ArgumentType {
     }
 }
 
-module.exports = SoundArgumentType;
+module.exports = SoundArgumentType

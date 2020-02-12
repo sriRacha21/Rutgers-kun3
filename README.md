@@ -32,7 +32,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] huh (skipping because of lack of importance and potential load on db)
 - [x] quote
 - [x] chain
-- [ ] config
+- [x] config (in favor of multiple configuration commands)
 - [x] setword (think about rename)
 - [x] whoami
 ### Reimplenting privileged old commands

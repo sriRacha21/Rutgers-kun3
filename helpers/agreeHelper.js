@@ -119,7 +119,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             rolesToAdd.push(permissionRole)
         guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
         // send welcome message
-        sendWelcomeMessage( guild, msg.author, provider.get( msg.guild, 'welcomeChannel' ), provider.get( msg.guild, 'welcomeText' ) )
+        sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
         // clean the database
         settings.remove( `agree:${msg.author.id}` )
         return msg.author.send( `You have successfully been given the ${agreementRoleToAdd.name} role in ${guild.name}!` )

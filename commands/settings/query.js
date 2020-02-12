@@ -29,6 +29,6 @@ module.exports = class QueryCommand extends Commando.Command {
         const data = this.client.provider.db.all(query)
 
         // pretty-print data with spacing of 2 and in a code block.
-        return msg.channel.send( JSON.stringify(await data, null, 2), {code: 'json'} )
+        return msg.channel.send( JSON.stringify(await data, null, 2), {code: 'json', split:true} )
     }
 }

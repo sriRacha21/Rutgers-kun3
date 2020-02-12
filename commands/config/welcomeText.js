@@ -10,7 +10,7 @@ module.exports = class SetWelcomeTextCommand extends Commando.Command {
             group: 'config',
             memberName: 'welcometext',
             description: oneLine`Configure the message that will be sent when a user joins the server. Use \`[guild]\` to replace that
-part of the text with the guild name and [user] to replace that part of the text with a string mentioning the joining user. 
+part of the text with the guild name and \`[user]\` to replace that part of the text with a string mentioning the joining user. 
 Just enter \`clear\` to clear the setting.`,
             userPermissions: [ defaults.admin_permission ],
             guildOnly: true,
@@ -18,7 +18,9 @@ Just enter \`clear\` to clear the setting.`,
                 {
                     key: 'welcomeText',
                     label: 'welcome text',
-                    prompt: `Enter the text you want a user to see when they enter the server.`,
+                    prompt: oneLine`Enter the text you want a user to see when they enter the server. Use \`[guild]\` to replace that
+part of the text with the guild name and \`[user]\` to replace that part of the text with a string mentioning the joining user. 
+Just enter \`clear\` to clear the setting.`,
                     type: 'string',
                 }
             ],

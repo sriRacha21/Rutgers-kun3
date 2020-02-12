@@ -24,7 +24,7 @@ function detectChain( msg, settings ) {
     // in order to start the chain properly a buffer of messages must be maintained
     // add to buffer if the message matches the other ones, ensure buffer is mainainted by key value channel id
     // pass a function that happens when the chain is broken
-    const bufferMatchSize = checkBufferMatch(msg, (bufferMatchSize) => {
+    const bufferMatchSize = checkBufferMatch(msg, (bufferMatchSize, message) => {
         // react to chain breaking message with an angry face
         msg.react(getRandomElement(angery))
         // if the chain was the highest ever recorded in the server set the new record and output a message
@@ -33,7 +33,7 @@ function detectChain( msg, settings ) {
         // if there is no current high score or the current score is higher than the current high score, set the new record and output a message
         if( !maybeHighscore || bufferMatchSize > maybeHighscore.score ) {
             settings.set( msg.guild, 'chain:highscore', {
-                message: msg.content,
+                message: message.content,
                 channel: msg.channel.id,
                 score: bufferMatchSize,
                 breaker: msg.author.id,
@@ -70,7 +70,7 @@ function checkBufferMatch( msg, breakingFunction ) {
         if( !isBufferMatch ) {
             msgChainTable.put( msg.channel.id, [ msg ] )
             if( maybeMsgArr.length > 2 )
-                breakingFunction(maybeMsgArr.length - 1)
+                breakingFunction(maybeMsgArr.length - 1, maybeMsgArr[0] )
         }
     } else
         msgChainTable.put( msg.channel.id, [ msg ] )

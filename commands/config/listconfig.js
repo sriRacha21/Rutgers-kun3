@@ -46,13 +46,13 @@ module.exports = class ListConfigCommand extends Commando.Command {
         if( welcomeText )
             embed.addField( `Welcome text:`, welcomeText )
         if( agreementRoles && agreementRoles.length > 0 ) {
-            agreementRoles.forEach( agreementRole => {
-                agreementRole.roleID = msg.guild.roles.find(role => role.id == agreementRole.roleID)
-            })
-            embed.addField( `Agreement Roles:`, agreementRoles.map(role => `${role.roleID}, ${role.authenticate}`).join('\n') )
+            // agreementRoles.forEach( agreementRole => {
+            //     agreementRole.roleID = msg.guild.roles.find(role => role.id == agreementRole.roleID)
+            // })
+            embed.addField( `Agreement Roles:`, agreementRoles.map(role => `<@&${role.roleID}>, ${role.authenticate}`).join('\n') )
         }
         if( rolesList.length > 0 )
-            embed.addField( 'Protected Roles:', rolesList.map(role => `<@${role}>`).join('\n') )
+            embed.addField( 'Protected Roles:', rolesList.map(role => `<@&${role}>`).join('\n') )
 
         return msg.channel.send( embed.fields.length > 0 ? embed : `No configs for this server. Set them up with \`${msg.guild.commandPrefix}config\`.` )
     }

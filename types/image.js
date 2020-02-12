@@ -25,4 +25,4 @@ class ImageArgumentType extends Commando.ArgumentType {
     }
 }
 
-module.exports = ImageArgumentType;
+module.exports = ImageArgumentType

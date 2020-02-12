@@ -108,6 +108,7 @@ Client.registry
         ['soundboard', 'Soundboard'],
         ['information', 'Info'],
         ['config', 'Configure Server Settings'],
+        ['moderation', 'Moderation'],
         ['settings', 'Settings'],
         ['verification', 'Verification']
 ])
