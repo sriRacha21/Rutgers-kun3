@@ -79,7 +79,7 @@ function submitRequestToChannel( requestSubmissionInfo, settings ) {
     channel.send( reRequest )
     .then( m => {
         m.react('👍')
-        m.react('👎')
+        .then( setTimeout( () => {m.react('👎')}, 1000 ))
         settings.set( channel.guild, `request:${m.id}`, {
             approveRequest: () => { runHasPerms() },
             userToNotify: user.id,

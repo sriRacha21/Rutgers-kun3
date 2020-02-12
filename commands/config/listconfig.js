@@ -27,6 +27,7 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const welcomeText = settings.get( msg.guild, `welcomeText` )
         const agreementRoles = settings.get( msg.guild, `agreementRoles` )
         const rolesList = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
+        const muteRoleID = settings.get( msg.guild, `muteRole` )
 
         // generate embed
         const embed = generateDefaultEmbed({
@@ -45,12 +46,10 @@ module.exports = class ListConfigCommand extends Commando.Command {
             embed.addField( `Welcome channel:`, `<#${welcomeChannelID}>` )
         if( welcomeText )
             embed.addField( `Welcome text:`, welcomeText )
-        if( agreementRoles && agreementRoles.length > 0 ) {
-            // agreementRoles.forEach( agreementRole => {
-            //     agreementRole.roleID = msg.guild.roles.find(role => role.id == agreementRole.roleID)
-            // })
+        if( muteRoleID )
+            embed.addField( `Mute role:`, `<@&${muteRoleID}>` )
+        if( agreementRoles && agreementRoles.length > 0 )
             embed.addField( `Agreement Roles:`, agreementRoles.map(role => `<@&${role.roleID}>, ${role.authenticate}`).join('\n') )
-        }
         if( rolesList.length > 0 )
             embed.addField( 'Protected Roles:', rolesList.map(role => `<@&${role}>`).join('\n') )
 
