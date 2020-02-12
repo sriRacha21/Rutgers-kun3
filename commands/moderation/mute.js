@@ -24,6 +24,15 @@ module.exports = class MuteCommnad extends Commando.Command {
     }
 
     async run( msg, {user, time} ) {
+        if( user.user.id == this.client.user.id ) {
+            const maybeEmote = this.client.emojis.find(emoji => emoji.name == 'WeirdChamp')
+            if( maybeEmote )
+                msg.react( maybeEmote )
+            else
+                msg.channel.send( 'Nice try!' )
+            return
+        }
+
         // msg.channel.send( `User is ${user}. Time is ${time}.` )
         msg.channel.send( `WIP!` )
     }
