@@ -1,6 +1,7 @@
 const Commando = require('discord.js-commando')
 const request = require('request-promise')
 const { getRandomElement } = require('../../helpers/getRandom')
+const { loadingEdit } = require('../../helpers/loadingEdit')
 
 module.exports = class WoofCommand extends Commando.Command {
     constructor(client) {
@@ -44,10 +45,12 @@ module.exports = class WoofCommand extends Commando.Command {
         const url = `https://api.woofbot.io/v1/breeds/${breed}/image`
 
         // perform the request
-        const req = await request(url)
-        const json = JSON.parse(req)
-
-        // return the url as a file
-        return msg.channel.send( { files: [json.response.url] } )
+        request(url)
+        .then( req => {
+            const json = JSON.parse(req)
+            // return the url as a file
+            loadingEdit(msg.channel, this.client.emojis, null, { files: [json.response.url] } )
+        })
+        .catch( err => msg.channel.send( `There was an error: ${err}` ))
     }
 }

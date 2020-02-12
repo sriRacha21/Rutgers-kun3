@@ -33,7 +33,7 @@ const Client = new Commando.Client(ClientOptions)
 Client.on('error', (error) => logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}`))
 Client.on('commandError', (command, err, message, args, fromPattern, result) => {
     logger.log('error', objToEmailBody({
-        command: `${message.guild.commandPrefix}${command.groupID}:${command.memberName} or ${message.guild.commandPrefix}${command.name}`,
+        command: `${command.groupID}:${command.memberName} or ${command.name}`,
         guild: message.guild.name,
         error: `${err.name}: ${err.message}`,
         arguments: args,

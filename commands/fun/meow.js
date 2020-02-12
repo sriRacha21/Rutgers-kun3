@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando')
 const request = require('request-promise')
+const { loadingEdit } = require('../../helpers/loadingEdit')
 
 module.exports = class MeowCommand extends Commando.Command {
     constructor(client) {
@@ -18,9 +19,11 @@ module.exports = class MeowCommand extends Commando.Command {
     
     async run( msg, args ) {
         const url = `https://aws.random.cat/meow`
-        const req = await request(url)
-        const json = JSON.parse(req)
-
-        return msg.channel.send( { files: [json.file] } )
+        request(url)
+        .then( req => {
+            const json = JSON.parse(req)
+            loadingEdit( msg.channel, this.client.emojis, null, { files: [json.file] } )
+        })
+        .catch( err => msg.channel.send( `There was an error: ${err}`))
     }
 }

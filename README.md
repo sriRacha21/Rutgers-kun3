@@ -36,7 +36,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] setword (think about rename)
 - [x] whoami
 ### Reimplenting privileged old commands
-- [ ] mute
+- [x] mute
 - [ ] ignore
 - [ ] agree
 - [x] listadmincommands (already solved with commando)

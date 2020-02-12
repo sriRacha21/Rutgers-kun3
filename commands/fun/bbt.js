@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando')
 const exec = require('child_process').execSync
+const { loadingEdit } = require('../../helpers/loadingEdit')
 
 module.exports = class BbtCommand extends Commando.Command {
     constructor(client) {
@@ -19,12 +20,6 @@ module.exports = class BbtCommand extends Commando.Command {
     }
 
     async run( msg ) {
-        return msg.channel.send(
-            exec('python3 scripts/fa1939febb310bcb6f8e9809604a4211/bbt.py')
-            .toString(),
-            {
-                code: true
-            }
-        )
+        loadingEdit( msg.channel, this.client.emojis, exec('python3 scripts/fa1939febb310bcb6f8e9809604a4211/bbt.py').toString(), { code: true } )
     }
 }
