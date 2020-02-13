@@ -46,7 +46,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] echo
 - [x] nick (not really needed)
 - [x] updaterules (not needed because warns are through yagpdb)
-- [ ] filterfromlive (unneeded, check off when live role functionality is done)
+- [x] filterfromlive (unneeded, check off when live role functionality is done)
 - [x] dm (correspondence through dm is not possible because dm's aren't logged so this is unncessary)
 - [ ] setroleresponse
 - [x] setpingexception (covered by setunpingableroles)
@@ -56,7 +56,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 ### New command ideas
 - [x] latex interpreter
 ### Extra
-- [ ] Live role
+- [x] Live role
 - [x] chain counting
 - [ ] verify competitive roles (use approval framework)
 - [ ] karma system for helpful users
