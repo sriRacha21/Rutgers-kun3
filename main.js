@@ -24,6 +24,8 @@ const { detectChain } = require('./helpers/detectChain')
 const { agreeHelper } = require('./helpers/agreeHelper')
 const { flushAgreements } = require('./helpers/flushAgreements')
 const { checkRoleMentions } = require('./helpers/checkRoleMentions')
+const { setLiveRole } = require('./helpers/setLiveRole')
+const { flushLiveRoles } = require('./helpers/flushLiveRoles')
 // set up winston logging
 const logger = require('./logger')
 // initialize the Discord client
@@ -49,6 +51,8 @@ Client.on('ready', () => {
     logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`)
     // periodically flush messages in #agreement in all servers
     flushAgreements( Client.guilds, Client.provider ) 
+    // periodically flush the live role from users that aren't streaming
+    flushLiveRoles( Client.guilds, Client.provider )
 })
 
 // emitted on message send
@@ -81,6 +85,7 @@ Client.on('message', msg => {
     // detect chains
     detectChain( msg, Client.provider )
 })
+
 // emitted on adding a reaction to a message
 Client.on('messageReactionAdd', (messageReaction, user) => {
     // ignore reactions by this bot
@@ -89,9 +94,12 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
 
     // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
-
 })
 
+// emitted on change of guild member properties
+Client.on('presenceUpdate', (oldMember, newMember) => {
+    setLiveRole( oldMember, newMember, Client.provider )
+})
 /*  CLEAN UP    */
 // set up SettingsProvider
 Client.setProvider(

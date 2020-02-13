@@ -2,7 +2,6 @@ const Commando = require('discord.js-commando')
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
-const { idsToValues } = require('../../helpers/idsToValues')
 
 module.exports = class ListConfigCommand extends Commando.Command {
     constructor(client) {
@@ -26,8 +25,9 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const welcomeChannelID = settings.get( msg.guild, `welcomeChannel` )
         const welcomeText = settings.get( msg.guild, `welcomeText` )
         const agreementRoles = settings.get( msg.guild, `agreementRoles` )
-        const rolesList = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
+        const protectedRoles = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
         const muteRoleID = settings.get( msg.guild, `muteRole` )
+        const liveRoleID = settings.get( msg.guild, `liveRole` )
         const unpingableRoleIDs = settings.get( msg.guild, `unpingableRoles` )
 
         // generate embed
@@ -49,12 +49,14 @@ module.exports = class ListConfigCommand extends Commando.Command {
             embed.addField( `Welcome text:`, welcomeText )
         if( muteRoleID )
             embed.addField( `Mute role:`, `<@&${muteRoleID}>` )
+        if( liveRoleID )
+            embed.addField( `Live role:`, `<@&${liveRoleID}>` )
         if( agreementRoles && agreementRoles.length > 0 )
             embed.addField( `Agreement Roles:`, agreementRoles.map(role => `<@&${role.roleID}>, ${role.authenticate}`).join('\n') )
         if( unpingableRoleIDs )
             embed.addField( `Unpingable Roles:`, unpingableRoleIDs.map(role => `<@&${role}>`).join('\n') )
-        if( rolesList.length > 0 )
-            embed.addField( 'Protected Roles:', rolesList.map(role => `<@&${role}>`).join('\n') )
+        if( protectedRoles.length > 0 )
+            embed.addField( 'Protected Roles:', protectedRoles.map(role => `<@&${role}>`).join('\n') )
 
         return msg.channel.send( embed.fields.length > 0 ? embed : `No configs for this server. Set them up with \`${msg.guild.commandPrefix}config\`.` )
     }

@@ -16,7 +16,7 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
                 {
                     key: 'muteRole',
                     label: 'mute role',
-                    prompt: oneLine`Enter the role you want to designate as the muted role.`,
+                    prompt: oneLine`Enter the role you want to designate as the muted role. Enter \`clear\` to remove the setting.`,
                     type: 'role|string',
                 }
             ],
