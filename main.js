@@ -23,6 +23,7 @@ const { objToEmailBody } = require('./helpers/objToEmailBody')
 const { detectChain } = require('./helpers/detectChain')
 const { agreeHelper } = require('./helpers/agreeHelper')
 const { flushAgreements } = require('./helpers/flushAgreements')
+const { checkRoleMentions } = require('./helpers/checkRoleMentions')
 // set up winston logging
 const logger = require('./logger')
 // initialize the Discord client
@@ -70,6 +71,8 @@ Client.on('message', msg => {
         parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.provider, msg.channel )
     // check if message contains latex formatting, also suggest using latex formatting
     latexInterpreter( msg.cleanContent, msg.channel )
+    // check if role has been mentioned
+    checkRoleMentions( msg, Client.provider )
     // check if word counters need to be incremented
     checkWordCount( msg, Client.settings )
     // react with rutgerschan, do reroll

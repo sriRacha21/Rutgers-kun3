@@ -38,18 +38,18 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 ### Reimplenting privileged old commands
 - [x] mute
 - [ ] ignore
-- [ ] agree
+- [x] agree
 - [x] listadmincommands (already solved with commando)
-- [ ] query 
-- [ ] filter
-- [ ] warn
-- [ ] echo
+- [x] query 
+- [x] filter (managed through yagpdb)
+- [x] warn (managed through yagpdb)
+- [x] echo
 - [x] nick (not really needed)
-- [ ] updaterules
+- [x] updaterules (not needed because warns are through yagpdb)
 - [ ] filterfromlive
-- [ ] dm
+- [x] dm (correspondence through dm is not possible because dm's aren't logged so this is unncessary)
 - [ ] setroleresponse
-- [ ] setpingexception
+- [x] setpingexception (covered by setunpingableroles)
 - [ ] setautoverify
 - [ ] settransactionchannel
 - [x] djs (replaced by eval)

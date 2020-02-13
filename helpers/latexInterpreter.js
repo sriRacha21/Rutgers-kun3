@@ -2,7 +2,7 @@ const { stripIndents } = require('common-tags')
 
 async function latexInterpreter( msgContent, channel ) {
     // get matches
-    let matches = msgContent.match( /\[\[.+?\]\]/g )
+    let matches = msgContent.match( /\{\{.+?\}\}/g )
 
     // was there a match?
     const matchFound = matches && matches.length > 0
@@ -14,7 +14,7 @@ async function latexInterpreter( msgContent, channel ) {
         // if no match was found and one is suggested send suggestion message
         if( channel && suggestMatch )
             channel.send( stripIndents`I see you're trying to enter math. I can parse LaTeX! Try entering an expression in double square brackets and I'll parse it.
-            Example: This line can be expressed as [[y=x-2]].` )
+            Example: This line can be expressed as {{y=x-2}}.` )
         return
     }
 
@@ -24,7 +24,7 @@ async function latexInterpreter( msgContent, channel ) {
     .map(match => match.trim())
 
     // map matches to urls, encodeURI doesn't properly parse +, so manually replace with .replace
-    let urls = matches
+    const urls = matches
     .map(match => `https://www.wiris.net/demo/editor/render?format=png&latex=${encodeURI(match).replace(/\+/g,'%2B')}&backgroundColor=%23fff&redherring=default.png`)
 
     // return array of URL's to images or a message if a channel is supplied

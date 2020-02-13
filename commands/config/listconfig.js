@@ -28,6 +28,7 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const agreementRoles = settings.get( msg.guild, `agreementRoles` )
         const rolesList = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
         const muteRoleID = settings.get( msg.guild, `muteRole` )
+        const unpingableRoleIDs = settings.get( msg.guild, `unpingableRoles` )
 
         // generate embed
         const embed = generateDefaultEmbed({
@@ -50,6 +51,8 @@ module.exports = class ListConfigCommand extends Commando.Command {
             embed.addField( `Mute role:`, `<@&${muteRoleID}>` )
         if( agreementRoles && agreementRoles.length > 0 )
             embed.addField( `Agreement Roles:`, agreementRoles.map(role => `<@&${role.roleID}>, ${role.authenticate}`).join('\n') )
+        if( unpingableRoleIDs )
+            embed.addField( `Unpingable Roles:`, unpingableRoleIDs.map(role => `<@&${role}>`).join('\n') )
         if( rolesList.length > 0 )
             embed.addField( 'Protected Roles:', rolesList.map(role => `<@&${role}>`).join('\n') )
 

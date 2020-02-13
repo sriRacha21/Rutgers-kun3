@@ -50,23 +50,13 @@ module.exports = class MuteCommand extends Commando.Command {
         if( msg.member.highestRole.position <= member.highestRole.position )
             return msg.channel.send( 'You cannot mute users with a role equal to or higher than yours.' )
 
-        // get muted role
-        const muteRoleID = this.client.provider.get( msg.guild, 'muteRole' )
-        if( !muteRoleID )
-            return msg.channel.send( `A mute role needs to be set with \`${msg.guild.commandPrefix}setmuterole\`.` )
-        const muteRole = msg.guild.roles.find( role => role.id == muteRoleID )
-        // get permission role if it exists
-        const maybeAgreementRoles = this.client.provider.get( msg.guild, `agreementRoles` )
-        let permissionRole = null
-        if( maybeAgreementRoles ) {
-            const permissionRoleID = maybeAgreementRoles.find( r => r.authenticate === 'permission' )
-            if( permissionRoleID )
-                permissionRole = msg.guild.roles.find( r => r.id == permissionRoleID )
-        }
+        // don't run if there is no muted role
+        if( !this.client.provider.get( msg.guild, 'muteRole' ) )
+            return msg.channel.send( 'There needs to be a muted role set to mute a user. Set one with `!setmuterole`.' )
 
         // command usage response
         msg.channel.send( `${member} has been muted for ${prettyMilliseconds(time)}.` )
         // assign muted role to user and remove it after a certain amount of time
-        startTimedMute( member, muteRole, permissionRole, reason, time )
+        startTimedMute( member, this.client.provider, reason == 'none' ? null : reason, time )
     }
 }

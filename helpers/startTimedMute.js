@@ -1,8 +1,19 @@
 const prettyMilliseconds = require('pretty-ms')
 
-function startTimedMute( member, muteRole, permissionRole, reason, expirationTime ) {
-    if( reason == 'none' )
-        reason = null
+function startTimedMute( member, settings, reason, expirationTime ) {
+    // get muted role
+    const muteRoleID = settings.get( member.guild, 'muteRole' )
+    if( !muteRoleID )
+        return
+    const muteRole = member.guild.roles.find( role => role.id == muteRoleID )
+    // get permission role if it exists
+    const maybeAgreementRoles = settings.get( member.guild, `agreementRoles` )
+    let permissionRole = null
+    if( maybeAgreementRoles ) {
+        const permissionRoleObj = maybeAgreementRoles.find( r => r.authenticate === 'permission' )
+        if( permissionRoleObj )
+            permissionRole = member.guild.roles.find( r => r.id == permissionRoleObj.roleID )
+    }
     
     if( expirationTime ) {
         // notify the user
@@ -12,7 +23,7 @@ function startTimedMute( member, muteRole, permissionRole, reason, expirationTim
         if( permissionRole && member.roles.find(r => r.id == permissionRole.id) )
             member.removeRole( permissionRole )
         setTimeout(() => {
-            startTimedMute(member, muteRole, permissionRole)
+            startTimedMute(member, settings)
         }, expirationTime)
     } else {
         // notify the user

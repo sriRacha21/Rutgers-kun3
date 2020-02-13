@@ -46,6 +46,6 @@ module.exports = class UnmuteCommand extends Commando.Command {
         // command usage response
         msg.channel.send( `${member} has been unmuted.` )
         // remove and add roles appropriately
-        startTimedMute( member, muteRole, permissionRole )
+        startTimedMute( member, this.client.provider )
     }
 }

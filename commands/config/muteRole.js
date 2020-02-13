@@ -30,9 +30,13 @@ module.exports = class SetMuteRoleCommand extends Commando.Command {
         if( typeof muteRole === 'object' )
             settings.set( msg.guild, `muteRole`, muteRole.id )
             .then( msg.channel.send( `Mute role successfully set as @${muteRole.name}.` ) )
-        else if( approvalChannel == 'clear' )
+        else if( muteRole == 'clear' ) {
+            // don't remove the mute role if there are unpingable roles
+            if( settings.get( msg.guild, 'unpingableRoles' ) )
+                return msg.channel.send( 'You cannot clear the mute role without clearing unpingable roles first. Run `!setunpingableroles clear` first.' )
             settings.remove( msg.guild, `muteRole` )
             .then( msg.channel.send( `Mute role successfully removed.` ) )
+        }
         else
             msg.channel.send(`Invalid input. Try again.`)
     }
