@@ -65,7 +65,6 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] write function to turn object fields into email body
 ### QA lol
 ##### thanks kirt
-- [ ] dont allow emoji filenames for !play ...
-- [ ] untrack sounds folder
+- [x] filter out bad characters for sounds
+- [x] untrack sounds folder (we still want the folder just not most of the files so, add to .gitignore and only track one file)
 - [ ] refresh sounds every 30 secondsish...
-- [ ] filter out bad characters for sounds

@@ -113,3 +113,6 @@ smtp_server.json
 
 # VSCode folder
 .vscode/
+
+# Soundboard folder
+sounds/

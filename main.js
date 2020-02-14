@@ -60,6 +60,8 @@ Client.on('ready', () => {
     flushAgreements( Client.guilds, Client.provider ) 
     // periodically flush the live role from users that aren't streaming
     flushLiveRoles( Client.guilds, Client.provider )
+    // peridiocally refresh command settings
+    setCommandFields(Client.registry)
 })
 
 // emitted on message send
@@ -246,7 +248,5 @@ Client.registry
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))
     .registerCommandsIn(path.join(__dirname, 'commands'))
-// set some command fields asynchronously
-setCommandFields(Client.registry)
 // log in
 Client.login(API_Keys.token)

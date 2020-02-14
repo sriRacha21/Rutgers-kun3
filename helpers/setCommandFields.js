@@ -6,6 +6,7 @@ async function setCommandFields(registry) {
     setWoofCommandFields(registry)
     setPlayCommandFields(registry)
     setAddSoundCommandFields(registry)
+    setTimeout(setCommandFields, 30*1000, registry);
 }
 
 async function setWoofCommandFields(registry) {
