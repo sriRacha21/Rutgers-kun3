@@ -29,6 +29,7 @@ const { setLiveRole } = require('./helpers/setLiveRole')
 const { flushLiveRoles } = require('./helpers/flushLiveRoles')
 const { logEvent } = require('./helpers/logEvent')
 const { checkAutoverify } = require('./helpers/checkAutoverify')
+const { sendRoleResponse } = require('./helpers/sendRoleResponse')
 // set up winston logging
 const logger = require('./logger')
 // get richembeds
@@ -128,6 +129,14 @@ ${Client.owners[0]}.` )
 Client.on('guildDelete', guild => {
     // clear all the settings for that guild
     Client.provider.clear( guild )
+})
+
+// emitted on member update
+Client.on('guildMemberUpdate', (oldM, newM) => {
+    if( oldM.user.bot )
+        return
+
+    sendRoleResponse(oldM, newM, Client.provider)
 })
 
 /*        	LOGGING	        */

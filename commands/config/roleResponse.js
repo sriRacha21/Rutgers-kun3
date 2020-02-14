@@ -1,0 +1,41 @@
+const Commando = require('discord.js-commando')
+const fs = require('fs')
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
+
+module.exports = class SetRoleResponseCommand extends Commando.Command {
+    constructor(client) {
+        super(client, {
+            name: 'setroleresponse',
+            group: 'config',
+            memberName: 'roleresponse',
+            description: 'Configure a response to be sent when a user adds a role.',
+            userPermissions: [ defaults.admin_permission ],
+            guildOnly: true,
+            args: [
+                {
+                    key: 'role',
+                    prompt: 'Enter the role whose response you want to set.',
+                    type: 'role',
+                },
+                {
+                    key: 'response',
+                    prompt: 'Enter the message you want the bot to send users that add the role. Enter `clear` to clear the setting.',
+                    type: 'string'
+                }
+            ]
+        })
+    }
+
+
+    async run( msg, { role, response } ) {
+        const settings = this.client.provider
+
+        if( response == 'clear' ) {
+            settings.remove( msg.guild, `roleResponse:${role.id}` )
+            return msg.channel.send( `Successfully cleared role response.` )
+        }
+
+        settings.set( msg.guild, `roleResponse:${role.id}`, response )
+        .then( msg.channel.send( 'Role response successfully set.' ) )
+	}
+}
