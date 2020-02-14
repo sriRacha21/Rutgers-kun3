@@ -1,6 +1,8 @@
 const Commando = require('discord.js-commando')
 const { oneLine } = require('common-tags')
 const { idsToValues } = require('../../helpers/idsToValues')
+const fs = require('fs')
+const isSMTPServerSetup = fs.existsSync('settings/smtp_server.json')
 
 module.exports = class AgreeCommand extends Commando.Command {
     constructor(client) {
@@ -32,6 +34,10 @@ were not set! Please tell an Admin to set them with \`${msg.guild.commandPrefix}
         if( agreementChannel && msg.channel.id != agreementChannel )
             return msg.author.send( oneLine`This isn't the agreement channel. 
 If you want to designate this as the agreement channel please use ${msg.guild.commandPrefix}setagreementchannel.` )
+
+        // exit if there is no SMTP server in the config file
+        if( !isSMTPServerSetup )
+            return msg.author.send( `There is no SMTP server setup! Exiting...` )
 
         // begin user verification process
         // turn role ID's into roles
