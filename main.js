@@ -1,4 +1,4 @@
-/*  IMPORTS AND GENERAL SETUP   */
+/*        	IMPORTS AND GENERAL SETUP	        */
 // import sqlite to use as SettingsProvider
 const sqlite = require('sqlite')
 // import path to join paths in a platform-dependent way
@@ -10,9 +10,10 @@ const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'u
 const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', defaults.encoding))
 // read in data from JSON file containing API keys
 const API_Keys = JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding))
-// get methods for setting up command fields asynchronously
-const { setCommandFields } = require('./helpers/setCommandFields')
+// string formatting
+const { oneLine } = require('common-tags')
 // get methods for event helpers
+const { setCommandFields } = require('./helpers/setCommandFields')
 const { latexInterpreter } = require('./helpers/latexInterpreter')
 const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy')
 const { parseCustomCommand } = require('./helpers/parseCustomCommand')
@@ -26,12 +27,16 @@ const { flushAgreements } = require('./helpers/flushAgreements')
 const { checkRoleMentions } = require('./helpers/checkRoleMentions')
 const { setLiveRole } = require('./helpers/setLiveRole')
 const { flushLiveRoles } = require('./helpers/flushLiveRoles')
+const { logEvent } = require('./helpers/logEvent')
+const { checkAutoverify } = require('./helpers/checkAutoverify')
 // set up winston logging
 const logger = require('./logger')
+// get richembeds
+const RichEmbed = require('discord.js').RichEmbed
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
-/*  EVENTS  */
+/*        	EVENTS	        */
 // emitted on error, warn, debug
 Client.on('error', (error) => logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}`))
 Client.on('commandError', (command, err, message, args, fromPattern, result) => {
@@ -47,6 +52,8 @@ Client.on('warn', (info) => logger.log('warn', info))
 Client.on('debug', (info) => logger.log('debug', info) )
 Client.on('disconnect', () => logger.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'))
+
+// emitted on bot being ready to operate
 Client.on('ready', () => { 
     logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`)
     // periodically flush messages in #agreement in all servers
@@ -64,8 +71,12 @@ Client.on('message', msg => {
     // delete messages in #agreement if they're made by non-admins or bots
     if( msg.guild ) {
         const agreementChannel = Client.provider.get( msg.guild, `agreementChannel` )
-        if( agreementChannel == msg.channel.id && (msg.author.bot || !msg.member.hasPermission(defaults.admin_permission)) )
-            msg.delete()
+        if( agreementChannel == msg.channel.id ) {
+            // ESCAPE and give the user their role if they entered the autoverify code
+            if( checkAutoverify( msg, Client.provider ) ) return
+            if( msg.author.bot || !msg.member.hasPermission(defaults.admin_permission) )
+                msg.delete()
+        }
     }
 
     // agreement process, we need the settings and settingsprovider to access guild and universal settings
@@ -100,7 +111,116 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
 Client.on('presenceUpdate', (oldMember, newMember) => {
     setLiveRole( oldMember, newMember, Client.provider )
 })
-/*  CLEAN UP    */
+
+// emitted on bot joining a guild
+Client.on('guildCreate', guild => {
+    // check if the server owner is still in the server
+    if( guild.owner )
+        guild.owner.user.send( oneLine`Hiya! I see you've decided to add me to your server! I have 
+a bunch of commands to configure the server to your liking. Just type \`help\` and check out some 
+of the commands in the \`Config\` group. If you have any questions please ask the writer of this bot, 
+${Client.owners[0]}.` )
+})
+
+// emitted on bot leaving (or getting kicked) from a guild
+Client.on('guildDelete', guild => {
+    // clear all the settings for that guild
+    Client.provider.clear( guild )
+})
+
+/*        	LOGGING	        */
+// emitted when a member joins a server
+Client.on('guildMemberAdd', member => {
+    // log the event
+    logEvent({
+        embedInfo: {
+            author: 'Member joined',
+            title: member.user.tag,
+            clientUser: Client.user,
+            authorThumbnail: member.guild.iconURL,
+            thumbnail: member.user.displayAvatarURL,
+        },
+        guild: member.guild,
+        settings: Client.provider
+    })
+})
+
+// emitted when a member leaves a server
+Client.on('guildMemberRemove', member => {
+    logEvent({
+        embedInfo: {
+            author: 'Member left',
+            title: member.user.tag,
+            clientUser: Client.user,
+            authorThumbnail: member.guild.iconURL,
+            thumbnail: member.user.displayAvatarURL
+        },
+        guild: member.guild,
+        settings: Client.provider,
+    })
+})
+
+// emitted when a message gets deleted
+Client.on('messageDelete', message => {
+    // ignore if not in guild
+    if( !message.guild )
+        return
+    // ignore deletions by bots
+    if( message.author.bot )
+        return 
+
+    const startEmbed = new RichEmbed()
+    if( message.content )
+        startEmbed.addField( 'Message content:', message.content )
+    startEmbed.addField( 'In channel:', message.channel )
+    
+    logEvent({
+        embedInfo: {
+            author: 'Message deleted by',
+            title: message.author.tag,
+            clientUser: Client.user,
+            authorThumbnail: message.guild.iconURL,
+            thumbnail: message.author.displayAvatarURL,
+            startingEmbed: startEmbed,
+        },
+        guild: message.guild,
+        settings: Client.provider,
+        attachments: message.attachments.array().map(a => a.proxyURL)
+    })
+})
+
+// emitted when a message gets edited
+Client.on('messageUpdate', (oMsg, nMsg) => {
+    // ignore if not in guild
+    if( oMsg.guild )
+        return
+    // ignore updates by bots
+    if( oMsg.author.bot )
+        return 
+
+    const startEmbed = new RichEmbed()
+    if( oMsg.content )
+        startEmbed.addField( 'Old message content:', oMsg.content )
+    if( nMsg.content )
+        startEmbed.addField( 'New message content:', nMsg.content )
+    startEmbed.addField( 'In channel:', oMsg.channel )
+
+    logEvent({
+        embedInfo: {
+            author: 'Message edited by',
+            title: oMsg.author.tag,
+            clientUser: Client.user,
+            authorThumbnail: oMsg.guild.iconURL,
+            thumbnail: oMsg.author.displayAvatarURL,
+            startingEmbed: startEmbed,
+        },
+        guild: oMsg.guild,
+        settings: Client.provider,
+        attachments: oMsg.attachments.array().map(a => a.proxyURL)
+    })
+})
+
+/*        	CLEAN UP	        */
 // set up SettingsProvider
 Client.setProvider(
     sqlite.open(

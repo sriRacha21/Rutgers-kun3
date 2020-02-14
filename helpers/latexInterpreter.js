@@ -13,7 +13,7 @@ async function latexInterpreter( msgContent, channel ) {
     if( !matchFound ) {
         // if no match was found and one is suggested send suggestion message
         if( channel && suggestMatch )
-            channel.send( stripIndents`I see you're trying to enter math. I can parse LaTeX! Try entering an expression in double square brackets and I'll parse it.
+            channel.send( stripIndents`I see you're trying to enter math. I can parse LaTeX! Try entering an expression in curly braces and I'll parse it.
             Example: This line can be expressed as {y=x-2}.` )
         return
     }

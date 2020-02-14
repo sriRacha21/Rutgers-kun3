@@ -8,8 +8,8 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 ### How to run me locally!
 1. Clone me somewhere you feel comfortable keeping Github projects: `git clone https://github.com/sriRacha21/Rutgers-kun3.git`
 2. Edit `api_keys.json.dist` and replace the "your token here text" with your API token (surrounded by double quotation marks), obtained from the Discord developer portal. Rename the file to `api_keys.json`.
-3. Edit `email_logging.json.dist` and rename it `email_logging.json`. If you are forking the project, you can edit this file to email you on errors.
-4. Edit `smtp_server.json.dist` with your SMTP server's details. Rename the file to `smtp_server.json`.
+3. Edit `email_logging.json.dist` and rename it `email_logging.json`. If you are forking the project, you can edit this file to email you on errors. **(OPTIONAL)**
+4. Edit `smtp_server.json.dist` with your SMTP server's details. Rename the file to `smtp_server.json`. **(OPTIONAL)**
 5. cd to root directory of the project.
 6. `npm install`
 7. `node main.js`
@@ -50,7 +50,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] dm (correspondence through dm is not possible because dm's aren't logged so this is unncessary)
 - [ ] setroleresponse
 - [x] setpingexception (covered by setunpingableroles)
-- [ ] setautoverify
+- [x] setautoverify
 - [ ] settransactionchannel
 - [x] djs (replaced by eval)
 ### New command ideas
@@ -58,6 +58,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 ### Extra
 - [x] Live role
 - [x] chain counting
+- [x] audit logging
 - [ ] verify competitive roles (use approval framework)
 - [ ] karma system for helpful users
 - [x] send email on error through winston

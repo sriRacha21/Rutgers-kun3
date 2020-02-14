@@ -22,7 +22,9 @@ module.exports = class ListConfigCommand extends Commando.Command {
         // get fields we're putting in the embed
         const approvalChannelID = settings.get( msg.guild, `approvalChannel` )
         const agreementChannelID = settings.get( msg.guild, `agreementChannel` )
+        const autoverifyObj = settings.get( msg.guild, `autoverify` )
         const welcomeChannelID = settings.get( msg.guild, `welcomeChannel` )
+        const logChannelID = settings.get( msg.guild, `logChannel` )
         const welcomeText = settings.get( msg.guild, `welcomeText` )
         const agreementRoles = settings.get( msg.guild, `agreementRoles` )
         const protectedRoles = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
@@ -43,8 +45,12 @@ module.exports = class ListConfigCommand extends Commando.Command {
             embed.addField( `Approval channel:`, `<#${approvalChannelID}>` )
         if( agreementChannelID )
             embed.addField( `Agreement channel:`, `<#${agreementChannelID}>` )
+        if( autoverifyObj )
+            embed.addField( `Autoverify phrase and role:`, `\`${autoverifyObj.phrase}\`, <@&${autoverifyObj.role}>` )
         if( welcomeChannelID )
             embed.addField( `Welcome channel:`, `<#${welcomeChannelID}>` )
+        if( logChannelID )
+            embed.addField( `Log channel:`, `<#${logChannelID}>` )
         if( welcomeText )
             embed.addField( `Welcome text:`, welcomeText )
         if( muteRoleID )

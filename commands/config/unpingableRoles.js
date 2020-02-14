@@ -10,6 +10,7 @@ module.exports = class SetUnpingableRolesCommand extends Commando.Command {
             memberName: 'unpingableroles',
             description: 'Configure the roles that users without the \`Mention Everyone\` permission will get muted upon mentioning.',
             userPermissions: [ defaults.admin_permission ],
+            guildOnly: true,
             args: [
                 {
                     key: 'roles',

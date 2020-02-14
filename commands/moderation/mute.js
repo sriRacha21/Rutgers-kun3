@@ -52,7 +52,7 @@ module.exports = class MuteCommand extends Commando.Command {
 
         // don't run if there is no muted role
         if( !this.client.provider.get( msg.guild, 'muteRole' ) )
-            return msg.channel.send( 'There needs to be a muted role set to mute a user. Set one with `!setmuterole`.' )
+            return msg.channel.send( `There needs to be a muted role set to mute a user. Set one with \`${msg.guild.commandPrefix}setmuterole\`.` )
 
         // command usage response
         msg.channel.send( `${member} has been muted for ${prettyMilliseconds(time)}.` )
