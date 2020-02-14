@@ -17,7 +17,8 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
         .setAuthor( author, authorThumbnail )
         .setTitle( title )
         .setThumbnail( thumbnail )
-        .setFooter( oneLine`${msg ? `Requested ${msg.createdAt.toLocaleString()} by ${msg.author.tag}` : clientUser.tag }`
+        .setFooter( oneLine`${msg ? `Requested ${msg.createdAt.toLocaleString()}
+by ${msg.author.tag}${guild ? ` in ${guild.name}` : ``}` : clientUser.tag }`
                     , clientUser.displayAvatarURL )
         .setColor( defaults.richembed_color )
 

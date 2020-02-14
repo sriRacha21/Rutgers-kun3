@@ -3,6 +3,7 @@ const { oneLine } = require('common-tags')
 const { idsToValues } = require('../../helpers/idsToValues')
 const fs = require('fs')
 const isSMTPServerSetup = fs.existsSync('settings/smtp_server.json')
+const { sendWelcomeMessage } = require('../../helpers/sendWelcomeMessage')
 
 module.exports = class AgreeCommand extends Commando.Command {
     constructor(client) {

@@ -50,7 +50,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] dm (correspondence through dm is not possible because dm's aren't logged so this is unncessary)
 - [ ] setroleresponse
 - [x] setpingexception (covered by setunpingableroles)
-- [ ] setautoverify
+- [x] setautoverify
 - [ ] settransactionchannel
 - [x] djs (replaced by eval)
 ### New command ideas

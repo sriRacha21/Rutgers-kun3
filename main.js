@@ -28,6 +28,7 @@ const { checkRoleMentions } = require('./helpers/checkRoleMentions')
 const { setLiveRole } = require('./helpers/setLiveRole')
 const { flushLiveRoles } = require('./helpers/flushLiveRoles')
 const { logEvent } = require('./helpers/logEvent')
+const { checkAutoverify } = require('./helpers/checkAutoverify')
 // set up winston logging
 const logger = require('./logger')
 // get richembeds
@@ -70,8 +71,12 @@ Client.on('message', msg => {
     // delete messages in #agreement if they're made by non-admins or bots
     if( msg.guild ) {
         const agreementChannel = Client.provider.get( msg.guild, `agreementChannel` )
-        if( agreementChannel == msg.channel.id && (msg.author.bot || !msg.member.hasPermission(defaults.admin_permission)) )
-            msg.delete()
+        if( agreementChannel == msg.channel.id ) {
+            // ESCAPE and give the user their role if they entered the autoverify code
+            if( checkAutoverify( msg, Client.provider ) ) return
+            if( msg.author.bot || !msg.member.hasPermission(defaults.admin_permission) )
+                msg.delete()
+        }
     }
 
     // agreement process, we need the settings and settingsprovider to access guild and universal settings
