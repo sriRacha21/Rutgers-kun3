@@ -23,6 +23,7 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const approvalChannelID = settings.get( msg.guild, `approvalChannel` )
         const agreementChannelID = settings.get( msg.guild, `agreementChannel` )
         const welcomeChannelID = settings.get( msg.guild, `welcomeChannel` )
+        const logChannelID = settings.get( msg.guild, `logChannel` )
         const welcomeText = settings.get( msg.guild, `welcomeText` )
         const agreementRoles = settings.get( msg.guild, `agreementRoles` )
         const protectedRoles = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
@@ -45,6 +46,8 @@ module.exports = class ListConfigCommand extends Commando.Command {
             embed.addField( `Agreement channel:`, `<#${agreementChannelID}>` )
         if( welcomeChannelID )
             embed.addField( `Welcome channel:`, `<#${welcomeChannelID}>` )
+        if( logChannelID )
+            embed.addField( `Log channel:`, `<#${logChannelID}>` )
         if( welcomeText )
             embed.addField( `Welcome text:`, welcomeText )
         if( muteRoleID )
