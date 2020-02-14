@@ -16,7 +16,7 @@ module.exports = class PlayCommand extends Commando.Command {
                     key: 'filename',
                     type: 'string',
                     prompt: '',
-                    parse: str => `${str.toLowerCase()}.mp3`
+                    parse: str => str.toLowerCase()
                 }
             ],
             argsPromptlimit: 1,
@@ -35,7 +35,7 @@ module.exports = class PlayCommand extends Commando.Command {
         msg.member.voiceChannel.join()
         .then( connection => {
             msg.react( '👏' )
-            connection.playFile(path.join(defaults.path, 'sounds', args.filename))
+            connection.playFile(path.join(process.cwd(), 'sounds', `${args.filename}.mp3`))
         })
         .catch( console.error )
     }

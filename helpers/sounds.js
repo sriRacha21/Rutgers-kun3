@@ -7,11 +7,12 @@ function getSoundsArr( humanReadable ) {
     .toString()
     .split('\n')
     .map(str => str.split('.')[0])
+    .filter(str => str != '')
 
-    const hrSoundsArr = `\n\`\`\`${
+    const hrSoundsArr = `\n\`\`\`\n${
         soundsArr
         .join('\n')
-    }\`\`\``
+    }\n\`\`\``
 
     return humanReadable ? hrSoundsArr : soundsArr
 }

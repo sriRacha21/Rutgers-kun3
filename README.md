@@ -63,3 +63,9 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [ ] karma system for helpful users
 - [x] send email on error through winston
 - [x] write function to turn object fields into email body
+### QA lol
+##### thanks kirt
+- [ ] dont allow emoji filenames for !play ...
+- [ ] untrack sounds folder
+- [ ] refresh sounds every 30 secondsish...
+- [ ] filter out bad characters for sounds
