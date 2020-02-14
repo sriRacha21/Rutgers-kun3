@@ -16,7 +16,7 @@ module.exports = class PlayCommand extends Commando.Command {
                     key: 'filename',
                     type: 'string',
                     prompt: '',
-                    validate: str => str.match(/[a-z]|[A-Z]|[0-9]+/i),
+                    validate: str => str.match(/[a-z]|[A-Z]|[0-9]+/),
                     parse: str => str.toLowerCase()
                 }
             ],
