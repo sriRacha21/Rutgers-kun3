@@ -31,6 +31,7 @@ const { logEvent } = require('./helpers/logEvent')
 const { checkAutoverify } = require('./helpers/checkAutoverify')
 const { sendRoleResponse } = require('./helpers/sendRoleResponse')
 const { checkProtectedRole } = require('./helpers/checkProtectedRole')
+const { validateAllStrArgs } = require('./helpers/validateAllStrArgs')
 // set up winston logging
 const logger = require('./logger')
 // get richembeds
@@ -205,7 +206,7 @@ Client.on('messageDelete', message => {
 // emitted when a message gets edited
 Client.on('messageUpdate', (oMsg, nMsg) => {
     // ignore if not in guild
-    if( oMsg.guild )
+    if( !oMsg.guild )
         return
     // ignore updates by bots
     if( oMsg.author.bot )
@@ -259,5 +260,7 @@ Client.registry
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))
     .registerCommandsIn(path.join(__dirname, 'commands'))
+// set all string args to only take 500 chars max
+validateAllStrArgs(Client.registry)
 // log in
 Client.login(API_Keys.token)
