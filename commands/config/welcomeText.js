@@ -31,12 +31,16 @@ Just enter \`clear\` to clear the setting.`,
     async run( msg, { welcomeText } ) {
         const settings = this.client.provider
 
-        if( welcomeText === 'clear' )
+        if( welcomeText === 'clear' ) {
             settings.remove( msg.guild, `welcomeText` )
             .then( msg.channel.send( `Welcome successfully removed.` ) )
-        else {
-            settings.set( msg.guild, `welcomeText`, welcomeText )
-            .then( msg.channel.send( `Welcome text successfully set.` ))
+            return
         }
+
+        if( !settings.get( msg.guild, `agreementChannel` ) )
+            return msg.channel.send( `You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.` )
+
+        settings.set( msg.guild, `welcomeText`, welcomeText )
+        .then( msg.channel.send( `Welcome text successfully set.` ))
     }
 }

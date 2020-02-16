@@ -117,3 +117,6 @@ netids.json
 
 # Soundboard folder
 sounds/
+
+# stored settings
+settings.sqlite3

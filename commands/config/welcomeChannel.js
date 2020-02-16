@@ -26,9 +26,13 @@ module.exports = class SetWelcomeChannelCommand extends Commando.Command {
     async run( msg, { welcomeChannel } ) {
         const settings = this.client.provider
 
-        if( typeof welcomeChannel === 'object' )
+        if( typeof welcomeChannel === 'object' ) {
+            if( !settings.get( msg.guild, `agreementChannel` ) )
+                return msg.channel.send( `You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.` )
+                
             settings.set( msg.guild, `welcomeChannel`, welcomeChannel.id )
             .then( msg.channel.send( `Welcome channel successfully set as ${welcomeChannel}.` ) )
+        }
         else if( welcomeChannel === 'clear' )
             settings.remove( msg.guild, `welcomeChannel` )
             .then( msg.channel.send( `Welcome channel successfully removed.` ) )
