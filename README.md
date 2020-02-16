@@ -1,5 +1,4 @@
 # Rutgers-kun3
-
 A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports Discord. Old version is hosted [here](https://github.com/sriRacha21/Rutgers-kun).
 
 ### How to Use
@@ -11,7 +10,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 3. Edit `email_logging.json.dist` and rename it `email_logging.json`. If you are forking the project, you can edit this file to email you on errors. **(OPTIONAL)**
 4. Edit `smtp_server.json.dist` with your SMTP server's details. Rename the file to `smtp_server.json`. **(OPTIONAL)**
 5. Rename `netids.json.dist` to `netids.json` to start recording netID's (to check if a user is already verified). **(OPTIONAL)**
-6. cd to root directory of the project.
+6. `cd` to root directory of the project.
 7. `npm install`
 8. `node main.js`
 
@@ -61,7 +60,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] chain counting
 - [x] audit logging
 - [x] verify competitive roles (use approval framework)
-- [ ] karma system for helpful users
+- [x] karma system for helpful users (decided not to do this, may be revisited)
 - [x] send email on error through winston
 - [x] write function to turn object fields into email body
 - [x] write agreement emails to (gitignored) file so that we don't have to reverify users that left and rejoined
