@@ -6,7 +6,7 @@ async function setCommandFields(registry) {
     setWoofCommandFields(registry)
     setPlayCommandFields(registry)
     setAddSoundCommandFields(registry)
-    setTimeout(setCommandFields, 30*1000, registry);
+    setTimeout(setCommandFields, 30*1000, registry)
 }
 
 async function setWoofCommandFields(registry) {
@@ -39,8 +39,9 @@ async function setPlayCommandFields(registry) {
     firstPlayArg
     .prompt = `Enter the name of a sound file. Available sounds are:${getSoundsArr(true)}`
 
-    firstPlayArg
-    .oneOf = getSoundsArr()
+    // idk why oneof works... I'll just filter the input manually
+    // firstPlayArg
+    // .oneOf = getSoundsArr()
 }
 
 async function setAddSoundCommandFields(registry) {

@@ -1,6 +1,6 @@
 const { generateDefaultEmbed } = require('./generateDefaultEmbed')
 
-function logEvent( logInfo ) {
+function logEvent( logInfo, extras ) {
     // get fields
     const embedInfo = logInfo.embedInfo
     const guild = logInfo.guild
@@ -21,6 +21,10 @@ function logEvent( logInfo ) {
     logChannel.send( embed )
     if( attachments.length > 0 )
         logChannel.send({ files: attachments })
+    if( extras )
+        extras.forEach(extra => {
+            logChannel.send( extra, {split: true} )
+        })
 }
 
 exports.logEvent = logEvent

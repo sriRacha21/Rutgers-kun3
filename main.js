@@ -190,8 +190,12 @@ Client.on('messageDelete', message => {
         return 
 
     const startEmbed = new RichEmbed()
-    if( message.content )
-        startEmbed.addField( 'Message content:', message.content )
+    const extras = []
+    if( message.content ) {
+        startEmbed.addField( 'Message content:', message.content.length <= 1024 ? message.content : 'See above for text.' )
+        if( message.content.length > 1024 )
+            extras.push( `**Deleted:**\n${message.cleanContent}` )
+    }
     startEmbed.addField( 'In channel:', message.channel )
     
     logEvent({
@@ -206,7 +210,7 @@ Client.on('messageDelete', message => {
         guild: message.guild,
         settings: Client.provider,
         attachments: message.attachments.array().map(a => a.proxyURL)
-    })
+    }, extras)
 })
 
 // emitted when a message gets edited
@@ -219,10 +223,17 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
         return 
 
     const startEmbed = new RichEmbed()
-    if( oMsg.content )
-        startEmbed.addField( 'Old message content:', oMsg.content )
-    if( nMsg.content )
-        startEmbed.addField( 'New message content:', nMsg.content )
+    const extras = []
+    if( oMsg.content ) {
+        startEmbed.addField( 'Old message content:', oMsg.content.length <= 1024 ? oMsg.content : 'See above for text.' )
+        if( oMsg.content.length > 1024 )
+            extras.push( `**Old:**\n${oMsg.cleanContent}` )
+    }
+    if( nMsg.content ) {
+        startEmbed.addField( 'New message content:', nMsg.content.length <= 1024 ? nMsg.content : 'See above for text.' )
+        if( nMsg.content.length > 1024 )
+            extras.push( `**New:**\n${nMsg.cleanContent}` )
+    }
     startEmbed.addField( 'In channel:', oMsg.channel )
 
     logEvent({
@@ -237,7 +248,7 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
         guild: oMsg.guild,
         settings: Client.provider,
         attachments: oMsg.attachments.array().map(a => a.proxyURL)
-    })
+    }, extras)
 })
 
 /*        	CLEAN UP	        */
