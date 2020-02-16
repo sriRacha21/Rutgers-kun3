@@ -2,7 +2,7 @@ const { stripIndents } = require('common-tags')
 
 async function latexInterpreter( msgContent, channel ) {
     // get matches
-    let matches = msgContent.match( /\{.+?\}/g )
+    let matches = msgContent.match( /\{\{.+?\}\}/g )
 
     // was there a match?
     const matchFound = matches && matches.length > 0
@@ -13,8 +13,8 @@ async function latexInterpreter( msgContent, channel ) {
     if( !matchFound ) {
         // if no match was found and one is suggested send suggestion message
         if( channel && suggestMatch )
-            channel.send( stripIndents`I see you're trying to enter math. I can parse LaTeX! Try entering an expression in curly braces and I'll parse it.
-            Example: This line can be expressed as {y=x-2}.` )
+            channel.send( stripIndents`I see you're trying to enter math. I can parse LaTeX! Try entering an expression in double curly braces and I'll parse it.
+            Example: This line can be expressed as {{y=x-2}}.` )
         return
     }
 

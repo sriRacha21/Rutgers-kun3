@@ -31,7 +31,7 @@
     "oneline": "^1.0.3",
     "parse-git-config": "^3.0.0",
     "pretty-ms": "^6.0.0",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "sqlite": "^3.0.3",
     "winston": "^3.2.1",

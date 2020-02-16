@@ -7,7 +7,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     // declare fields
     let type
     let submissionName
-    let permissions
+    let permission
     let member
     let runNoPerms
     let runHasPerms
@@ -17,7 +17,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     // extract fields from object, throw errors or use defaults if fields aren't provided
     type = approvalPolicyOptions.type ? approvalPolicyOptions.type : null
     submissionName = approvalPolicyOptions.submissionName ? approvalPolicyOptions.submissionName : null
-    permissions = approvalPolicyOptions.permission ? approvalPolicyOptions.permission : defaults.moderator_permission // by default moderator (kick permission)
+    permission = approvalPolicyOptions.permission ? approvalPolicyOptions.permission : defaults.moderator_permission // by default moderator (kick permission)
     if( approvalPolicyOptions.member ) { member = approvalPolicyOptions.member } else { throw "member is a required field." }
     if( approvalPolicyOptions.runNoPerms ) { runNoPerms = approvalPolicyOptions.runNoPerms } 
     else { runNoPerms = () => { 
@@ -32,7 +32,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     // adjust RequiredEmbedInfo to defaults
     requiredEmbedInfo.author = requiredEmbedInfo.author ? requiredEmbedInfo.author : `${type.charAt(0).toUpperCase() + type.slice(1)} add attempt by`
     // run appropriate function, run it normally if the user has proper perms or there's no approval channel, with approval otherwise
-    if( member.hasPermission( permissions ) || !approvalChannelID ) {
+    if( member.hasPermission( permission ) || !approvalChannelID ) {
         runHasPerms()
     } else {
         submitRequestToChannel({
@@ -49,7 +49,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
         runNoPerms()
     }
     
-    return member.hasPermission( permissions )
+    return member.hasPermission( permission )
 }
 
 function submitRequestToChannel( requestSubmissionInfo, settings ) {
@@ -83,7 +83,7 @@ function submitRequestToChannel( requestSubmissionInfo, settings ) {
         settings.set( channel.guild, `request:${m.id}`, {
             approveRequest: () => { runHasPerms() },
             userToNotify: user.id,
-            messageToSend: `Your ${type} submission${', `' + submissionName + '`,'} has been `
+            messageToSend: `Your ${type}${', `' + submissionName + '`,'} has been `
         })
     })
     // send attachment(s) if the URL resolves

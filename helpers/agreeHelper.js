@@ -25,6 +25,7 @@ function agreeHelper( msg, guilds, settings, provider ) {
     const guildID = agreementObj.guildID
     const roleID = agreementObj.roleID
     const code = agreementObj.code
+    const netID = agreementObj.netID
     const step = agreementObj.step
     
     // convert guildID to guild
@@ -77,6 +78,16 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             return msg.author.send( `This does not appear to be a valid netID. Please re-enter your netID.` )
         // turn the role ID into a role
         const role = guild.roles.find( role => role.id == roleID )
+        // check if the net id is in our file of already verified netids
+        if( fs.existsSync('settings/netids.json') ) {
+            const netIDsObj = JSON.parse(fs.readFileSync('settings/netids.json', 'utf-8'))
+            if( netIDsObj[msg.author.id] == maybeNetID ) {
+                settings.remove( `agree:${msg.author.id}` )
+                sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
+                const agreementRole = guild.roles.find( r => r.id == roleID )
+                return msg.author.send( `Your netID has already been verified! You have successfully been given the ${agreementRole.name} role in ${guild.name}!` )
+            }
+        }
         // now that we know the netID is valid, send them an email with a verification code
         const transporter = nodemailer.createTransport({
             host: SMTP_Server.host,
@@ -104,6 +115,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             guildID: guild.id,
             roleID: roleID,
             code: verificationCode,
+            netID: maybeNetID,
             step: 3
         })
     }
@@ -120,6 +132,12 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
         // send welcome message
         sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
+        // save the email to a file
+        if( fs.existsSync('settings/netids.json') ) {
+            const netIDsObj = JSON.parse(fs.readFileSync('settings/netids.json', 'utf-8'))
+            netIDsObj[msg.author.id] = netID
+            fs.writeFileSync('settings/netids.json', JSON.stringify(netIDsObj))
+        }
         // clean the database
         settings.remove( `agree:${msg.author.id}` )
         return msg.author.send( `You have successfully been given the ${agreementRoleToAdd.name} role in ${guild.name}!` )

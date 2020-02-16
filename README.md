@@ -10,9 +10,10 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 2. Edit `api_keys.json.dist` and replace the "your token here text" with your API token (surrounded by double quotation marks), obtained from the Discord developer portal. Rename the file to `api_keys.json`.
 3. Edit `email_logging.json.dist` and rename it `email_logging.json`. If you are forking the project, you can edit this file to email you on errors. **(OPTIONAL)**
 4. Edit `smtp_server.json.dist` with your SMTP server's details. Rename the file to `smtp_server.json`. **(OPTIONAL)**
-5. cd to root directory of the project.
-6. `npm install`
-7. `node main.js`
+5. Rename `netids.json.dist` to `netids.json` to start recording netID's (to check if a user is already verified). **(OPTIONAL)**
+6. cd to root directory of the project.
+7. `npm install`
+8. `node main.js`
 
 ## TODO List
 ### Reimplementing unprivileged old commands
@@ -59,10 +60,11 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] Live role
 - [x] chain counting
 - [x] audit logging
-- [ ] verify competitive roles (use approval framework)
+- [x] verify competitive roles (use approval framework)
 - [ ] karma system for helpful users
 - [x] send email on error through winston
 - [x] write function to turn object fields into email body
+- [x] write agreement emails to (gitignored) file so that we don't have to reverify users that left and rejoined
 ### QA lol
 ##### thanks kirt
 - [x] filter out bad characters for sounds

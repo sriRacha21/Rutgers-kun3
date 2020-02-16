@@ -110,6 +110,7 @@ api_keys.json
 # Private Info
 email_logging.json
 smtp_server.json
+netids.json
 
 # VSCode folder
 .vscode/

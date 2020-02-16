@@ -26,17 +26,19 @@ module.exports = class SetUnpingableRolesCommand extends Commando.Command {
     async run( msg, { roles } ) {
         const settings = this.client.provider
 
-        if( roles[0] === 'clear' ) 
-            return settings.remove( msg.guild, `unpingableRoles` )
+        if( roles[0] === 'clear' ) {
+            settings.remove( msg.guild, `unpingableRoles` )
             .then( msg.channel.send(`Unpingable roles successfully cleared.`) )
+            return
+        }
 
         if( !settings.get( msg.guild, `muteRole` ) )
-            return msg.channel.send( `You need to designate a muted role with \`!setmuterole\` first.` )
+            return msg.channel.send( `You need to designate a muted role with \`${msg.guild.commandPrefix}setmuterole\` first.` )
 
         if( !!roles.find(r => !r.mentionable) )
             return msg.channel.send( `All roles must be mentionable.` )
         
-        return settings.set( msg.guild, `unpingableRoles`, roles.map(r => r.id) )
+        settings.set( msg.guild, `unpingableRoles`, roles.map(r => r.id) )
         .then( msg.channel.send( `Unpingable roles successfully set.` ) )
 	}
 }

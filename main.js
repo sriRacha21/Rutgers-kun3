@@ -30,6 +30,7 @@ const { flushLiveRoles } = require('./helpers/flushLiveRoles')
 const { logEvent } = require('./helpers/logEvent')
 const { checkAutoverify } = require('./helpers/checkAutoverify')
 const { sendRoleResponse } = require('./helpers/sendRoleResponse')
+const { checkProtectedRole } = require('./helpers/checkProtectedRole')
 // set up winston logging
 const logger = require('./logger')
 // get richembeds
@@ -61,7 +62,7 @@ Client.on('ready', () => {
     flushAgreements( Client.guilds, Client.provider ) 
     // periodically flush the live role from users that aren't streaming
     flushLiveRoles( Client.guilds, Client.provider )
-    // peridiocally refresh command settings
+    // periodically refresh command settings
     setCommandFields(Client.registry)
 })
 
@@ -137,6 +138,7 @@ Client.on('guildMemberUpdate', (oldM, newM) => {
         return
 
     sendRoleResponse(oldM, newM, Client.provider)
+    checkProtectedRole(oldM, newM, Client.provider, Client.user)
 })
 
 /*        	LOGGING	        */
