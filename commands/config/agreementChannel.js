@@ -26,6 +26,9 @@ module.exports = class SetAgreementChannelCommand extends Commando.Command {
     async run( msg, { agreementChannel } ) {
         const settings = this.client.provider
 
+        if( !this.client.provider.get( msg.guild, 'agreementRoles' ) )
+            return msg.channel.send( 'You need to set up the roles that a user can choose from when they agree to the server rules first.' )
+
         if( typeof agreementChannel === 'object' )
             settings.set( msg.guild, `agreementChannel`, agreementChannel.id )
             .then( msg.channel.send( `Agreement channel successfully set as ${agreementChannel}.` ) )

@@ -1,5 +1,5 @@
 const RichEmbed = require('discord.js').RichEmbed
-const oneLine = require('oneline')
+const { oneLine } = require('common-tags')
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 

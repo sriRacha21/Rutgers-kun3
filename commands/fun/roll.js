@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando')
-const oneLine = require('oneline')
+const { oneLine } = require('common-tags')
 const { generateDefaultEmbed } = require("../../helpers/generateDefaultEmbed");
 const { getRandomInt } = require("../../helpers/getRandom");
 

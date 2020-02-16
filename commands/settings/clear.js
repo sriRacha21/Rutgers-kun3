@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando')
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
-const oneLine = require('oneline');
+const { oneLine } = require('common-tags');
 
 module.exports = class ClearSettingsCommand extends Commando.Command {
     constructor(client) {

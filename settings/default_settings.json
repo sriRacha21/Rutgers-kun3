@@ -1,4 +1,5 @@
 {
+    "version": "3.0",
     "richembed_color": "0xFF0000",
     "encoding": "utf-8",
     "admin_permission": "ADMINISTRATOR",

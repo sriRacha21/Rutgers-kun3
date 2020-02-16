@@ -1,7 +1,7 @@
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 const { generateDefaultEmbed } = require('./generateDefaultEmbed')
-const oneLine = require('oneline')
+const { oneLine } = require('common-tags')
 
 function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     // declare fields

@@ -7,7 +7,7 @@ module.exports = class WoofCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'woof',
-            aliases: ['bark'],
+            aliases: ['bark', 'dog'],
             group: 'fun',
             memberName: 'woof',
             description: 'Cute dog.',

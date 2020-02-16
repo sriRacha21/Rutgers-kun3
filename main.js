@@ -32,9 +32,10 @@ const { checkAutoverify } = require('./helpers/checkAutoverify')
 const { sendRoleResponse } = require('./helpers/sendRoleResponse')
 const { checkProtectedRole } = require('./helpers/checkProtectedRole')
 const { validateAllStrArgs } = require('./helpers/validateAllStrArgs')
+const { generatePresence } = require('./helpers/generatePresence')
 // set up winston logging
 const logger = require('./logger')
-// get richembeds
+// get some Discord fields we need
 const RichEmbed = require('discord.js').RichEmbed
 // initialize the Discord client
 const Commando = require('discord.js-commando')
@@ -64,7 +65,9 @@ Client.on('ready', () => {
     // periodically flush the live role from users that aren't streaming
     flushLiveRoles( Client.guilds, Client.provider )
     // periodically refresh command settings
-    setCommandFields(Client.registry)
+    setCommandFields( Client.registry )
+    // peridiocally update the bot's status
+    generatePresence( Client, 0 )
 })
 
 // emitted on message send
@@ -114,6 +117,9 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
 
 // emitted on change of guild member properties
 Client.on('presenceUpdate', (oldMember, newMember) => {
+    if( newMember.user.bot )
+        return
+
     setLiveRole( oldMember, newMember, Client.provider )
 })
 
@@ -135,7 +141,7 @@ Client.on('guildDelete', guild => {
 
 // emitted on member update
 Client.on('guildMemberUpdate', (oldM, newM) => {
-    if( oldM.user.bot )
+    if( newM.user.bot )
         return
 
     sendRoleResponse(oldM, newM, Client.provider)

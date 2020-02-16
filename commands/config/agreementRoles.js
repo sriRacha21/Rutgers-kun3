@@ -53,7 +53,6 @@ Just enter \`clear\` followed by \`finish\` to clear the current setting.`,
             const roleToPush = msg.guild.roles.find( role => role.name.toLowerCase() == agreementRole )
             if( !roleToPush )
                 failure = 'One or more roles could not be found.'
-            console.log( 'pushing roleID: ' + roleToPush.id )
             agreementRoleObjs.push({
                 roleID: roleToPush.id,
                 authenticate: authenticate
