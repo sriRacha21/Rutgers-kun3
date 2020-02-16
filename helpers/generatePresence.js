@@ -16,7 +16,7 @@ function generatePresence( client, which ) {
 	}
 	const presence = new Game(data, client.user.presence)
 	client.user.setPresence({ game: presence })
-    setTimeout( generatePresence, 5*60*1000, client.prefix, (which+1) > names.length ? 0 : which + 1 )
+    setTimeout( generatePresence, 5*60*1000, client, (which+1) > names.length ? 0 : which + 1 )
 }
 
 function getNumLines() {
