@@ -14,8 +14,8 @@ module.exports = class SetVolumeCommand extends Commando.Command {
             args: [
                 {
                     key: 'volume',
-                    type: 'integer',
-                    prompt: 'Enter the desired volume for bots in this guild.',
+                    type: 'integer|string',
+                    prompt: 'Enter the desired volume for bots in this guild. Type `clear` to reset the setting to default.',
                     min: 0,
                     max: 100
                 }
@@ -26,6 +26,12 @@ module.exports = class SetVolumeCommand extends Commando.Command {
 
     async run( msg, { volume } ) {
         const settings = this.client.provider
+
+        if( typeof volume === 'string' ) {
+            settings.remove( msg.guild, `volume` )
+            msg.channel.send( `Cleared volume setting.` )
+            return
+        }
 
         settings.set( msg.guild, `volume`, volume )
         .then( msg.channel.send( `Volume successfully set to ${volume}.` ))

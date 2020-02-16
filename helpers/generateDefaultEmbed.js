@@ -19,7 +19,7 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
         .setThumbnail( thumbnail )
         .setFooter( oneLine`${msg ? `Requested ${msg.createdAt.toLocaleString()}
 by ${msg.author.tag}${guild ? ` in ${guild.name}` : ``}` : clientUser.tag }`
-                    , clientUser.displayAvatarURL )
+                    , msg ? msg.author.displayAvatarURL : clientUser.displayAvatarURL )
         .setColor( defaults.richembed_color )
 
     return startingEmbed

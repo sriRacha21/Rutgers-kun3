@@ -33,6 +33,7 @@ const { sendRoleResponse } = require('./helpers/sendRoleResponse')
 const { checkProtectedRole } = require('./helpers/checkProtectedRole')
 const { validateAllStrArgs } = require('./helpers/validateAllStrArgs')
 const { generatePresence } = require('./helpers/generatePresence')
+const { removeInvites } = require('./helpers/removeInvites')
 // set up winston logging
 const logger = require('./logger')
 // get some Discord fields we need
@@ -92,6 +93,8 @@ Client.on('message', msg => {
     // parse a custom command if the message starts with it, send the first word after the prefix to the method
     if( msg.cleanContent.startsWith(msg.guild && msg.guild.commandPrefix) )
         parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.provider, msg.channel )
+    // remove server invite links
+    removeInvites( msg, Client )
     // check if message contains latex formatting, also suggest using latex formatting
     latexInterpreter( msg.cleanContent, msg.channel )
     // check if role has been mentioned
