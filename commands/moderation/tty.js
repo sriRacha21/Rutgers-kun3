@@ -12,7 +12,7 @@ module.exports = class TtyCommand extends Commando.Command {
             group: 'moderation',
             aliases: ['terminal'],
             memberName: 'tty',
-            description: 'tty',
+            description: 'Open a web TTY.',
         });
     }
 
