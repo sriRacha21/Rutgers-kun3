@@ -1,0 +1,10 @@
+{
+    "url": "https://localhost/tty/",
+    "timeout": 60000,
+
+    "ssh_host": "localhost",
+    "ssh_port": 22,
+
+    "tls_public": "settings/cert.pem",
+    "tls_private": "settings/key.pem"
+}
