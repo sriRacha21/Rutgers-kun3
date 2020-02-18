@@ -96,7 +96,7 @@ Client.on('message', msg => {
             .cleanContent
             .toLowerCase()
             .split(' ')[0]
-            .substring(msg.guild.commandPrefix.length), Client.provider, msg.channel
+            .substring(msg.guild.commandPrefix.length), msg.cleanContent.split(' ').slice(1), Client.provider, msg.channel
         )
     // remove server invite links
     removeInvites( msg, Client )
