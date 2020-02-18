@@ -88,7 +88,7 @@ function submitRequestToChannel( requestSubmissionInfo, settings ) {
     })
     // send attachment(s) if the URL resolves
     if( attachments.length > 0 ) {
-        channel.send({ files: attachments.map(attachment => attachment.proxyURL) })
+        channel.send({ files: attachments.filter(attachment => !!attachment).map(attachment => attachment.proxyURL) })
         .catch( e => channel.send( `Not able to send associated file: \`${e}\`` ) )
     }
 }

@@ -27,7 +27,7 @@ command. Type \`nothing\` to have no text for the custom command.`,
                     type: 'string',
                     error: 'You provided an invalid command name. Command names must be alphanumeric and less than or equal to 20 characters.',
                     validate: str => {
-                        const matches = str.match(/([a-z]|[0-9]){1,20}/g)
+                        const matches = str.match(/([a-z]|[0-9]){1,20}/gi)
                         return matches ? matches[0].length == str.length : false
                     },
                     parse: str => str.toLowerCase()
@@ -80,6 +80,7 @@ command. Type \`nothing\` to have no text for the custom command.`,
                     settings.set( msg.guild, `commands:${name}`, commandSettings )
                     .then( msg.react('👍') )
                 },
+                attachments: [ attachment ],
                 settings: this.client.provider,
                 errChannel: msg.channel
             },

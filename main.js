@@ -92,7 +92,12 @@ Client.on('message', msg => {
     agreeHelper( msg, Client.guilds, Client.settings, Client.provider )
     // parse a custom command if the message starts with it, send the first word after the prefix to the method
     if( msg.cleanContent.startsWith(msg.guild && msg.guild.commandPrefix) )
-        parseCustomCommand( msg.cleanContent.split(' ')[0].substring(msg.guild.commandPrefix.length), Client.provider, msg.channel )
+        parseCustomCommand( msg
+            .cleanContent
+            .toLowerCase()
+            .split(' ')[0]
+            .substring(msg.guild.commandPrefix.length), Client.provider, msg.channel
+        )
     // remove server invite links
     removeInvites( msg, Client )
     // check if message contains latex formatting, also suggest using latex formatting

@@ -1,4 +1,6 @@
 const Commando = require('discord.js-commando')
+const fs = require('fs')
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
 module.exports = class RemoveInvitesCommand extends Commando.Command {
     constructor(client) {
@@ -7,6 +9,7 @@ module.exports = class RemoveInvitesCommand extends Commando.Command {
             group: 'config',
             memberName: 'removeinvites',
             description: 'Set up the bot to remove server invite links. Automatically excludes some servers by default.',
+            userPermissions: [ defaults.admin_permission ]
         })
     }
 

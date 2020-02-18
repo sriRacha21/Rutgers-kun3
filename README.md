@@ -65,6 +65,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports 
 - [x] write function to turn object fields into email body
 - [x] write agreement emails to (gitignored) file so that we don't have to reverify users that left and rejoined
 - [x] custom status
+- [ ] voting
 ### QA lol
 ##### thanks kirt
 - [x] filter out bad characters for sounds

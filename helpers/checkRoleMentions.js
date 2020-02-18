@@ -1,8 +1,14 @@
 const { startTimedMute } = require('./startTimedMute')
+const fs = require('fs')
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
 function checkRoleMentions( msg, settings ) {
     // return if the message is not in a guild
     if( !msg.guild )
+        return
+
+    // exit if member has the mention everyone permission
+    if( msg.member.hasPermission( defaults.officer_permission ) )
         return
 
     // get the unpingable roles from the settings
