@@ -9,7 +9,7 @@ const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'u
 // read in data from JSON file containing default settings for the bot (ClientOptions object)
 const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', defaults.encoding))
 // read in data from JSON file containing API keys
-const API_Keys = JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding))
+const API_Keys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding)) : {token:''}
 // string formatting
 const { oneLine } = require('common-tags')
 // get methods for event helpers
