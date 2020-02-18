@@ -120,3 +120,6 @@ sounds/
 
 # stored settings
 settings.sqlite3
+
+# pem files
+*.pem

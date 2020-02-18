@@ -20,20 +20,21 @@ function removeInvites( msg, client ) {
     ]
 
     if( removeInvites ) {
-        let inviteMatch = msg.content.match( /discord.gg\/([a-z]|[A-Z]|[0-9])+/gi )
-        inviteMatch = inviteMatch ? inviteMatch[0] : null
-        if( inviteMatch ) {
-            client.fetchInvite(inviteMatch)
-            .then( invite => {
-                if( universalInvOverrides.includes(invite.guild.id) )
-                    return
-                msg.delete()
-                if( !member.hasPermission( defaults.moderator_permission ) )
-                    startTimedMute( msg.member, client.provider, 'Sending a server invite link', 4*60*60*1000 )
-            } )
-            .catch( err => {
-                if( err )
-                    logger.log( 'warn', `Unable to resolve invite ${inviteMatch}. Error: ${err}` ) 
+        let inviteMatches = msg.content.match( /discord(app)?.(gg|com)\/(invite\/)?([a-z]|[A-Z]|[0-9])+/gi )
+        if( inviteMatches ) {
+            inviteMatches.forEach( inviteMatch => {
+                client.fetchInvite(inviteMatch)
+                .then( invite => {
+                    if( universalInvOverrides.includes(invite.guild.id) )
+                        return
+                    msg.delete()
+                    if( !msg.member.hasPermission( defaults.moderator_permission ) )
+                        startTimedMute( msg.member, client.provider, 'Sending a server invite link', 4*60*60*1000 )
+                } )
+                .catch( err => {
+                    if( err )
+                        logger.log( 'warn', `Unable to resolve invite ${inviteMatch}. Error: ${err}` ) 
+                })
             })
         }
     }
