@@ -4,7 +4,6 @@ require('winston-daily-rotate-file')
 const { Mail } = require('winston-mail')
 // import for reading in emails for transports
 const fs = require('fs')
-const API_Keys = JSON.parse(fs.readFileSync('settings/api_keys.json', 'utf-8'))
 const { host, port, domain, username, password } = fs.existsSync('settings/smtp_server.json') ? JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8')) : { host: null, port: null, domain: null, username: null, password: null }
 const emails = fs.existsSync('settings/email_logging.json') ? JSON.parse(fs.readFileSync('settings/email_logging.json','utf-8')) : null
 

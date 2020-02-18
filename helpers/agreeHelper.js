@@ -1,7 +1,7 @@
 // sending emails
 const nodemailer = require('nodemailer')
 const fs = require('fs')
-const SMTP_Server = JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8'))
+const SMTP_Server = fs.existsSync('settings/smtp_server.json') ? JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8')) : null
 const { generateVerificationCode } = require('./getRandom')
 const { idsToValues } = require('./idsToValues')
 const { isValidnetID } = require('./isValidnetID')
@@ -12,6 +12,12 @@ const { inspect } = require('util')
 
 function agreeHelper( msg, guilds, settings, provider ) {
     const agreementObj = settings.get( `agree:${msg.author.id}` )
+
+    // ensure the SMTP server is setup
+    if( !SMTP_Server ) {
+        logger.log( `error`, `SMTP server is not setup! Please follow the readme to use this properly.` )
+        return
+    }
 
     // ensure the user is in DM
     if( msg.guild )

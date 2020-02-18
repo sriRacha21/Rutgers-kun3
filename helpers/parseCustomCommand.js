@@ -1,13 +1,14 @@
-function parseCustomCommand( commandName, settings, channel ) {
+function parseCustomCommand( commandName, appends, settings, channel ) {
     const commandInfo = settings.get(channel.guild, `commands:${commandName}`)
 
     let msgSendPromise
     if( commandInfo ) {
-        if( commandInfo.text != '' && commandInfo.attachment )
-            msgSendPromise = channel.send( commandInfo.text, {files: [commandInfo.attachment]} )
-        else if ( commandInfo.text != '' && !commandInfo.attachment )
-            msgSendPromise = channel.send( commandInfo.text )
-        else if( commandInfo.text == '' && commandInfo.attachment )
+        const text = (commandInfo.text + ' ' + appends.join(' ')).trim()
+        if( text != '' && commandInfo.attachment )
+            msgSendPromise = channel.send( text, {files: [commandInfo.attachment]} )
+        else if ( text != '' && !commandInfo.attachment )
+            msgSendPromise = channel.send( text )
+        else if( text == '' && commandInfo.attachment )
             msgSendPromise = channel.send( {files: [commandInfo.attachment]} )
         else
             throw 'Illegal arguments for parseCustomCommand'
