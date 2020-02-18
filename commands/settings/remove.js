@@ -1,7 +1,4 @@
 const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
-const util = require('util')
 
 module.exports = class RemoveSettingCommand extends Commando.Command {
     constructor(client) {
@@ -11,7 +8,6 @@ module.exports = class RemoveSettingCommand extends Commando.Command {
             memberName: 'remove',
             description: 'Remove a setting in the settings provider for this guild in the CommandoClient.',
             examples: [ 'settings:remove key', 'remove-guild-settings approvalChannel' ],
-            userPermissions: [ defaults.admin_permission ],
             args: [
                 {
                     key: 'key',

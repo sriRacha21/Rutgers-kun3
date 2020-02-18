@@ -1,6 +1,4 @@
 const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 const { oneLine } = require('common-tags');
 
 module.exports = class ClearSettingsCommand extends Commando.Command {
@@ -11,7 +9,6 @@ module.exports = class ClearSettingsCommand extends Commando.Command {
             memberName: 'clear',
             description: 'Clear all settings saved for a guild.', 
             examples: [ 'clear' ],
-            userPermissions: [ defaults.admin_permission ],
             args: [
                 {
                     key: 'sureness',

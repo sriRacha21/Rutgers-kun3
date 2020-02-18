@@ -1,6 +1,4 @@
 const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 const util = require('util')
 
 module.exports = class GetSettingCommand extends Commando.Command {
@@ -11,7 +9,6 @@ module.exports = class GetSettingCommand extends Commando.Command {
             memberName: 'get',
             description: 'Get a setting in the settings provider for this guild in the CommandoClient.',
             examples: [ 'settings:get key', 'get-guild-setting approvalChannel' ],
-            userPermissions: [ defaults.admin_permission ],
             args: [
                 {
                     key: 'key',
