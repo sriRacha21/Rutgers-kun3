@@ -9,7 +9,7 @@ module.exports = class SetRoleResponseCommand extends Commando.Command {
             group: 'config',
             memberName: 'roleresponse',
             description: 'Configure a response to be sent when a user adds a role.',
-            userPermissions: [ defaults.admin_permission ],
+            userPermissions: [ defaults.officer_permission ],
             guildOnly: true,
             args: [
                 {

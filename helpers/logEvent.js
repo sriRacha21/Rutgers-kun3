@@ -5,6 +5,7 @@ function logEvent( logInfo, extras ) {
     const embedInfo = logInfo.embedInfo
     const guild = logInfo.guild
     const settings = logInfo.settings
+    let channel = logInfo.channel
     const attachments = logInfo.attachments ? logInfo.attachments : []
     // exit if there is no guild
     if( !guild )
@@ -14,16 +15,17 @@ function logEvent( logInfo, extras ) {
     if( !logChannelID )
         return
     // set log channel
-    const logChannel = guild.channels.find( c => c.id == logChannelID )
+    if( !channel )
+        channel = guild.channels.find( c => c.id == logChannelID )
     // get default embed
     const embed = generateDefaultEmbed( embedInfo ) 
     // send message to channel
-    logChannel.send( embed )
+    channel.send( embed )
     if( attachments.length > 0 )
-        logChannel.send({ files: attachments })
+        channel.send({ files: attachments })
     if( extras )
         extras.forEach(extra => {
-            logChannel.send( extra, {split: true} )
+            channel.send( extra, {split: true} )
         })
 }
 

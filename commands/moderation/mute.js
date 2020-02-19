@@ -57,6 +57,6 @@ module.exports = class MuteCommand extends Commando.Command {
         // command usage response
         msg.channel.send( `${member} has been muted for ${prettyMilliseconds(time)}.` )
         // assign muted role to user and remove it after a certain amount of time
-        startTimedMute( member, this.client.provider, reason == 'none' ? null : reason, time )
+        startTimedMute( member, this.client.provider, reason == 'none' ? null : reason, time, this.client.user )
     }
 }

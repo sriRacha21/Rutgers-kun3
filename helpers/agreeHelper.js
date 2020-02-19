@@ -108,7 +108,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             from: `server-verification@${SMTP_Server.domain}`,
             to: `${maybeNetID}@scarletmail.rutgers.edu`,
             subject: `Verify your ${role.name} role in ${guild.name}!`,
-            text: `Your verification code is:\n${verificationCode}`
+            html: `Your verification code is:<br><code style="font-size:2.5em;line-height:2em">${verificationCode}</code>`
         }
         transporter.sendMail(emailInfo)
         .then( () => {

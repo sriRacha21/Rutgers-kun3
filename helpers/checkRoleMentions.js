@@ -2,7 +2,7 @@ const { startTimedMute } = require('./startTimedMute')
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
-function checkRoleMentions( msg, settings ) {
+function checkRoleMentions( msg, settings, clientUser ) {
     // return if the message is not in a guild
     if( !msg.guild )
         return
@@ -24,7 +24,7 @@ function checkRoleMentions( msg, settings ) {
 
     // if a match is found, mute the user for the default mute time
     if( mentionedRole ) {
-        startTimedMute( msg.member, settings, 'Mentioning a role that you were not allowed to mention', 4*60*60*1000 )
+        startTimedMute( msg.member, settings, 'Mentioning a role that you were not allowed to mention', 4*60*60*1000, clientUser )
         // delete the message
         msg.delete()
         // turn the id into a role

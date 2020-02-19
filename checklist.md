@@ -16,7 +16,7 @@
 - [x] huh (skipping because of lack of importance and potential load on db)
 - [x] quote
 - [x] chain
-- [x] config (in favor of multiple configuration commands)
+- [ ] config (in favor of multiple configuration commands) (decided to just run the needed commands to set up the server in order)
 - [x] setword (think about rename)
 - [x] whoami
 ### Reimplenting privileged old commands
@@ -50,6 +50,7 @@
 - [x] write agreement emails to (gitignored) file so that we don't have to reverify users that left and rejoined
 - [x] custom status
 - [ ] voting
+- [ ] log moderator actions in mod log channel
 ### QA lol
 ##### thanks kirt
 - [x] filter out bad characters for sounds

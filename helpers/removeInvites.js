@@ -29,7 +29,7 @@ function removeInvites( msg, client ) {
                         return
                     msg.delete()
                     if( !msg.member.hasPermission( defaults.moderator_permission ) )
-                        startTimedMute( msg.member, client.provider, 'Sending a server invite link', 4*60*60*1000 )
+                        startTimedMute( msg.member, client.provider, 'Sending a server invite link', 4*60*60*1000, client.user )
                 } )
                 .catch( err => {
                     if( err )

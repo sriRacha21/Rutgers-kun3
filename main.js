@@ -90,6 +90,9 @@ Client.on('message', msg => {
 
     // agreement process, we need the settings and settingsprovider to access guild and universal settings
     agreeHelper( msg, Client.guilds, Client.settings, Client.provider )
+    // if the member is ignored leave
+    if( msg.guild && Client.provider.get( msg.guild, `ignored:${msg.member.id}` ) )
+        return
     // parse a custom command if the message starts with it, send the first word after the prefix to the method
     if( msg.cleanContent.startsWith(msg.guild && msg.guild.commandPrefix) )
         parseCustomCommand( msg
@@ -103,7 +106,7 @@ Client.on('message', msg => {
     // check if message contains latex formatting, also suggest using latex formatting
     latexInterpreter( msg.cleanContent, msg.channel )
     // check if role has been mentioned
-    checkRoleMentions( msg, Client.provider )
+    checkRoleMentions( msg, Client.provider, Client.user )
     // check if word counters need to be incremented
     checkWordCount( msg, Client.settings )
     // react with rutgerschan, do reroll
@@ -229,6 +232,9 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
     // ignore updates by bots
     if( oMsg.author.bot )
         return 
+    // if the message content is the same, exit
+    if( oMsg.content == nMsg.content )
+        return
 
     const startEmbed = new RichEmbed()
     const extras = []
