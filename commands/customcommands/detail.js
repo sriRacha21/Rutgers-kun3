@@ -42,7 +42,10 @@ Run \`${msg.guild.commandPrefix}listcommand\` to see a list of all commands.` )
             clientUser: this.client.user,
             msg: msg
         })
-        .addField( `Contents:`, commandInfo.text )
+        if( commandInfo.text )
+            retEmbed.addField( `Contents:`, commandInfo.text )
+        if( commandInfo.attachment )
+            retEmbed.addField( 'Attachment:', commandInfo.attachment )
         
         // check if user id is in cache
         const creator = this.client.users.find( user => user.id == commandInfo.userID )

@@ -25,7 +25,7 @@ async function latexInterpreter( msgContent, channel ) {
 
     // map matches to urls, encodeURI doesn't properly parse +, so manually replace with .replace
     const urls = matches
-    .map(match => `https://www.wiris.net/demo/editor/render?format=png&latex=${encodeURI(match).replace(/\+/g,'%2B')}&backgroundColor=%23fff&redherring=default.png`)
+    .map(match => `https://www.wiris.net/demo/editor/render?format=png&color=%23fff&latex=${encodeURI(match).replace(/\+/g,'%2B')}&backgroundColor=%232c2f33&redherring=default.png`)
 
     // return array of URL's to images or a message if a channel is supplied
     return channel 
