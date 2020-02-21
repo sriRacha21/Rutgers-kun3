@@ -15,7 +15,7 @@ function flushAgreements( guilds, provider ) {
             maybeAgreementChannel.fetchMessages()
             .then( messages => {
                 messages
-                .filter(msg => msg.author.bot || !msg.member.hasPermission(defaults.admin_permission))
+                .filter(msg => msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission)) )
                 .forEach( message => message.delete() )
             })
         })

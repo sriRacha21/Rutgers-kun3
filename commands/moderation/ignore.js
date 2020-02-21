@@ -1,5 +1,7 @@
 const Commando = require('discord.js-commando')
 const { logEvent } = require('../../helpers/logEvent')
+const fs = require('fs')
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
 module.exports = class IgnoreCommand extends Commando.Command {
     constructor(client) {
@@ -10,6 +12,7 @@ module.exports = class IgnoreCommand extends Commando.Command {
             memberName: 'ignore',
             description: 'Make me toggle ignoring a server member.',
             guildOnly: true,
+            userPermissions: [ defaults.moderator_permission ],
             args: [
                 {
                     key: 'member',

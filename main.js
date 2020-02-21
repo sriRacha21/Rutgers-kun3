@@ -85,7 +85,7 @@ Client.on('message', msg => {
         if( agreementChannel == msg.channel.id ) {
             // ESCAPE and give the user their role if they entered the autoverify code
             if( checkAutoverify( msg, Client.provider ) ) return
-            if( msg.author.bot || !msg.member.hasPermission(defaults.admin_permission) )
+            if( msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission)) )
                 msg.delete()
         }
     }

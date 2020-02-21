@@ -28,8 +28,8 @@ module.exports = class BMACCommand extends Commando.Command {
         }
 
         const embed = generateDefaultEmbed(embedInfo)
-        .setImage( 'https://cdn.buymeacoffee.com/buttons/default-orange.png' )
-        .setDescription( '[Link here!](https://www.buymeacoffee.com/h4K7sQj)' )
+        .setImage( 'https://cdn.buymeacoffee.com/buttons/default-red.png' )
+        .setURL( 'https://www.buymeacoffee.com/h4K7sQj' )
         .setThumbnail()
 
         msg.channel.send( embed )

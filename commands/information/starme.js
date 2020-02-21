@@ -1,5 +1,7 @@
 const Commando = require('discord.js-commando')
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
+const fs = require('fs')
+const contributors = JSON.parse(fs.readFileSync('settings/bot_settings.json', 'utf-8')).contributor
 
 module.exports = class StarMeCommand extends Commando.Command {
     constructor(client) {
@@ -20,7 +22,8 @@ module.exports = class StarMeCommand extends Commando.Command {
             clientUser: this.client.user,
             msg: msg,
         })
-        .setDescription( '[Link here!](https://github.com/sriRacha21/Rutgers-kun3/stargazers)' )
+        .setDescription(`A special thanks to:\n${contributors.map(c => `<@${c}>`).join('\n')}\nfor contributing!`)
+        .setURL( 'https://github.com/sriRacha21/Rutgers-kun3/stargazers' )
 
         msg.channel.send( embed )
 	}
