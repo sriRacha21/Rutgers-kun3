@@ -24,6 +24,7 @@ module.exports = class WhoAmICommand extends Commando.Command {
         .addField('Programmer:', `I was written by Arjun Srivastav, <@${this.client.owners[0].id}>.`)
         .addField("I'm open source!", `I'm hosted at ${parse.sync()['remote "origin"'].url}.`)
         .addField('Thanks!', 'API for woof command by joey#1337 hosted at https://woofbot.io/')
+        .addField('Feeling Generous?', 'Buy me a coffee!: https://www.buymeacoffee.com/h4K7sQj')
         
         return msg.channel.send( embed )
     }

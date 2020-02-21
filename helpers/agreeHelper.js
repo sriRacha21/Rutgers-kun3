@@ -88,9 +88,13 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         if( fs.existsSync('settings/netids.json') ) {
             const netIDsObj = JSON.parse(fs.readFileSync('settings/netids.json', 'utf-8'))
             if( netIDsObj[msg.author.id] == maybeNetID ) {
+                const agreementRole = agreementRoles.find(role => role.id == roleID)
+                const rolesToAdd = [agreementRole]
+                if( permissionRole )
+                    rolesToAdd.push(permissionRole)
+                guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
                 settings.remove( `agree:${msg.author.id}` )
                 sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
-                const agreementRole = guild.roles.find( r => r.id == roleID )
                 return msg.author.send( `Your netID has already been verified! You have successfully been given the ${agreementRole.name} role in ${guild.name}!` )
             }
         }

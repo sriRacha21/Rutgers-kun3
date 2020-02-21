@@ -25,7 +25,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     } }
     if( approvalPolicyOptions.runHasPerms ) { runHasPerms = approvalPolicyOptions.runHasPerms } else { throw "A function to run if a member has perms is required." }
     if( approvalPolicyOptions.settings ) { settings = approvalPolicyOptions.settings } else { throw "GuildSettingsHelper is required." }
-    attachments = approvalPolicyOptions.attachments ? approvalPolicyOptions.attachments : []
+    attachments = approvalPolicyOptions.attachments ? (approvalPolicyOptions.attachments[0] ? approvalPolicyOptions.attachments : []) : []
     if( approvalPolicyOptions.errChannel ) { errChannel = approvalPolicyOptions.errChannel } else { throw 'errChannel is a required field.' }
     // check if there's an approval channel
     const approvalChannelID = settings.get( member.guild, 'approvalChannel')

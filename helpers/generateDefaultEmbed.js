@@ -14,13 +14,15 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
     const startingEmbed = requiredEmbedInfo.startingEmbed ? requiredEmbedInfo.startingEmbed : new RichEmbed()
 
     startingEmbed
-        .setAuthor( author, authorThumbnail )
         .setTitle( title )
         .setThumbnail( thumbnail )
         .setFooter( oneLine`${msg ? `Requested ${msg.createdAt.toLocaleString()}
 by ${msg.author.tag}${guild ? ` in ${guild.name}` : ``}` : clientUser.tag }`
                     , msg ? msg.author.displayAvatarURL : clientUser.displayAvatarURL )
         .setColor( defaults.richembed_color )
+
+    if( requiredEmbedInfo.author )
+        startingEmbed.setAuthor( author, authorThumbnail )
 
     return startingEmbed
 }
