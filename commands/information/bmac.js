@@ -5,7 +5,7 @@ module.exports = class BMACCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'bmac',
-            aliases: [ 'buymeacoffee' ],
+            aliases: [ 'buymeacoffee', 'coffee' ],
             group: 'information',
             memberName: 'bmac',
             description: 'Buy me a coffee?',
@@ -31,7 +31,7 @@ module.exports = class BMACCommand extends Commando.Command {
         .setImage( 'https://cdn.buymeacoffee.com/buttons/default-orange.png' )
         .setDescription( '[Link here!](https://www.buymeacoffee.com/h4K7sQj)' )
         .setThumbnail()
-        
+
         msg.channel.send( embed )
 	}
-} 
+}
