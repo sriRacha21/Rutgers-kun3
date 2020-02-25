@@ -23,6 +23,8 @@ function checkWordCount( msg, settings ) {
 \`${word}\` counter: ${count + wordFrequency}`)
         }
     })
+
+    settings.set(`countword:${msg.author.id}`, wordCounts)
 }
 
 exports.checkWordCount = checkWordCount

@@ -24,6 +24,10 @@ module.exports = class AddEmoteCommand extends Commando.Command {
                 }
             ],
             argsPromptLimit: 0,
+            throttling: {
+                usages: 1,
+                duration: 600,
+            }
         })
     }
 

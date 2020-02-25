@@ -95,7 +95,7 @@ Client.on('message', msg => {
     // remove server invite links
     removeInvites( msg, Client )
     // if the member is ignored leave
-    if( msg.guild && Client.provider.get( msg.guild, `ignored:${msg.member.id}` ) )
+    if( msg.guild && msg.member && Client.provider.get( msg.guild, `ignored:${msg.member.id}` ) )
         return
     // parse a custom command if the message starts with it, send the first word after the prefix to the method
     if( msg.cleanContent.startsWith(msg.guild && msg.guild.commandPrefix) )
@@ -206,6 +206,10 @@ Client.on('messageDelete', message => {
     // ignore deletions by bots
     if( message.author.bot )
         return 
+    // ignore deletions in agreement channel
+    const agreementChannel = Client.provider.get( message.guild, `agreementChannel` )
+    if( agreementChannel && message.channel.id == agreementChannel.id )
+        return
 
     const startEmbed = new RichEmbed()
     const extras = []

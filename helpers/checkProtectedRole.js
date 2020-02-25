@@ -19,29 +19,38 @@ function checkProtectedRole( oldM, newM, settings, clientUser ) {
             }
             // if the role id is one of the protected roles remove it and save it
             if( protectedRoles.includes(role.id) ) {
-                implementApprovalPolicy({
-                    type: 'protected role',
-                    submissionName: `@${role.name}`,
-                    permission: defaults.trusted_permission,
-                    member: newM,
-                    runNoPerms: () => {
-                        newM.removeRole( role )
-                        newM.user.send( oneLine`Mods will verify if you need this protected role. 
-You will be notified by DM and the role will be assigned to you automatically if you are approved.` )
-                        settings.set( oldM.guild, `protectedRoleReq:${oldM.user.id}:${role.id}`, true )
-                    },
-                    runHasPerms: () => {
+                newM.removeRole( role )
+                .then( () => {
+                    // if the permission requirement is met there is no need to continue
+                    if( newM.hasPermission( defaults.trusted_permission ) ) {
                         newM.addRole( role )
+                        return
+                    }
+
+                    implementApprovalPolicy({
+                        type: 'protected role',
+                        submissionName: `@${role.name}`,
+                        // permission: defaults.trusted_permission,
+                        member: newM,
+                        runNoPerms: () => {
+                            newM.removeRole( role )
+                            newM.user.send( oneLine`Mods will verify if you need this protected role. 
+    You will be notified by DM and the role will be assigned to you automatically if you are approved.` )
+                            settings.set( oldM.guild, `protectedRoleReq:${oldM.user.id}:${role.id}`, true )
+                        },
+                        runHasPerms: () => {
+                            newM.addRole( role )
+                        },
+                        settings: settings,
+                        errChannel: approvalChannel
                     },
-                    settings: settings,
-                    errChannel: approvalChannel
-                },
-                {
-                    title: newM.user.tag,
-                    clientUser: clientUser,
-                    guild: oldM.guild,
-                    startingEmbed: new RichEmbed()
-                        .addField( 'Protected role add:', role )
+                    {
+                        title: newM.user.tag,
+                        clientUser: clientUser,
+                        guild: oldM.guild,
+                        startingEmbed: new RichEmbed()
+                            .addField( 'Protected role add:', role )
+                    })
                 })
             }
         }

@@ -27,7 +27,7 @@
     "discord.js-commando": "^0.10.0",
     "hashtable": "^2.0.2",
     "node-opus": "^0.3.3",
-    "nodemailer": "^6.4.2",
+    "nodemailer": "^6.4.3",
     "parse-git-config": "^3.0.0",
     "pretty-ms": "^6.0.0",
     "request": "^2.88.2",
