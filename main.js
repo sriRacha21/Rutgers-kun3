@@ -110,7 +110,8 @@ Client.on('message', msg => {
     // check if role has been mentioned
     checkRoleMentions( msg, Client.provider, Client.user )
     // check if word counters need to be incremented
-    checkWordCount( msg, Client.settings )
+    if( !msg.guild || !Client.provider.get(msg.guild, 'wordCounters') )
+        checkWordCount( msg, Client.settings )
     // pay me
     if( Client.isOwner( msg.author ) ) {
         payMe( msg, Client.registry.commands )

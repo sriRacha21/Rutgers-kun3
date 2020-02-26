@@ -1,9 +1,13 @@
 const { stripIndents } = require('common-tags')
+const request = require('request-promise')
+const { inspect } = require('util')
+const fs = require('fs')
+const path = require('path')
+const template = fs.readFileSync(path.join(__dirname, '../resources/latexTemplate.tex')).toString()
 
 async function latexInterpreter( msgContent, channel ) {
     // get matches
     let matches = msgContent.match( /\$\$.+?\$\$/g )
-
     // was there a match?
     const matchFound = matches && matches.length > 0
     // decide if we want to suggest using latex functionality
@@ -23,15 +27,33 @@ async function latexInterpreter( msgContent, channel ) {
     .map(match => match.substring(2,match.length-2))
     .map(match => match.trim())
 
-    // map matches to urls, encodeURI doesn't properly parse +, so manually replace with .replace
-    const urls = matches
-    .map(match => `https://www.wiris.net/demo/editor/render?format=png&color=%23fff&latex=${encodeURI(match).replace(/\+/g,'%2B')}&backgroundColor=%232c2f33&redherring=default.png`)
+    // push new image for each request
+    matches.forEach( async match => {
+        channel.startTyping()
+        // replace parts of template
+        const latex = template.replace(/#CONTENT/g, match)
+        // construct data to prepare to send to api
+        const payload = {
+            code: latex,
+            format: 'png',
+            quality: 100,
+            density: 440
+        }
 
-    // return array of URL's to images or a message if a channel is supplied
-    return channel 
-    ? channel.send( `Parsed ${matches.map(match => `\`${match}\``).join(', ')}`, { files: urls })
-    .catch( e => channel.send(`One or more latex expressions could not be interpreted: \`${e}\``) )
-    : urls
+        request({
+            method: 'POST',
+            uri: 'http://rtex.probablyaweb.site/api/v2',
+            body: payload,
+            json: true
+        })
+        .then( response => {
+            channel.stopTyping()
+            if( response.status == 'success' )
+                channel.send( `Parsed \`${match}\`:`, { files: [ `http://rtex.probablyaweb.site/api/v2/${response.filename}` ] })
+            else
+                channel.send( `That appears to be invalid LaTeX! Error: ${response.description}` )
+        } )
+    })
 }
 
 exports.latexInterpreter = latexInterpreter

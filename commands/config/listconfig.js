@@ -29,6 +29,7 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const modChannelID = settings.get( msg.guild, `modChannel`)
         const welcomeText = settings.get( msg.guild, `welcomeText` )
         const removeInvites = settings.get( msg.guild, `removeInvites` )
+        const wordCountMessages = settings.get( msg.guild, `wordCounters` )
         const agreementRoles = settings.get( msg.guild, `agreementRoles` )
         const protectedRoles = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
         const muteRoleID = settings.get( msg.guild, `muteRole` )
@@ -61,6 +62,7 @@ module.exports = class ListConfigCommand extends Commando.Command {
         if( welcomeText )
             embed.addField( `Welcome text:`, welcomeText )
         embed.addField( `Removing invites?:`, removeInvites ? 'On' : 'Off' )
+        embed.addField( `Word Count Messages?:`, !wordCountMessages ? 'On' : 'Off' )
         if( muteRoleID )
             embed.addField( `Mute role:`, `<@&${muteRoleID}>` )
         if( liveRoleID )
