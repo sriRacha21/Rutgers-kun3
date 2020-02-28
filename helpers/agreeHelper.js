@@ -53,7 +53,7 @@ function agreeHelper( msg, guilds, settings, provider ) {
         // we need to validate the input, make sure its one of the roles
         // if the input does not match one of the role names (case ignored), exit
         if( !agreementRoles.map(role => role.name.toLowerCase()).includes(maybeRoleName) )
-            return msg.author.send( `Your role did not match one of the listed roles. Please enter it again. Roles are ${agreementRoles.map(role => role.name).join(', ')}.` )
+            return msg.author.send( `Your role did not match one of the listed roles. Please enter it again. Roles are ${agreementRoles.filter(r => r.id != permissionRoleObj.roleID).map(role => role.name).join(', ')}.` )
         // capture the role name, store it in the setting, prepare for next input
         const agreementRole = agreementRoles.find(role => role.name.toLowerCase() == maybeRoleName)
         // if the role id matches a non-authenticate, skip the other steps and give them that role

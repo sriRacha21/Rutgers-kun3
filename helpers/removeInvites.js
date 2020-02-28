@@ -13,6 +13,7 @@ function removeInvites( msg, client ) {
         '143013824679641088', // rutgers esports
         '409134033898045470', // rutgers computer science
         '531342782338433024', // rutgers playground
+        '682667655043350528', // RU Mathcord
         '572965432890490900', // scarlet smash
         '643670268404826142', // league of legends
         '277296577469612033', // pokemon

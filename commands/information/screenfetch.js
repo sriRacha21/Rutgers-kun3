@@ -23,7 +23,7 @@ module.exports = class ScreenfetchCommand extends Commando.Command {
             .join('\n'), // this procedure removes non-important new lines and trims every line
             {
                 split: true,
-                code: true
+                code: 'bash'
             }
         )
     }

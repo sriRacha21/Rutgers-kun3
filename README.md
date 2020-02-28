@@ -2,7 +2,8 @@
 A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports Discord. Old version is hosted [here](https://github.com/sriRacha21/Rutgers-kun).
 
 ### How to Use
-[Click me to add me to your server!](https://discordapp.com/api/oauth2/authorize?client_id=291355097919913985&permissions=0&scope=bot)
+1. [Click me to add me to your server!](https://discordapp.com/api/oauth2/authorize?client_id=291355097919913985&permissions=0&scope=bot)
+2. [Setup](documentation/setup.md).
 
 ### How to run me locally!
 1. Clone me somewhere you feel comfortable keeping Github projects: `git clone https://github.com/sriRacha21/Rutgers-kun3.git`

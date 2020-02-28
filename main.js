@@ -33,6 +33,7 @@ const { sendRoleResponse } = require('./helpers/sendRoleResponse')
 const { checkProtectedRole } = require('./helpers/checkProtectedRole')
 const { validateAllStrArgs } = require('./helpers/validateAllStrArgs')
 const { generatePresence } = require('./helpers/generatePresence')
+const { generateDefaultEmbed } = require('./helpers/generateDefaultEmbed')
 const { removeInvites } = require('./helpers/removeInvites')
 const { payMe } = require('./helpers/payMe')
 const { starMe } = require('./helpers/starMe')
@@ -85,7 +86,7 @@ Client.on('message', msg => {
         if( agreementChannel == msg.channel.id ) {
             // ESCAPE and give the user their role if they entered the autoverify code
             if( checkAutoverify( msg, Client.provider ) ) return
-            if( msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission)) )
+            if( !msg.webhookID && msg.author.id == Client.user.id || (msg.member && !msg.member.hasPermission(defaults.admin_permission)) )
                 msg.delete()
         }
     }
@@ -144,12 +145,12 @@ Client.on('presenceUpdate', (oldMember, newMember) => {
 
 // emitted on bot joining a guild
 Client.on('guildCreate', guild => {
-    // check if the server owner is still in the server
+    // run documentation command
     if( guild.owner )
-        guild.owner.user.send( oneLine`Hiya! I see you've decided to add me to your server! I have 
-a bunch of commands to configure the server to your liking. Just type \`help\` and check out some 
-of the commands in the \`Config\` group. If you have any questions please ask the writer of this bot, 
-${Client.owners[0]}.` )
+        Client.registry.commands.get('documentation').run({
+            guild: guild,
+            author: guild.owner
+        })
 })
 
 // emitted on bot leaving (or getting kicked) from a guild

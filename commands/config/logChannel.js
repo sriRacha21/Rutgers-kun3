@@ -15,7 +15,7 @@ module.exports = class SetlogChannelCommand extends Commando.Command {
                 {
                     key: 'logChannel',
                     label: 'log channel',
-                    prompt: `Enter the channel you want to use for users to see before they see the rest of the server.`,
+                    prompt: `Enter the channel you want to log edited/deleted messages to.`,
                     type: 'channel|string',
                 }
             ],

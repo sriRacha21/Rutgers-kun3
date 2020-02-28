@@ -28,6 +28,8 @@ module.exports = class SetAgreementChannelCommand extends Commando.Command {
 
         if( !this.client.provider.get( msg.guild, 'agreementRoles' ) )
             return msg.channel.send( 'You need to set up the roles that a user can choose from when they agree to the server rules first.' )
+        if( !this.client.provider.get( msg.guild, 'welcomeChannel' ) )
+            return msg.channel.send( 'You need to set up the welcome channel first.' )
 
         if( typeof agreementChannel === 'object' )
             settings.set( msg.guild, `agreementChannel`, agreementChannel.id )

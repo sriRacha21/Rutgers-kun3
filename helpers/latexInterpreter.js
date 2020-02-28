@@ -7,7 +7,7 @@ const template = fs.readFileSync(path.join(__dirname, '../resources/latexTemplat
 
 async function latexInterpreter( msgContent, channel ) {
     // get matches
-    let matches = msgContent.match( /\$\$.+?\$\$/g )
+    let matches = msgContent.match( /\$\$.+?\$\$/gs )
     // was there a match?
     const matchFound = matches && matches.length > 0
     // decide if we want to suggest using latex functionality
