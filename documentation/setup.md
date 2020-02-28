@@ -26,6 +26,8 @@ After running the command it will prompt you to enter a series of strings compri
     * **false** indicates that the preceding role would **not require netID verification** (the user will skip all the steps and instantly enter the server with this role)
     * **permission** indicates an **unpickable role** that will be **given to the user alongside one of the roles they pick**
 
+**Note:** Ensure every string is its own message and that when you're done entering inputs, enter `finish` as its own message.
+
 Example: 
 
 ![!setagreementroles](../resources/setup-images/setagreementroles.png)
