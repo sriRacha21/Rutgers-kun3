@@ -42,7 +42,7 @@ The command will prompt you to enter a channel. You can enter simply the channel
 
 ### `!setagreementchannel`
 
-With this comamnd you can choose which channel **users will see when they first enter the server**.
+With this command you can choose which channel **users will see when they first enter the server**.
 
 Just like the last command, it will prompt you to enter a channel.
 
