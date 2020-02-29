@@ -28,9 +28,11 @@ function removeInvites( msg, client ) {
                 .then( invite => {
                     if( universalInvOverrides.includes(invite.guild.id) )
                         return
-                    msg.delete()
-                    if( !msg.member.hasPermission( defaults.moderator_permission ) )
-                        startTimedMute( msg.member, client.provider, 'Sending a server invite link', 4*60*60*1000, client.user )
+                    if( !msg.member.hasPermission(defaults.moderator_permission) ) {
+                        msg.delete()
+                        if( client.provider.get(msg.guild, `muteRole`) )
+                            startTimedMute( msg.member, client.provider, 'Sending a server invite link', 4*60*60*1000, client.user )
+                    }
                 } )
                 .catch( err => {
                     if( err )

@@ -121,8 +121,9 @@ Client.on('message', msg => {
     // react with rutgerschan, do reroll
     rutgersChan( msg )
     reroll( msg )
-    // detect chains
-    detectChain( msg, Client.provider )
+    // detect chains (not in agreement channel)
+    if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, `agreementChannel`)) || (msg.guild && Client.provider.get(msg.guild, `agreementChannel`) != msg.channel.id) )
+        detectChain( msg, Client.provider )
 })
 
 // emitted on adding a reaction to a message
@@ -210,7 +211,7 @@ Client.on('messageDelete', message => {
         return 
     // ignore deletions in agreement channel
     const agreementChannel = Client.provider.get( message.guild, `agreementChannel` )
-    if( agreementChannel && message.channel.id == agreementChannel.id )
+    if( agreementChannel && message.channel.id == agreementChannel )
         return
 
     const startEmbed = new RichEmbed()

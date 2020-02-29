@@ -8,20 +8,9 @@ const template = fs.readFileSync(path.join(__dirname, '../resources/latexTemplat
 async function latexInterpreter( msgContent, channel ) {
     // get matches
     let matches = msgContent.match( /\$\$.+?\$\$/gs )
-    // was there a match?
-    const matchFound = matches && matches.length > 0
-    // decide if we want to suggest using latex functionality
-    const suggestMatch = msgContent.match(/sqrt|sin\(|cos\(|tan\(/g)
-
-    // ignore no matches
-    if( !matchFound ) {
-        // if no match was found and one is suggested send suggestion message
-        if( channel && suggestMatch )
-            channel.send( stripIndents`I see you're trying to enter math. I can parse LaTeX! Try entering an expression in double dollar signs and I'll parse it.
-            Example: This line can be expressed as $$y=x-2$$.` )
+    // if there are none return
+    if( !matches )
         return
-    }
-
     // remove brackets from matches and trim them
     matches = matches
     .map(match => match.substring(2,match.length-2))
@@ -50,6 +39,7 @@ async function latexInterpreter( msgContent, channel ) {
             channel.stopTyping()
             if( response.status == 'success' )
                 channel.send( `Parsed \`${match}\`:`, { files: [ `http://rtex.probablyaweb.site/api/v2/${response.filename}` ] })
+
             else
                 channel.send( `That appears to be invalid LaTeX! Error: ${response.description}` )
         } )

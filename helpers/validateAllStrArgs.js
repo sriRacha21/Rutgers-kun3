@@ -1,5 +1,5 @@
 function validateAllStrArgs( registry ) {
-    registry.commands.forEach( command => {
+    registry.commands.filter(c => c.group.id != 'util').forEach( command => {
         if( command.argsCollector ) {
             command.argsCollector.args.forEach( arg => {
                 if( arg.type && arg.type.id == 'string' && !arg.validator ) {
@@ -8,7 +8,7 @@ function validateAllStrArgs( registry ) {
                 }
             })
         }
-    } )    
+    } )
 }
 
 exports.validateAllStrArgs = validateAllStrArgs
