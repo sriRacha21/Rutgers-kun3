@@ -63,10 +63,12 @@ module.exports = class ClassCommand extends Commando.Command {
         const semester = `${season}${year}`
 
         // make request
+        msg.channel.startTyping()
         request(`http://sis.rutgers.edu/oldsoc/courses.json?subject=${subject}&semester=${semester}&campus=${campus}&level=${level}`)
         .then( data => {
             const json = JSON.parse(data)
             const classToSend = json.find(d => +d.courseNumber == course)
+            msg.channel.stopTyping()
             if( classToSend ) {
                 const embed = generateDefaultEmbed({
                     author: 'Class information for ',

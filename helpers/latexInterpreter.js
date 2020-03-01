@@ -15,6 +15,7 @@ async function latexInterpreter( msgContent, channel ) {
     matches = matches
     .map(match => match.substring(2,match.length-2))
     .map(match => match.trim())
+    .map(match => match.replace(/`/g, ''))
 
     // push new image for each request
     matches.forEach( async match => {

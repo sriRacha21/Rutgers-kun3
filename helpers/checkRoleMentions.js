@@ -8,7 +8,7 @@ function checkRoleMentions( msg, settings, clientUser ) {
         return
 
     // exit if member has the mention everyone permission
-    if( msg.member.hasPermission( defaults.officer_permission ) )
+    if( msg.member && msg.member.hasPermission( defaults.officer_permission ) )
         return
 
     // get the unpingable roles from the settings
