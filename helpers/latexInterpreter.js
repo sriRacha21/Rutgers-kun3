@@ -38,11 +38,12 @@ async function latexInterpreter( msgContent, channel ) {
         })
         .then( response => {
             channel.stopTyping()
+            let messagePromise
             if( response.status == 'success' )
-                channel.send( `Parsed \`${match}\`:`, { files: [ `http://rtex.probablyaweb.site/api/v2/${response.filename}` ] })
-
+                messagePromise = channel.send( `Parsed \`${match}\`:`, { files: [ `http://rtex.probablyaweb.site/api/v2/${response.filename}` ] })
             else
-                channel.send( `That appears to be invalid LaTeX! Error: ${response.description}` )
+                messagePromise = channel.send( `That appears to be invalid LaTeX! Error: ${response.description}` )
+            messagePromise.then( msg => msg.react('🗑') )
         } )
     })
 }

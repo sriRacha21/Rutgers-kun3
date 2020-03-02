@@ -132,6 +132,10 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
     if( user.id == Client.user.id )
         return
 
+    // if the bot sent one of the messageReactions and it was a wastebin and someone else sent a wastebin, delete it
+    const botReaction = messageReaction.message.reactions.find(mr => mr.me)
+    if( botReaction && botReaction.emoji == '🗑' && messageReaction.emoji == '🗑' )
+        messageReaction.message.delete()
     // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
 })
