@@ -19,7 +19,7 @@ module.exports = class ClassCommand extends Commando.Command {
                     label: 'class code',
                     prompt: 'Enter the class code formatted as: \`<school code>:<subject code>:<course code>\`. Section code can be optionally inserted at the end is a 2-digit number.',
                     type: 'string',
-                    parse: str => str.match(/^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([0-9]{2})?$/)
+                    parse: str => str.match(/^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?$/i)
                 },
                 {
                     key: 'seasonYear',
@@ -72,8 +72,14 @@ module.exports = class ClassCommand extends Commando.Command {
                         professorInfo.sections.push(section.number)
                 })
             })
+            let visited = false
             professorInfos.forEach( professorInfo => {
-                embed.addField( professorInfo.name + ':', `Sections: ${professorInfo.sections.length > 0 ? `${professorInfo.sections.join(', ')}` : `None`}` )
+                if ( embed.fields.length < 25 )
+                    embed.addField( professorInfo.name + ':', `Sections: ${professorInfo.sections.length > 0 ? `${professorInfo.sections.join(', ')}` : `None`}` )
+                if( embed.fields.length == 25 && !visited ) {
+                    visited = true
+                    embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
+                }
             })
         } else {
             const foundSection = classToSend.sections.find(s => s.number === section )
@@ -86,8 +92,11 @@ module.exports = class ClassCommand extends Commando.Command {
                 embed.addField("Notes:", foundSection.notes)
             if( foundSection.meetingTimes && foundSection.meetingTimes.length > 0 ) {
                 foundSection.meetingTimes.forEach(time => {
-                    embed.addField(`${ClassCommand.codeToReadable('meetingDay', time.meetingDay)} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc).toLowerCase()} on ${time.campusName[0]}${time.campusName.slice(1).toLowerCase()}:`,
-                    `${time.buildingCode}-${time.roomNumber} from ${convert(`${time.startTime.slice(0,2)}:${time.startTime.slice(2)}`, 'hh:MM A')} to ${convert(`${time.endTime.slice(0,2)}:${time.endTime.slice(2)}`, 'hh:MM A')}` )
+                    if ( embed.fields.length < 25 )
+                        embed.addField(`${ClassCommand.codeToReadable('meetingDay', time.meetingDay)} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc).toLowerCase()} on ${time.campusName[0]}${time.campusName.slice(1).toLowerCase()}:`,
+                        `${time.buildingCode}-${time.roomNumber} from ${convert(`${time.startTime.slice(0,2)}:${time.startTime.slice(2)}`, 'hh:MM A')} to ${convert(`${time.endTime.slice(0,2)}:${time.endTime.slice(2)}`, 'hh:MM A')}` )
+                    if( embed.fields.length == 25 )
+                        embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
                 })
             }
         }
