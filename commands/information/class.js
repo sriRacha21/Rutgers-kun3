@@ -1,6 +1,9 @@
 const Commando = require('discord.js-commando')
 const request = require('request-promise')
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
+const xRay = require('x-ray')
+const x = new xRay()
+const convert = require('convert-time')
 
 module.exports = class ClassCommand extends Commando.Command {
     constructor(client) {
@@ -14,9 +17,9 @@ module.exports = class ClassCommand extends Commando.Command {
                 {
                     key: 'class',
                     label: 'class code',
-                    prompt: 'Enter the class code formatted as: \`<school code>:<subject code>:<course code>\`.',
+                    prompt: 'Enter the class code formatted as: \`<school code>:<subject code>:<course code>\`. Section code can be optionally inserted at the end is a 2-digit number.',
                     type: 'string',
-                    parse: str => str.match(/^[0-9]{2}:([0-9]{3}):([0-9]{3}$)/) || str.match(/^([0-9]{3}):([0-9]{3}$)/),
+                    parse: str => str.match(/^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([0-9]{2})?$/)
                 },
                 {
                     key: 'seasonYear',
@@ -43,13 +46,79 @@ module.exports = class ClassCommand extends Commando.Command {
         })
     }
 
+    static output(classToSend, embed, section, msg) {
+        // add prereqs if theyre there
+        if( classToSend.preReqNotes && !section )
+            embed.addField('Prereqs:', classToSend.preReqNotes
+            .replace(/<em>|<\/em>/g, '')
+            .replace(/ \)/g,')')
+            .replace(/\)\)/g,'))\n'))
+        // process professors and the sections they teach
+        if( !section ) {
+            const professorInfos = []
+            classToSend.sections.forEach( section => {
+                if( section.instructors ) 
+                    section.instructors.map(i => i.name).forEach(name => {
+                        if( !professorInfos.map(i => i.name).includes(name) )
+                            professorInfos.push({
+                                name: name,
+                                sections: []
+                            })
+                    })
+            })
+            professorInfos.forEach( professorInfo => {
+                classToSend.sections.forEach( section => {
+                    if( section.instructors && section.instructors.map(i => i.name).includes(professorInfo.name) )
+                        professorInfo.sections.push(section.number)
+                })
+            })
+            professorInfos.forEach( professorInfo => {
+                embed.addField( professorInfo.name + ':', `Sections: ${professorInfo.sections.length > 0 ? `${professorInfo.sections.join(', ')}` : `None`}` )
+            })
+        } else {
+            const foundSection = classToSend.sections.find(s => s.number === section )
+            if( !foundSection )
+                return msg.channel.send( `Section ${section} could not be found.` )
+            embed.setDescription(`**Section ${section}**\nIndex ${foundSection.index}`)
+            if( foundSection.instructors && foundSection.instructors.length > 0 )
+                embed.addField("Instructors:", foundSection.instructors.map(i => i.name).join('\n') )
+            if( foundSection.notes )
+                embed.addField("Notes:", foundSection.notes)
+            if( foundSection.meetingTimes && foundSection.meetingTimes.length > 0 ) {
+                foundSection.meetingTimes.forEach(time => {
+                    embed.addField(`${ClassCommand.codeToReadable('meetingDay', time.meetingDay)} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc).toLowerCase()} on ${time.campusName[0]}${time.campusName.slice(1).toLowerCase()}:`,
+                    `${time.buildingCode}-${time.roomNumber} from ${convert(`${time.startTime.slice(0,2)}:${time.startTime.slice(2)}`, 'hh:MM A')} to ${convert(`${time.endTime.slice(0,2)}:${time.endTime.slice(2)}`, 'hh:MM A')}` )
+                })
+            }
+        }
+        // send the message
+        return msg.channel.send( embed ).then( m => m.react('🗑') )
+    }
 
+    static codeToReadable(type, value) {
+        if( type == 'meetingDay' ) {
+            if( value == 'M' ) return "Monday"
+            else if( value == 'T' ) return "Tuesday"
+            else if( value == 'W' ) return "Wednesday"
+            else if( value == 'TH' ) return "Thursday"
+            else if( value == 'F' ) return "Friday"
+            else return "Unknown"
+        } else if( type == 'meetingModeDesc' ) {
+            if( value == 'LEC' ) return "Lecture"
+            else if( value == "RECIT" ) return "Recitation"
+            else return "Unknown"
+        } //else if( type == 'time' ) {
+        //     if( +time.slice(0,2) > 12 )
+
+        // }
+        return "Unknown"
+    } 
     async run( msg, args ) {
-        console.log( args.seasonYear )
         if( !args.class )
             return msg.channel.send( `That's not a valid class code. Class codes are formatted as \`<school code>:<subject code>:<course code>\`.` )
         const subject = args.class[1]
         const course = args.class[2]
+        const section = args.class[3]
         const campus = args.campus
         const level = args.level
         const seasonYear = args.seasonYear
@@ -91,39 +160,31 @@ module.exports = class ClassCommand extends Commando.Command {
             const classToSend = json.find(d => +d.courseNumber == course)
             msg.channel.stopTyping()
             if( classToSend ) {
+                // generating the initial embed
                 const embed = generateDefaultEmbed({
-                    author: 'Class information for ',
+                    author: `${section ? "Section" : "Class"} information for `,
                     title: classToSend.title,
                     clientUser: this.client.user,
                     msg: msg,
                 })
-                .setURL(json.synopsisURL)
-                if( classToSend.preReqNotes )
-                    embed.addField('Prereqs:', classToSend.preReqNotes
-                    .replace(/<em>|<\/em>/g, '')
-                    .replace(/ \)/g,')')
-                    .replace(/\)\)/g,'))\n'))
-                const professorInfos = []
-                classToSend.sections.forEach( section => {
-                    if( section.instructors ) 
-                        section.instructors.map(i => i.name).forEach(name => {
-                            if( !professorInfos.map(i => i.name).includes(name) )
-                                professorInfos.push({
-                                    name: name,
-                                    sections: []
-                                })
-                        })
-                })
-                professorInfos.forEach( professorInfo => {
-                    classToSend.sections.forEach( section => {
-                        if( section.instructors && section.instructors.map(i => i.name).includes(professorInfo.name) )
-                            professorInfo.sections.push(section.number)
+                .setThumbnail()
+                if( classToSend.synopsisUrl )
+                    embed.setURL(classToSend.synopsisUrl)
+                // get the synopsis url if it exists and scrape it for an image
+                if( classToSend.synopsisUrl ) {
+                    x( classToSend.synopsisUrl, 'img', [{
+                        img: '',
+                        src: '@src'
+                    }])(function(err,header) {
+                        if( err ) return
+                        if( header.length >= 0 )
+                            embed.setImage(header[0].src)
+                        if( header.length >= 2 )
+                            embed.setThumbnail(header[2].src)
+                        ClassCommand.output(classToSend, embed, section, msg)
                     })
-                })
-                professorInfos.forEach( professorInfo => {
-                    embed.addField( professorInfo.name + ':', `Sections: ${professorInfo.sections.length > 0 ? `${professorInfo.sections.join(', ')}` : `None`}` )
-                })
-                return msg.channel.send( embed ).then( m => m.react('🗑') )
+                } else
+                    ClassCommand.output(classToSend, embed, section, msg)
             }
             else
                 return msg.channel.send( `Class could not be found.
@@ -132,4 +193,5 @@ Example: \`${msg.guild.commandPrefix ? msg.guild.commandPrefix : this.client.com
                 .then( m => m.react('🗑') )
         })
     }
+
 }

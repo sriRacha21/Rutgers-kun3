@@ -23,19 +23,21 @@
   "homepage": "https://github.com/sriRacha21/Rutgers-kun3#readme",
   "dependencies": {
     "common-tags": "^1.8.0",
-    "discord.js": "^11.5.1",
+    "convert-time": "^0.3.0",
+    "discord.js": "^11.6.1",
     "discord.js-commando": "^0.10.0",
     "hashtable": "^2.0.2",
     "node-opus": "^0.3.3",
-    "nodemailer": "^6.4.3",
+    "nodemailer": "^6.4.4",
     "parse-git-config": "^3.0.0",
-    "pretty-ms": "^6.0.0",
+    "pretty-ms": "^6.0.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "sqlite": "^3.0.3",
     "wetty.js": "^1.1.4",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2",
-    "winston-mail": "^2.0.0"
+    "winston-mail": "^2.0.0",
+    "x-ray": "^2.3.4"
   }
 }
