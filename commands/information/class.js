@@ -197,8 +197,8 @@ module.exports = class ClassCommand extends Commando.Command {
             }
             else
                 return msg.channel.send( `Class could not be found.
-Maybe it's not from this semester? Try requesting another semester with \`${msg.guild.commandPrefix ? msg.guild.commandPrefix : this.client.commandPrefix}class ${subject}:${course} '<season> <year>'\`
-Example: \`${msg.guild.commandPrefix ? msg.guild.commandPrefix : this.client.commandPrefix}class 750:273 'fall 2019'\`` )
+Maybe it's not from this semester? Try requesting another semester with \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}class ${subject}:${course} '<season> <year>'\`
+Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}class 750:273 'fall 2019'\`` )
                 .then( m => m.react('🗑') )
         })
     }

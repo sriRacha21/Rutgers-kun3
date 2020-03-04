@@ -17,7 +17,9 @@ module.exports = class CountWordCommand extends Commando.Command {
                     key: 'word',
                     prompt: 'Enter the word to be tracked.',
                     type: 'string',
-                    parse: str => str.toLowerCase()
+                    validate: str => str.match(/(?:[A-Z]|[0-9]){0,20}/i),
+                    parse: str => str.toLowerCase(),
+                    error: 'Word entered must be alphanumeric'
                 }
             ],
             argsPromptLimit: 1,
