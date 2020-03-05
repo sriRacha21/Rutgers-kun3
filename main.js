@@ -34,6 +34,7 @@ const { checkProtectedRole } = require('./helpers/checkProtectedRole')
 const { validateAllStrArgs } = require('./helpers/validateAllStrArgs')
 const { generatePresence } = require('./helpers/generatePresence')
 const { generateDefaultEmbed } = require('./helpers/generateDefaultEmbed')
+const { reactionListener } = require('./helpers/reactionListener')
 const { removeInvites } = require('./helpers/removeInvites')
 const { payMe } = require('./helpers/payMe')
 const { starMe } = require('./helpers/starMe')
@@ -136,6 +137,9 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
     const botReaction = messageReaction.message.reactions.find(mr => mr.me)
     if( botReaction && botReaction.emoji == '🗑' && messageReaction.emoji == '🗑' )
         messageReaction.message.delete()
+    // use reactionListener
+    console.log(`emitted for event class:${messageReaction.message.id}:${messageReaction.emoji.name}`)
+    reactionListener.emit(`class:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'))
     // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
 })
@@ -313,3 +317,5 @@ Client.registry
 validateAllStrArgs(Client.registry)
 // log in
 Client.login(API_Keys.token)
+// exports
+exports.Client = Client

@@ -1,9 +1,14 @@
 const Commando = require('discord.js-commando')
 const request = require('request-promise')
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
+const { reactionListener } = require('../../helpers/reactionListener')
 const xRay = require('x-ray')
 const x = new xRay()
 const convert = require('convert-time')
+const { reactRecursive } = require('../../helpers/detectChain')
+const courseNonArgRegex = /(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?/i
+const courseRegex = /^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?$/i
+const emojiCharacters = require('../../helpers/emojiCharacters')
 
 module.exports = class ClassCommand extends Commando.Command {
     constructor(client) {
@@ -19,7 +24,7 @@ module.exports = class ClassCommand extends Commando.Command {
                     label: 'class code',
                     prompt: 'Enter the class code formatted as: \`<school code>:<subject code>:<course code>\`. Section code can be optionally inserted at the end is a 2-digit number.',
                     type: 'string',
-                    parse: str => str.match(/^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?$/i)
+                    parse: str => str.match(courseRegex)
                 },
                 {
                     key: 'seasonYear',
@@ -46,63 +51,27 @@ module.exports = class ClassCommand extends Commando.Command {
         })
     }
 
-    static output(classToSend, embed, section, msg) {
-        // add prereqs if theyre there
-        if( classToSend.preReqNotes && !section )
-            embed.addField('Prereqs:', classToSend.preReqNotes
-            .replace(/<em>|<\/em>/g, '')
-            .replace(/ \)/g,')')
-            .replace(/\)\)/g,'))\n'))
-        // process professors and the sections they teach
-        if( !section ) {
-            const professorInfos = []
-            classToSend.sections.forEach( section => {
-                if( section.instructors ) 
-                    section.instructors.map(i => i.name).forEach(name => {
-                        if( !professorInfos.map(i => i.name).includes(name) )
-                            professorInfos.push({
-                                name: name,
-                                sections: []
-                            })
-                    })
-            })
-            professorInfos.forEach( professorInfo => {
-                classToSend.sections.forEach( section => {
-                    if( section.instructors && section.instructors.map(i => i.name).includes(professorInfo.name) )
-                        professorInfo.sections.push(section.number)
-                })
-            })
-            let visited = false
-            professorInfos.forEach( professorInfo => {
-                if ( embed.fields.length < 25 )
-                    embed.addField( professorInfo.name + ':', `Sections: ${professorInfo.sections.length > 0 ? `${professorInfo.sections.join(', ')}` : `None`}` )
-                if( embed.fields.length == 25 && !visited ) {
-                    visited = true
-                    embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
-                }
-            })
-        } else {
-            const foundSection = classToSend.sections.find(s => s.number === section )
-            if( !foundSection )
-                return msg.channel.send( `Section ${section} could not be found.` )
-            embed.setDescription(`**Section ${section}**\nIndex ${foundSection.index}`)
-            if( foundSection.instructors && foundSection.instructors.length > 0 )
-                embed.addField("Instructors:", foundSection.instructors.map(i => i.name).join('\n') )
-            if( foundSection.notes )
-                embed.addField("Notes:", foundSection.notes)
-            if( foundSection.meetingTimes && foundSection.meetingTimes.length > 0 ) {
-                foundSection.meetingTimes.forEach(time => {
-                    if ( embed.fields.length < 25 )
-                        embed.addField(`${ClassCommand.codeToReadable('meetingDay', time.meetingDay)} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc).toLowerCase()} on ${time.campusName[0]}${time.campusName.slice(1).toLowerCase()}:`,
-                        `${time.buildingCode}-${time.roomNumber} from ${convert(`${time.startTime.slice(0,2)}:${time.startTime.slice(2)}`, 'hh:MM A')} to ${convert(`${time.endTime.slice(0,2)}:${time.endTime.slice(2)}`, 'hh:MM A')}` )
-                    if( embed.fields.length == 25 )
-                        embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
-                })
-            }
-        }
-        // send the message
-        return msg.channel.send( embed ).then( m => m.react('🗑') )
+    static processPreReqNotes( preReqNotes, reactions, emojiClassDict ) {
+        const courseGlobalRegex = new RegExp(courseNonArgRegex, 'gi')
+        const courseCodes = preReqNotes.match(courseGlobalRegex)
+        let letter = 'a'
+        // if there are more course codes in the prereq notes than letter just leave lol
+        if( !courseCodes || (courseCodes && courseCodes.length > 26) ) 
+            return preReqNotes
+        const uniqueCourseCodes = []
+        courseCodes.forEach( courseCode => {
+            if( uniqueCourseCodes.includes(courseCode) )
+                return
+            uniqueCourseCodes.push(courseCode)
+            preReqNotes = preReqNotes.replace(courseCode, `$& ${emojiCharacters[letter]} `)
+            // emit to the event emitter saying that a reaction has been added to the message
+            reactions.push(emojiCharacters[letter])
+            emojiClassDict[emojiCharacters[letter]] = courseCode.match(/^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?$/)
+            letter = String.fromCharCode(letter.charCodeAt(0) + 1)
+        })
+        return preReqNotes
     }
+
 
     static codeToReadable(type, value) {
         if( type == 'meetingDay' ) {
@@ -116,12 +85,10 @@ module.exports = class ClassCommand extends Commando.Command {
             if( value == 'LEC' ) return "Lecture"
             else if( value == "RECIT" ) return "Recitation"
             else return "Unknown"
-        } //else if( type == 'time' ) {
-        //     if( +time.slice(0,2) > 12 )
-
-        // }
+        }
         return "Unknown"
     } 
+
     async run( msg, args ) {
         if( !args.class )
             return msg.channel.send( `That's not a valid class code. Class codes are formatted as \`<school code>:<subject code>:<course code>\`.` )
@@ -190,10 +157,10 @@ module.exports = class ClassCommand extends Commando.Command {
                             embed.setImage(header[0].src)
                         if( header.length >= 2 )
                             embed.setThumbnail(header[2].src)
-                        ClassCommand.output(classToSend, embed, section, msg)
+                        ClassCommand.output(classToSend, embed, section, msg, args)
                     })
                 } else
-                    ClassCommand.output(classToSend, embed, section, msg)
+                    ClassCommand.output(classToSend, embed, section, msg, args)
             }
             else
                 return msg.channel.send( `Class could not be found.
@@ -203,4 +170,82 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
         })
     }
 
+    static output(classToSend, embed, section, msg, args) {
+        // store reactions and dictionary that we're gonna use for reaction browsing
+        const reactions = []
+        const emojiClassDict = {}
+        // add prereqs if theyre there
+        if( classToSend.preReqNotes && !section ) {
+            // process prereq notes before sending them
+            let preReqNotes = classToSend.preReqNotes
+            .replace(/<em>|<\/em>/g, '')
+            .replace(/ \)/g,')')
+            .replace(/\)\)/g,'))\n')
+
+            preReqNotes = ClassCommand.processPreReqNotes(preReqNotes, reactions, emojiClassDict)
+            embed.addField('Prereqs:',preReqNotes)
+        }
+        // process professors and the sections they teach
+        if( !section ) {
+            const professorInfos = []
+            classToSend.sections.forEach( section => {
+                if( section.instructors ) 
+                    section.instructors.map(i => i.name).forEach(name => {
+                        if( !professorInfos.map(i => i.name).includes(name) )
+                            professorInfos.push({
+                                name: name,
+                                sections: []
+                            })
+                    })
+            })
+            professorInfos.forEach( professorInfo => {
+                classToSend.sections.forEach( section => {
+                    if( section.instructors && section.instructors.map(i => i.name).includes(professorInfo.name) )
+                        professorInfo.sections.push(section.number)
+                })
+            })
+            let visited = false
+            professorInfos.forEach( professorInfo => {
+                if ( embed.fields.length < 25 )
+                    embed.addField( professorInfo.name + ':', `Sections: ${professorInfo.sections.length > 0 ? `${professorInfo.sections.join(', ')}` : `None`}` )
+                if( embed.fields.length == 25 && !visited ) {
+                    visited = true
+                    embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
+                }
+            })
+        } else {
+            const foundSection = classToSend.sections.find(s => s.number === section )
+            if( !foundSection )
+                return msg.channel.send( `Section ${section} could not be found.` )
+            embed.setDescription(`**Section ${section}**\nIndex ${foundSection.index}`)
+            if( foundSection.instructors && foundSection.instructors.length > 0 )
+                embed.addField("Instructors:", foundSection.instructors.map(i => i.name).join('\n') )
+            if( foundSection.notes )
+                embed.addField("Notes:", foundSection.notes)
+            if( foundSection.meetingTimes && foundSection.meetingTimes.length > 0 ) {
+                foundSection.meetingTimes.forEach(time => {
+                    if ( embed.fields.length < 25 )
+                        embed.addField(`${ClassCommand.codeToReadable('meetingDay', time.meetingDay)} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc).toLowerCase()} on ${time.campusName[0]}${time.campusName.slice(1).toLowerCase()}:`,
+                        `${time.buildingCode}-${time.roomNumber} from ${convert(`${time.startTime.slice(0,2)}:${time.startTime.slice(2)}`, 'hh:MM A')} to ${convert(`${time.endTime.slice(0,2)}:${time.endTime.slice(2)}`, 'hh:MM A')}` )
+                    if( embed.fields.length == 25 )
+                        embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
+                })
+            }
+        }
+        // send the message
+        return msg.channel.send( embed ).then( m => {
+            reactions.unshift('🗑')
+            reactRecursive( m, reactions, (mr) => {
+                reactionListener.once(`class:${m.id}:${mr.emoji.name}`, (command) => {
+                    if( emojiClassDict[mr.emoji.name] ){}
+                        command.run(msg, {
+                            class: emojiClassDict[mr.emoji.name],
+                            seasonYear: args.seasonYear,
+                            campus: args.campus,
+                            level: args.level
+                        }, true)
+                })
+            } )
+        }) 
+    }
 }

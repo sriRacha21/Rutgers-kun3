@@ -99,13 +99,16 @@ function numToEmoteArr( num ) {
     return emoteNum
 }
 
-function reactRecursive( msg, array ) {
+function reactRecursive( msg, array, cb ) {
     if( array[0] ) {
-        msg.react(array[0])
+        const reactPromise = msg.react(array[0])
+        if( cb )
+            reactPromise.then( mr => cb(mr) )
         setTimeout(() => {
-            reactRecursive( msg, array.slice(1) )
+            reactRecursive( msg, array.slice(1), cb )
         }, 1000)
     }
 }
 
 exports.detectChain = detectChain
+exports.reactRecursive = reactRecursive
