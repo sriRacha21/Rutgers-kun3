@@ -236,7 +236,7 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
         return msg.channel.send( embed ).then( m => {
             reactions.unshift('🗑')
             reactRecursive( m, reactions, (mr) => {
-                reactionListener.once(`class:${m.id}:${mr.emoji.name}`, (command) => {
+                reactionListener.once(`class:${msg.author.id}:${m.id}:${mr.emoji.name}`, (command) => {
                     if( emojiClassDict[mr.emoji.name] ){}
                         command.run(msg, {
                             class: emojiClassDict[mr.emoji.name],

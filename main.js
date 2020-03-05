@@ -138,8 +138,7 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
     if( botReaction && botReaction.emoji == '🗑' && messageReaction.emoji == '🗑' )
         messageReaction.message.delete()
     // use reactionListener
-    console.log(`emitted for event class:${messageReaction.message.id}:${messageReaction.emoji.name}`)
-    reactionListener.emit(`class:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'))
+    reactionListener.emit(`class:${user.id}:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'))
     // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
 })
@@ -305,6 +304,7 @@ Client.registry
         ['quotes', 'Quotes'],
         ['soundboard', 'Soundboard'],
         ['information', 'Info'],
+        ['fiddle', 'Fiddlers'],
         ['config', 'Configure Server Settings'],
         ['moderation', 'Moderation'],
         ['settings', 'Settings'],

@@ -111,6 +111,7 @@ api_keys.json
 email_logging.json
 smtp_server.json
 netids.json
+fiddler.json
 
 # VSCode folder
 .vscode/
