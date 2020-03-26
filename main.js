@@ -112,7 +112,7 @@ Client.on('message', msg => {
     // check if role has been mentioned
     checkRoleMentions( msg, Client.provider, Client.user )
     // check if word counters need to be incremented
-    if( !msg.guild || !Client.provider.get(msg.guild, 'wordCounters') )
+    if( !msg.guild || (!Client.provider.get(msg.guild, 'wordCounters') && !Client.provider.get(msg.guild, `wordCounters:${msg.channel.id}`)) )
         checkWordCount( msg, Client.settings )
     // pay me
     if( Client.isOwner( msg.author ) ) {

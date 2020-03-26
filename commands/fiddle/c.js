@@ -22,7 +22,6 @@ module.exports = class CCommand extends Commando.Command {
         })
     }
 
-
     async run( msg, args ) {
         // check if fiddler file exists
         if( !fiddlerFile )
@@ -67,10 +66,11 @@ module.exports = class CCommand extends Commando.Command {
         // attempt to run the file as the fiddler user
         let runOutput
         try {
-            runOutput = exec(`timeout 5s sudo -u ${fiddlerFile.c.user} "${outFilePath}"`)
+            runOutput = exec(`cd .. && timeout 5s sudo -u ${fiddlerFile.c.user} "${outFilePath}" && cd - > /dev/null`)
         } catch( e ) {
             msg.channel.stopTyping()
-            return msg.channel.send(`Error while running: \`${e}\``)
+            exec(`rm ${path.join(fiddlerFile.c.templateFolder, `${msg.author.id}*`)}`)
+            return msg.channel.send(`Error while running:\n\`\`\`bash\n${e}\n\`\`\``)
         }
 
         // clean-up
@@ -78,6 +78,6 @@ module.exports = class CCommand extends Commando.Command {
 
         // output message
         msg.channel.stopTyping()
-        return msg.channel.send(runOutput ? `Run output:\n\`\`\`c\n${runOutput}\n\`\`\`` : 'No output.', {split: true})
+        return msg.channel.send(runOutput && runOutput.toString() ? `Run output:\n\`\`\`c\n${runOutput}\n\`\`\`` : 'No output.', {split: true})
 	}
 }

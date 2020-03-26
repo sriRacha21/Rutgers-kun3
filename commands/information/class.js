@@ -47,7 +47,7 @@ module.exports = class ClassCommand extends Commando.Command {
                     type: 'string',
                     default: 'UG',
                 }
-            ]
+            ],
         })
     }
 
@@ -89,7 +89,7 @@ module.exports = class ClassCommand extends Commando.Command {
         return "Unknown"
     } 
 
-    async run( msg, args ) {
+    async run( msg, args, fromPattern ) {
         if( !args.class )
             return msg.channel.send( `That's not a valid class code. Class codes are formatted as \`<school code>:<subject code>:<course code>\`.` )
         const subject = args.class[1]
@@ -153,9 +153,9 @@ module.exports = class ClassCommand extends Commando.Command {
                         src: '@src'
                     }])(function(err,header) {
                         if( err ) return
-                        if( header.length >= 0 )
+                        if( header.length >= 0 && header[0].src )
                             embed.setImage(header[0].src)
-                        if( header.length >= 2 )
+                        if( header.length >= 2 && header[2].src )
                             embed.setThumbnail(header[2].src)
                         ClassCommand.output(classToSend, embed, section, msg, args)
                     })
@@ -236,6 +236,8 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
         return msg.channel.send( embed ).then( m => {
             reactions.unshift('🗑')
             reactRecursive( m, reactions, (mr) => {
+                if( mr.emoji.name == '🗑' )
+                    return
                 reactionListener.once(`class:${msg.author.id}:${m.id}:${mr.emoji.name}`, (command) => {
                     if( emojiClassDict[mr.emoji.name] ){}
                         command.run(msg, {

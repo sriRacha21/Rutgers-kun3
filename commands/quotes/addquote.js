@@ -35,6 +35,10 @@ module.exports = class AddQuoteCommand extends Commando.Command {
         if( user.bot )
             return msg.channel.send( `You can't quote a bot.` )
 
+        // if the message is over 1024 letters it's not allowed
+        if( msg.content.length > 1024 )
+            return msg.channel.send('That quote is too long!')
+
         // push quote to settings
         const maybeQuotes = settings.get( `quotes:${user.id}` )
         const quotes = maybeQuotes ? maybeQuotes : []

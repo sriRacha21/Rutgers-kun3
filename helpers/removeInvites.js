@@ -18,6 +18,7 @@ function removeInvites( msg, client ) {
         '643670268404826142', // league of legends
         '277296577469612033', // pokemon
         '430957374124326913', // rainbow 6
+        '692027761081974925', // RU economics
     ]
 
     if( removeInvites ) {
@@ -28,7 +29,7 @@ function removeInvites( msg, client ) {
                 .then( invite => {
                     if( universalInvOverrides.includes(invite.guild.id) )
                         return
-                    if( !msg.member.hasPermission(defaults.moderator_permission) ) {
+                    if( !msg.member.hasPermission(defaults.trusted_permission) ) {
                         msg.delete()
                         if( client.provider.get(msg.guild, `muteRole`) )
                             startTimedMute( msg.member, client.provider, 'Sending a server invite link', 4*60*60*1000, client.user )

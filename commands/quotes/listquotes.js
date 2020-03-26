@@ -48,7 +48,8 @@ module.exports = class ListQuotesCommand extends Commando.Command {
 
         let counter = 1
         quotes.forEach(( quote ) => {
-            retEmbed.addField( `Quote ${counter}:`, quote )
+            if( quote.length <= 1024 )
+                retEmbed.addField( `Quote ${counter}:`, quote )
             counter++
         })
 
