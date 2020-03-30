@@ -9,6 +9,7 @@ const { reactRecursive } = require('../../helpers/detectChain')
 const courseNonArgRegex = /(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?/i
 const courseRegex = /^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?$/i
 const emojiCharacters = require('../../helpers/emojiCharacters')
+const logger = require('../../logger')
 
 module.exports = class ClassCommand extends Commando.Command {
     constructor(client) {
@@ -130,7 +131,9 @@ module.exports = class ClassCommand extends Commando.Command {
 
         // make request
         msg.channel.startTyping()
-        request(`http://sis.rutgers.edu/oldsoc/courses.json?subject=${subject}&semester=${semester}&campus=${campus}&level=${level}`)
+        const url = `http://sis.rutgers.edu/oldsoc/courses.json?subject=${subject}&semester=${semester}&campus=${campus}&level=${level}`
+        logger.info(`Requesting URL: ${url}`)
+        request(url)
         .then( data => {
             const json = JSON.parse(data)
             const classToSend = json.find(d => +d.courseNumber == course)
@@ -168,6 +171,14 @@ Maybe it's not from this semester? Try requesting another semester with \`${msg.
 Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}class 750:273 'fall 2019'\`` )
                 .then( m => m.react('🗑') )
         })
+    }
+
+    static amOrPm( pmCode ) {
+        if( pmCode.toLowerCase() == 'p' )
+            return 'PM'
+        else if( pmCode.toLowerCase() == 'a' )
+            return 'AM'
+        return '?M'
     }
 
     static output(classToSend, embed, section, msg, args) {
@@ -226,7 +237,7 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
                 foundSection.meetingTimes.forEach(time => {
                     if ( embed.fields.length < 25 )
                         embed.addField(`${ClassCommand.codeToReadable('meetingDay', time.meetingDay)} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc).toLowerCase()} on ${time.campusName[0]}${time.campusName.slice(1).toLowerCase()}:`,
-                        `${time.buildingCode}-${time.roomNumber} from ${convert(`${time.startTime.slice(0,2)}:${time.startTime.slice(2)}`, 'hh:MM A')} to ${convert(`${time.endTime.slice(0,2)}:${time.endTime.slice(2)}`, 'hh:MM A')}` )
+                        `${time.buildingCode}-${time.roomNumber} from ${convert(`${time.startTime.slice(0,2)}:${time.startTime.slice(2)}`, `hh:MM ${ClassCommand.amOrPm(time.pmCode)}`)} to ${convert(`${time.endTime.slice(0,2)}:${time.endTime.slice(2)}`, `hh:MM ${ClassCommand.amOrPm(time.pmCode)}`)}` )
                     if( embed.fields.length == 25 )
                         embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
                 })
