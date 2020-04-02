@@ -62,5 +62,6 @@ module.exports = class ListCommandCommands extends Commando.Command {
         .setDescription(description)
 
         msg.channel.send( retEmbed )
+        .then( m => m.react('🗑') )
     }
 }

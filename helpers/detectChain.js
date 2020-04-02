@@ -3,8 +3,8 @@ const msgChainTable = new HashTable()
 const { getRandomElement } = require('./getRandom')
 
 const numberEmotes = [
-    '0️⃣', '1️⃣', '2️⃣', '3️⃣', 
-    '4️⃣', '5️⃣', '6️⃣', '7️⃣', 
+    '0️⃣', '1️⃣', '2️⃣', '3️⃣',
+    '4️⃣', '5️⃣', '6️⃣', '7️⃣',
     '8️⃣', '9️⃣', '🔢',
 ]
 
@@ -29,7 +29,7 @@ function detectChain( msg, settings ) {
         msg.react(getRandomElement(angery))
         // if the chain was the highest ever recorded in the server set the new record and output a message
         // but only if the score is 2 or higher.
-        const maybeHighscore = settings.get( msg.guild, 'chain:highscore' ) 
+        const maybeHighscore = settings.get( msg.guild, 'chain:highscore' )
         // if there is no current high score or the current score is higher than the current high score, set the new record and output a message
         if( !maybeHighscore || bufferMatchSize > maybeHighscore.score ) {
             settings.set( msg.guild, 'chain:highscore', {
@@ -58,10 +58,10 @@ function checkBufferMatch( msg, breakingFunction ) {
     const maybeMsgArr = msgChainTable.get(msg.channel.id)
     if( maybeMsgArr ) {
         isBufferMatch = maybeMsgArr.reduce( (accumulator, message) => {
-            return accumulator 
+            return accumulator
             &&  (
-                    message.author.id != msg.author.id 
-                    && message.content == msg.content 
+                    message.author.id != msg.author.id
+                    && message.content == msg.content
                     && message.content != ''
                 )
         }, true)

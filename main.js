@@ -138,7 +138,11 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
     if( botReaction && botReaction.emoji == '🗑' && messageReaction.emoji == '🗑' )
         messageReaction.message.delete()
     // use reactionListener
+    // for the class command
     reactionListener.emit(`class:${user.id}:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'))
+    // for the listquotes command
+    if( messageReaction.emoji == '📧' )
+        reactionListener.emit(`listquotes:${messageReaction.message.id}`, user)
     // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
 })
