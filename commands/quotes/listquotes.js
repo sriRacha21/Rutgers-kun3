@@ -60,9 +60,9 @@ module.exports = class ListQuotesCommand extends Commando.Command {
 
         quotes.forEach(( quote, idx ) => {
             if( quote.length <= 1024 ) {
-                retEmbed.addField( `Quote ${idx}:`, quote )
+                retEmbed.addField( `Quote ${idx+1}:`, quote )
                 if( quotes.length - idx <= quoteAbbreviatedCount )
-                    abbreviatedEmbed.addField(`Quote ${idx}:`, quote);
+                    abbreviatedEmbed.addField(`Quote ${idx+1}:`, quote);
             }
         })
 

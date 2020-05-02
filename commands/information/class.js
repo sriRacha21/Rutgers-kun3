@@ -84,7 +84,8 @@ module.exports = class ClassCommand extends Commando.Command {
             else return "Unknown"
         } else if( type == 'meetingModeDesc' ) {
             if( value == 'LEC' ) return "Lecture"
-            else if( value == "RECIT" ) return "Recitation"
+            else if( value == 'RECIT' ) return "Recitation"
+            else if ( value == 'WORKSHOP' ) return "Workshop"
             else return "Unknown"
         }
         return "Unknown"
@@ -156,9 +157,9 @@ module.exports = class ClassCommand extends Commando.Command {
                         src: '@src'
                     }])(function(err,header) {
                         if( err ) return
-                        if( header.length >= 0 && header[0].src )
+                        if( header.length >= 0 && header[0] && header[0].src )
                             embed.setImage(header[0].src)
-                        if( header.length >= 2 && header[2].src )
+                        if( header.length >= 2 && header[2] && header[2].src )
                             embed.setThumbnail(header[2].src)
                         ClassCommand.output(classToSend, embed, section, msg, args)
                     })
@@ -175,9 +176,9 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
 
     static amOrPm( pmCode ) {
         if( pmCode.toLowerCase() == 'p' )
-            return 'PM'
+            return 'P'
         else if( pmCode.toLowerCase() == 'a' )
-            return 'AM'
+            return 'A'
         return '?M'
     }
 

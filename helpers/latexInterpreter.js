@@ -1,5 +1,6 @@
 const { stripIndents } = require('common-tags')
 const request = require('request-promise')
+const bent = require('bent')
 const { inspect } = require('util')
 const fs = require('fs')
 const path = require('path')
@@ -37,6 +38,8 @@ async function latexInterpreter( msgContent, channel ) {
             body: payload,
             json: true
         }) 
+        // const post = bent('POST','json')
+        // promiseList.push( post('http://rtex.probablyaweb.site/api/v2',payload) )
         promiseList.push( reqPromise )
     })
     Promise.all( promiseList ).then( responses => {
@@ -47,6 +50,11 @@ async function latexInterpreter( msgContent, channel ) {
             .map(response => `http://rtex.probablyaweb.site/api/v2/${response.filename}`)
         }) 
         .then( msg => msg.react('🗑') )
+    })
+    .catch( err => {
+        channel.stopTyping()
+        if( err ) channel.send(`The LaTeX interpreter API returned an error: \`${err}\`.
+**Message from programmer:** I am having issues connecting to the server and am investigating the problem.`);
     })
 }
 

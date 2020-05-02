@@ -40,6 +40,8 @@ const { payMe } = require('./helpers/payMe')
 const { starMe } = require('./helpers/starMe')
 // set up winston logging
 const logger = require('./logger')
+// detailed log of objects
+const { inspect } = require('util')
 // get some Discord fields we need
 const RichEmbed = require('discord.js').RichEmbed
 // initialize the Discord client
@@ -289,6 +291,11 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
         attachments: oMsg.attachments.array().map(a => a.proxyURL)
     }, extras)
 })
+
+// unhandled promise rejection stacktrace
+process.on('unhandledRejection', (reason, p) => {
+    logger.warn(`Unhandled Rejection at: Promise ${inspect(p)}\nreason: ${reason}`);
+});
 
 /*        	CLEAN UP	        */
 // set up SettingsProvider

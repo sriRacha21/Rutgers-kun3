@@ -1,5 +1,6 @@
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
+const logger = require('../logger')
 
 function flushAgreements( guilds, provider ) {
     if( guilds ) {
@@ -16,7 +17,8 @@ function flushAgreements( guilds, provider ) {
             .then( messages => {
                 messages
                 .filter( msg => !msg.webhookID && (msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission))) )
-                .forEach( message => message.delete() )
+                .forEach( message => message.delete()
+                    .catch(err => { if(err) logger.warn(`Couldn't delete message in the agreement channel of guild ${message.guild.name}.`) } ) )
             })
         })
     }
