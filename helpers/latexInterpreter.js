@@ -32,29 +32,28 @@ async function latexInterpreter( msgContent, channel ) {
             density: 440
         }
 
-        const reqPromise = request({
-            method: 'POST',
-            uri: 'http://rtex.probablyaweb.site/api/v2',
-            body: payload,
-            json: true
-        }) 
-        // const post = bent('POST','json')
-        // promiseList.push( post('http://rtex.probablyaweb.site/api/v2',payload) )
-        promiseList.push( reqPromise )
+        // const reqPromise = request({
+        //     method: 'POST',
+        //     uri: 'https://rtex.probablyaweb.site/api/v2',
+        //     body: payload,
+        //     json: true
+        // }) 
+        // promiseList.push( reqPromise )
+        const post = bent('POST','json')
+        promiseList.push( post('https://rtex.probablyaweb.site/api/v2',payload) )
     })
     Promise.all( promiseList ).then( responses => {
         channel.stopTyping()
         channel.send( `Parsed \`${matches.join('\`, \`')}\`:`, {
             files: responses
             .filter(response => response.status == 'success' )
-            .map(response => `http://rtex.probablyaweb.site/api/v2/${response.filename}`)
+            .map(response => `https://rtex.probablyaweb.site/api/v2/${response.filename}`)
         }) 
         .then( msg => msg.react('🗑') )
     })
     .catch( err => {
         channel.stopTyping()
-        if( err ) channel.send(`The LaTeX interpreter API returned an error: \`${err}\`.
-**Message from programmer:** I am having issues connecting to the server and am investigating the problem.`);
+        if( err ) channel.send(`The LaTeX interpreter API returned an error: \`${err}\`.`);
     })
 }
 
