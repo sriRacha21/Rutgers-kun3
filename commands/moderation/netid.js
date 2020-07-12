@@ -2,7 +2,6 @@ const Commando = require('discord.js-commando');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const fs = require('fs');
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
-const userIDs = JSON.parse(fs.readFileSync('settings/netids.json','utf-8'));
 
 module.exports = class NetidCommand extends Commando.Command {
     constructor(client) {
@@ -25,6 +24,9 @@ module.exports = class NetidCommand extends Commando.Command {
 
 
     async run( msg, { netid } ) {
+        // make sure the netids file exists
+        if( !fs.existsSync('settings/netids.json') ) return;
+        const userIDs = JSON.parse(fs.readFileSync('settings/netids.json','utf-8'));
         // iterate over whole json object <key: userID, value: netID> to find netID
         let foundUserID;
         for( const key in userIDs ) 
