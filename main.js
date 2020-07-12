@@ -47,17 +47,22 @@ const RichEmbed = require('discord.js').RichEmbed
 // initialize the Discord client
 const Commando = require('discord.js-commando')
 const Client = new Commando.Client(ClientOptions)
+// don't stop on expired certificate
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 /*        	EVENTS	        */
 // emitted on error, warn, debug
-Client.on('error', (error) => logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}`))
+Client.on('error', (error) => logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}
+Stacktrace: ${error.stack}`))
 Client.on('commandError', (command, err, message, args, fromPattern, result) => {
-    logger.log('error', objToEmailBody({
+    const emailBody = {
         command: `${command.groupID}:${command.memberName} or ${command.name}`,
-        guild: message.guild.name,
         error: `${err.name}: ${err.message}`,
+        stackTrace: err.stack,
         arguments: args,
         fromPattern: fromPattern,
-    }))
+    }
+    if( message.guild ) emailBody.guild = message.guild.name;
+    logger.log('error', objToEmailBody(emailBody))
 })
 Client.on('warn', (info) => logger.log('warn', info))
 Client.on('debug', (info) => logger.log('debug', info) )
@@ -65,10 +70,10 @@ Client.on('disconnect', () => logger.warn('Websocket disconnected!'))
 Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'))
 
 // emitted on bot being ready to operate
-Client.on('ready', () => { 
+Client.on('ready', () => {
     logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`)
     // periodically flush messages in #agreement in all servers
-    flushAgreements( Client.guilds, Client.provider ) 
+    flushAgreements( Client.guilds, Client.provider )
     // periodically flush the live role from users that aren't streaming
     flushLiveRoles( Client.guilds, Client.provider )
     // periodically refresh command settings
@@ -221,7 +226,7 @@ Client.on('messageDelete', message => {
         return
     // ignore deletions by bots
     if( message.author.bot )
-        return 
+        return
     // ignore deletions in agreement channel
     const agreementChannel = Client.provider.get( message.guild, `agreementChannel` )
     if( agreementChannel && message.channel.id == agreementChannel )
@@ -235,7 +240,7 @@ Client.on('messageDelete', message => {
             extras.push( `**Deleted:**\n${message.cleanContent}` )
     }
     startEmbed.addField( 'In channel:', message.channel )
-    
+
     logEvent({
         embedInfo: {
             author: 'Message deleted by',
@@ -258,7 +263,7 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
         return
     // ignore updates by bots
     if( oMsg.author.bot )
-        return 
+        return
     // if the message content is the same, exit
     if( oMsg.content == nMsg.content )
         return

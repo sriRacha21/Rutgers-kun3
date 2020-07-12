@@ -37,6 +37,7 @@ command. Type \`nothing\` to have no text for the custom command.`,
                     label: 'command text',
                     prompt: 'Enter the text you want the command to output. Enter `nothing` for no text.',
                     type: 'string',
+                    default: 'nothing',
                     validate: str => str.length > 0 && str.length <= 500
                 }
             ],

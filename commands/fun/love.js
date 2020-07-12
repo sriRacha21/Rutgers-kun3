@@ -39,7 +39,9 @@ module.exports = class LoveCommand extends Commando.Command {
 
         // form calculation string
         return msg.channel.send( oneLine`${args.one} loves ${args.two}
-            ${percent}%${percent == 100 ? "! :heart:" : "" }` + `\n${this.generateProgressBar(percent)}` )
+            ${percent}%${percent == 100 ? "! :heart:" : "" }` + `\n${this.generateProgressBar(percent)}`, {
+                allowedMentions: {} // don't allow the bot to mention anyone
+            })
     }
 
     // calculate an integer value from a string by usnig ASCII codes

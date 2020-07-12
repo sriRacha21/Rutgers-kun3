@@ -4,7 +4,6 @@ const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
 const { reactionListener } = require('../../helpers/reactionListener')
 const xRay = require('x-ray')
 const x = new xRay()
-const convert = require('convert-time')
 const { reactRecursive } = require('../../helpers/detectChain')
 const courseNonArgRegex = /(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?/i
 const courseRegex = /^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?$/i
@@ -86,12 +85,13 @@ module.exports = class ClassCommand extends Commando.Command {
             if( value == 'LEC' ) return "Lecture"
             else if( value == 'RECIT' ) return "Recitation"
             else if ( value == 'WORKSHOP' ) return "Workshop"
+            else if( value == 'REMOTE-SYNCH' ) return "Remote Synchronous"
             else return "Unknown"
         }
         return "Unknown"
     } 
 
-    async run( msg, args, fromPattern ) {
+    async run( msg, args ) {
         if( !args.class )
             return msg.channel.send( `That's not a valid class code. Class codes are formatted as \`<school code>:<subject code>:<course code>\`.` )
         const subject = args.class[1]
@@ -110,9 +110,9 @@ module.exports = class ClassCommand extends Commando.Command {
         if( seasonYear === 'default' ) {
             if( month >= 8 && (month < 11 || ( month == 11 && date < 23 )) ) // fall
                 season = '9'
-            else if( (month == 0 && date >= 21) || (month > 0 && month < 4) || (month == 4 && date < 4) ) // spring
+            else if( (month == 0 && date >= 21) || (month > 0 && month < 4) || (month == 4 && date < 23) ) // spring
                 season = '1'
-            else if( (month == 4) && (date >= 26) || (month > 4 && month < 7) || (month == 7 && date < 12) ) // summer
+            else if( (month == 4) && (date >= 23) || (month > 4 && month < 7) || (month == 7 && date < 12) ) // summer
                 season = '7'
             else if( (month == 11 && date >= 23) || (month == 0 && date < 17) ) // winter
                 season = '0'
@@ -176,9 +176,9 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
 
     static amOrPm( pmCode ) {
         if( pmCode.toLowerCase() == 'p' )
-            return 'P'
+            return 'PM'
         else if( pmCode.toLowerCase() == 'a' )
-            return 'A'
+            return 'AM'
         return '?M'
     }
 
@@ -236,9 +236,11 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
                 embed.addField("Notes:", foundSection.notes)
             if( foundSection.meetingTimes && foundSection.meetingTimes.length > 0 ) {
                 foundSection.meetingTimes.forEach(time => {
-                    if ( embed.fields.length < 25 )
+                    if ( embed.fields.length < 25 ) {
+                        const place = `${time.buildingCode}-${time.roomNumber}`;
                         embed.addField(`${ClassCommand.codeToReadable('meetingDay', time.meetingDay)} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc).toLowerCase()} on ${time.campusName[0]}${time.campusName.slice(1).toLowerCase()}:`,
-                        `${time.buildingCode}-${time.roomNumber} from ${convert(`${time.startTime.slice(0,2)}:${time.startTime.slice(2)}`, `hh:MM ${ClassCommand.amOrPm(time.pmCode)}`)} to ${convert(`${time.endTime.slice(0,2)}:${time.endTime.slice(2)}`, `hh:MM ${ClassCommand.amOrPm(time.pmCode)}`)}` )
+                        `${time.buildingCode ? `${place} from` : ''} ${time.startTime.slice(0,2)}:${time.startTime.slice(2)} ${time.pmCode}M to ${time.endTime.slice(0,2)}:${time.endTime.slice(2)} ${time.pmCode}M` );
+                    }
                     if( embed.fields.length == 25 )
                         embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
                 })
