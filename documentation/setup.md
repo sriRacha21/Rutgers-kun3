@@ -61,7 +61,7 @@ Want to have some custom welcome text for when a user joins your server?
 
 Run **`!setwelcometext` and write any string you want** and the bot will send that message in the channel designated with `!setwelcomechannel`.
 
-Writing `[user]` and `[guild]` in your string will replace those parts of the text with the name of the user who joined and the name of the serer, respectively.
+Writing `[user]` and `[guild]` in your string will replace those parts of the text with the name of the user who joined and the name of the server, respectively.
 
 ### P.S.:
 You can use `!setautoverify` to set a phrase that users can enter in the agreement channel to skip verification and instantly get their role. This is useful for events such as the involvement fair where user retention is critical to the success of your club or Discord server.
