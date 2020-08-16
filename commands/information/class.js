@@ -56,7 +56,7 @@ module.exports = class ClassCommand extends Commando.Command {
         const courseCodes = preReqNotes.match(courseGlobalRegex)
         let letter = 'a'
         // if there are more course codes in the prereq notes than letter just leave lol
-        if( !courseCodes || (courseCodes && courseCodes.length > 26) ) 
+        if( !courseCodes || (courseCodes && courseCodes.length > 26) )
             return preReqNotes
         const uniqueCourseCodes = []
         courseCodes.forEach( courseCode => {
@@ -86,10 +86,11 @@ module.exports = class ClassCommand extends Commando.Command {
             else if( value == 'RECIT' ) return "Recitation"
             else if ( value == 'WORKSHOP' ) return "Workshop"
             else if( value == 'REMOTE-SYNCH' ) return "Remote Synchronous"
+            else if( value == 'REMOTE-ASYNCH' ) return "Remote Asynchronous"
             else return "Unknown"
         }
         return "Unknown"
-    } 
+    }
 
     async run( msg, args ) {
         if( !args.class )
@@ -108,7 +109,7 @@ module.exports = class ClassCommand extends Commando.Command {
         let season
         let semester
         if( seasonYear === 'default' ) {
-            if( month >= 8 && (month < 11 || ( month == 11 && date < 23 )) ) // fall
+            if( month >= 7 && (month < 11 || ( month == 11 && date < 23 )) ) // fall
                 season = '9'
             else if( (month == 0 && date >= 21) || (month > 0 && month < 4) || (month == 4 && date < 23) ) // spring
                 season = '1'
@@ -126,7 +127,7 @@ module.exports = class ClassCommand extends Commando.Command {
             else throw 'Oh no.'
             year = seasonYear[2]
         }
-        
+
         // assign variables to prepare to make request
         semester = `${season}${year}`
 
@@ -201,7 +202,7 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
         if( !section ) {
             const professorInfos = []
             classToSend.sections.forEach( section => {
-                if( section.instructors ) 
+                if( section.instructors )
                     section.instructors.map(i => i.name).forEach(name => {
                         if( !professorInfos.map(i => i.name).includes(name) )
                             professorInfos.push({
@@ -238,8 +239,11 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
                 foundSection.meetingTimes.forEach(time => {
                     if ( embed.fields.length < 25 ) {
                         const place = `${time.buildingCode}-${time.roomNumber}`;
-                        embed.addField(`${ClassCommand.codeToReadable('meetingDay', time.meetingDay)} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc).toLowerCase()} on ${time.campusName[0]}${time.campusName.slice(1).toLowerCase()}:`,
-                        `${time.buildingCode ? `${place} from` : ''} ${time.startTime.slice(0,2)}:${time.startTime.slice(2)} ${time.pmCode}M to ${time.endTime.slice(0,2)}:${time.endTime.slice(2)} ${time.pmCode}M` );
+                        const startTime = time.startTime ? `${time.startTime.slice(0,2)}:${time.startTime.slice(2)} ${time.pmCode}M` : null;
+                        const endTime = time.endTime ? `${time.endTime.slice(0,2)}:${time.startTime.slice(2)} ${time.pmCode}M` : null;
+
+                        embed.addField(`${time.meetingDay ? ClassCommand.codeToReadable('meetingDay', time.meetingDay) : ''} ${ClassCommand.codeToReadable('meetingModeDesc', time.meetingModeDesc)} ${time.campusName ? "on " + time.campusName : "online"}:`,
+                        `${time.buildingCode ? `${place} from` : ''} ${startTime && endTime ? `${startTime} to ${endTime}` : 'No start or end time provided.' }` );
                     }
                     if( embed.fields.length == 25 )
                         embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' )
@@ -262,6 +266,6 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
                         }, true)
                 })
             } )
-        }) 
+        })
     }
 }

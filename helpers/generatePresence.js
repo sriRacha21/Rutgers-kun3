@@ -9,6 +9,7 @@ function generatePresence( client, which ) {
 		`Version ${defaults.version}`,
 		`${client.commandPrefix}whoami`,
 		`<3 Rutgers-Chan`,
+        `New Profile Picture by Jia (@J_Hangz)!`
 	]
 	const data = {
 		name: names[which],

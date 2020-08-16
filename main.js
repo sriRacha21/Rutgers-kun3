@@ -320,7 +320,6 @@ Client.registry
         ['quotes', 'Quotes'],
         ['soundboard', 'Soundboard'],
         ['information', 'Info'],
-        ['fiddle', 'Fiddlers'],
         ['config', 'Configure Server Settings'],
         ['moderation', 'Moderation'],
         ['settings', 'Settings'],
