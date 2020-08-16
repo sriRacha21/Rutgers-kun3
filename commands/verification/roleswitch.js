@@ -56,7 +56,7 @@ Please enter your netID. Your netID is a unique identifier given to you by Rutge
                     this.client.settings.set(`agree:${msg.author.id}`, {
                         guildID: msg.guild.id,
                         roleID: toRole.id,
-                        roleswitch: true,
+                        nowelcome: true,
                         removerole: prevRole.id,
                         step: 2
                     })

@@ -66,6 +66,19 @@ Writing `[user]` and `[guild]` in your string will replace those parts of the te
 ### P.S.:
 You can use `!setautoverify` to set a phrase that users can enter in the agreement channel to skip verification and instantly get their role. This is useful for events such as the involvement fair where user retention is critical to the success of your club or Discord server.
 
+
+# Setting up your Rutgers email verification system (slim) **BETA**:
+Many people have been asking for an easier way to set this up for months. After a few hours of just sitting down and typing out code I think I finally got a system to do this working, but **it has some limitations and I haven't tested it thoroughly so use at your own risk**.
+
+### Send a message to some channel
+To use this, you should send a message that you intend for people to react to to get their role:
+![Message for users to react to](../resources/setup-images/discord_msg_role_react.png)
+
+### `!agreementsetupslim`
+Just run the command in the **same channel** that you sent the message in the above step. Then enter:
+1. The **name of the role** you want people to receive when they click the emoji and verify their netID.
+2. Right click the message you sent before and click "Copy ID". If this menu option doesn't appear you may need to enable it (Discord settings --> Appearance --> Developer Mode.)
+
 ## That's it! If you just wanted to know how to set up your email verification system you're done! If you want to configure your server more continue reading.
 
 # Checking your selected configurations:

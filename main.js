@@ -72,14 +72,24 @@ Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'))
 // emitted on bot being ready to operate
 Client.on('ready', () => {
     logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`)
-    // periodically flush messages in #agreement in all servers
-    flushAgreements( Client.guilds, Client.provider )
-    // periodically flush the live role from users that aren't streaming
-    flushLiveRoles( Client.guilds, Client.provider )
     // periodically refresh command settings
     setCommandFields( Client.registry )
     // peridiocally update the bot's status
     generatePresence( Client, 0 )
+})
+
+// when the settings provider is ready
+Client.on('providerReady', () => {
+    // retrieve messages from the cache
+    const messagesToCache = Client.settings.get('messagesToCache') ? Client.settings.get('messagesToCache') : []
+    messagesToCache.forEach(msgAndChannel => {
+        Client.channels.get(msgAndChannel.channel).fetchMessage(msgAndChannel.message)
+        .then(m => console.log(`Cached message: ${m.cleanContent}`));
+    });
+    // periodically flush messages in #agreement in all servers
+    flushAgreements( Client.guilds, Client.provider )
+    // periodically flush the live role from users that aren't streaming
+    flushLiveRoles( Client.guilds, Client.provider )
 })
 
 // emitted on message send
@@ -140,6 +150,37 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
     if( user.id == Client.user.id )
         return
 
+    // if this is the agreement slim message with the agreement slim reaction start agreement process
+    const agreementSlim = Client.provider.get(messageReaction.message.guild, 'agreementSlim');
+    if( agreementSlim 
+        && agreementSlim.message == messageReaction.message.id 
+        && agreementSlim.emote == messageReaction.emoji.id ) {
+        // get the role
+        const toRole = messageReaction.message.guild.roles.get(agreementSlim.role);
+        // set the agreement setting
+        messageReaction.remove(user);
+        user.send(`In order to switch to ${toRole.name} you need to be authenticated through 2-step email verification.
+Please enter your netID. Your netID is a unique identifier given to you by Rutgers that you use to sign in to all your Rutgers services. It is generally your initials followed by a few numbers.`)
+            .then(m => {
+                Client.settings.set(`agree:${user.id}`, {
+                    guildID: messageReaction.message.guild.id,
+                    roleID: agreementSlim.role,
+                    step: 2,
+                    nowelcome: true
+                })
+            })
+            .catch(err => {
+                if( err )
+                    msg.channel.send(`Error: \`${err}\`
+This may have happened because you are not accepting DM's.
+Turn on DM's from server members:`, {files: ['resources/setup-images/instructions/notif_settings.png', 'resources/setup-images/instructions/dms_on.png']})
+                    .then(m => {
+                        setTimeout(() => {
+                            m.delete();
+                        }, 10000);
+                    })
+            })
+    }
     // if the bot sent one of the messageReactions and it was a wastebin and someone else sent a wastebin, delete it
     const botReaction = messageReaction.message.reactions.find(mr => mr.me)
     if( botReaction && botReaction.emoji == '🗑' && messageReaction.emoji == '🗑' )

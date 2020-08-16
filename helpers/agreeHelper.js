@@ -33,7 +33,7 @@ function agreeHelper( msg, guilds, settings, provider ) {
     const code = agreementObj.code
     const netID = agreementObj.netID
     const step = agreementObj.step
-    const roleswitch = agreementObj.roleswitch
+    const nowelcome = agreementObj.nowelcome
     const removerole = agreementObj.removerole
     
     // convert guildID to guild
@@ -97,7 +97,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             if( netIDsObj[msg.author.id] == maybeNetID ) {
                 const agreementRole = agreementRoles.find(role => role.id == roleID)
                 const rolesToAdd = [agreementRole]
-                if( permissionRole && !roleswitch )
+                if( permissionRole && !nowelcome )
                     rolesToAdd.push(permissionRole)
                 guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
                 .then(m => {
@@ -105,7 +105,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
                         m.removeRole(removerole)
                 })
                 settings.remove( `agree:${msg.author.id}` )
-                if( !roleswitch )
+                if( !nowelcome )
                     sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
                 return msg.author.send( `Your netID has already been verified! You have successfully been given the ${agreementRole.name} role in ${guild.name}!` )
             }
@@ -140,8 +140,8 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             netID: maybeNetID,
             step: 3
         };
-        if( roleswitch )
-            agreementObjTwo.roleswitch = true;
+        if( nowelcome )
+            agreementObjTwo.nowelcome = true;
         if( removerole )
             agreementObjTwo.removerole = removerole;
         settings.set( `agree:${msg.author.id}`, agreementObjTwo )
@@ -154,7 +154,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             return msg.author.send( `That doesn't appear to be the right verification code. Make sure you're entering or copy/pasting it correctly.` )
         // now that we know the codes match, grant the role
         const rolesToAdd = [agreementRoleToAdd]
-        if( permissionRole && !roleswitch )
+        if( permissionRole && !nowelcome )
             rolesToAdd.push(permissionRole)
         guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
         .then(m => {
@@ -163,7 +163,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
                 m.removeRole(removerole)
         })
         // send welcome message
-        if( !roleswitch )
+        if( !nowelcome )
             sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
         // save the email to a file
         if( fs.existsSync('settings/netids.json') ) {
