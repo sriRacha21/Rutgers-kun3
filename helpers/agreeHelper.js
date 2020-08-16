@@ -33,6 +33,8 @@ function agreeHelper( msg, guilds, settings, provider ) {
     const code = agreementObj.code
     const netID = agreementObj.netID
     const step = agreementObj.step
+    const roleswitch = agreementObj.roleswitch
+    const removerole = agreementObj.removerole
     
     // convert guildID to guild
     const guild = guilds.find( guild => guild.id == guildID )
@@ -95,11 +97,16 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             if( netIDsObj[msg.author.id] == maybeNetID ) {
                 const agreementRole = agreementRoles.find(role => role.id == roleID)
                 const rolesToAdd = [agreementRole]
-                if( permissionRole )
+                if( permissionRole && !roleswitch )
                     rolesToAdd.push(permissionRole)
                 guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
+                .then(m => {
+                    if( removerole )
+                        m.removeRole(removerole)
+                })
                 settings.remove( `agree:${msg.author.id}` )
-                sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
+                if( !roleswitch )
+                    sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
                 return msg.author.send( `Your netID has already been verified! You have successfully been given the ${agreementRole.name} role in ${guild.name}!` )
             }
         }
@@ -126,13 +133,18 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         })
 
         // now that we've sent the verification code, wrap up by storing what happened in the settings and prepare for the final input
-        settings.set( `agree:${msg.author.id}`, {
+        let agreementObjTwo = {
             guildID: guild.id,
             roleID: roleID,
             code: verificationCode,
             netID: maybeNetID,
             step: 3
-        })
+        };
+        if( roleswitch )
+            agreementObjTwo.roleswitch = true;
+        if( removerole )
+            agreementObjTwo.removerole = removerole;
+        settings.set( `agree:${msg.author.id}`, agreementObjTwo )
     }
 
     if( step == 3 ) {
@@ -142,11 +154,17 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             return msg.author.send( `That doesn't appear to be the right verification code. Make sure you're entering or copy/pasting it correctly.` )
         // now that we know the codes match, grant the role
         const rolesToAdd = [agreementRoleToAdd]
-        if( permissionRole )
+        if( permissionRole && !roleswitch )
             rolesToAdd.push(permissionRole)
         guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
+        .then(m => {
+            // if there is a role to remove, remove it
+            if( removerole )
+                m.removeRole(removerole)
+        })
         // send welcome message
-        sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
+        if( !roleswitch )
+            sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
         // save the email to a file
         if( fs.existsSync('settings/netids.json') ) {
             const netIDsObj = JSON.parse(fs.readFileSync('settings/netids.json', 'utf-8'))

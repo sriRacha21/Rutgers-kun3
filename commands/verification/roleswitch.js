@@ -25,7 +25,7 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
         // ensure the server has verification set up
         let agreementRoles = this.client.provider.get(msg.guild, 'agreementRoles');
         if( !agreementRoles || agreementRoles.length == 0 )
-            return;
+            return msg.channel.send("This server does not have email verification set up.");
         agreementRoles = agreementRoles.filter(r => r.authenticate != 'permission')
         // ensure the user has one of the agreement roles
         let prevRole = -1;
@@ -34,7 +34,10 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
                 prevRole = r.id;
         });
         if( prevRole == -1 )
-            return;
+            return msg.channel.send("You do not have any of the roles set up for email verification in this server.");
+        // if to role is a role that the member already has stop 
+        if( msg.member.roles.has(toRole.id) )
+            return msg.channel.send("You already have this role.")
         // convert role id's to roles
         prevRole = msg.guild.roles.get(prevRole);
             // toRole is already a role object
@@ -45,11 +48,42 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
         const agreementRoleTo = agreementRoles.find(r => r.roleID == toRole.id);
         if( !agreementRolePrev || !agreementRoleTo )
             msg.channel.send(`Make sure you enter one of these roles: ${agreementRoles.map(r => msg.guild.roles.get(r.roleID).name)}`);
-        // if the role to switch to requires authentication and the previous role was authenticated (i.e. student to alum)
-        if( agreementRolePrev.authenticate == 'true' && agreementRoleTo.authenticate == 'true' ) {
+        // if the previous role was not authenticated and the to role is
+        if( agreementRolePrev.authenticate == 'false' && agreementRoleTo.authenticate == 'true' ) {
+            msg.author.send(`In order to switch to ${toRole.name} you need to be authenticated through 2-step email verification.
+Please enter your netID. Your netID is a unique identifier given to you by Rutgers that you use to sign in to all your Rutgers services. It is generally your initials followed by a few numbers.`)
+                .then(m => {
+                    this.client.settings.set(`agree:${msg.author.id}`, {
+                        guildID: msg.guild.id,
+                        roleID: toRole.id,
+                        roleswitch: true,
+                        removerole: prevRole.id,
+                        step: 2
+                    })
+                    msg.channel.send("You've been DM'ed instructions on switching roles.")
+                })
+                .catch(err => {
+                    if( err )
+                        msg.channel.send(`Error: \`${err}\`
+This may have happened because you are not accepting DM's.
+Turn on DM's from server members:`, {files: ['resources/setup-images/instructions/notif_settings.png', 'resources/setup-images/instructions/dms_on.png']})
+                })
+        } else {
+            // any other case
             // just remove the prev role and add the to role
-            msg.guild.member.roles.remove(prevRole)
-            msg.guild.member.roles.add(toRole)
+            msg.member.removeRole(prevRole)
+                .then(m => {
+                    msg.member.addRole(toRole)
+                        .then(m => msg.channel.send(`Successfully switched your role to ${toRole.name}.`))
+                        .catch(e => {
+                            if(e)
+                                msg.channel.send(`Error adding role ${toRole.name}: ${e}. Please ensure the bot is above this role and has "Manage Roles" so it can manage it.`);
+                        })
+                    })
+                .catch(e => {
+                    if(e)
+                        msg.channel.send(`Error removing role ${prevRole.name}: ${e}. Please ensure the bot is above this role and has "Manage Roles" so it can manage it.`);
+                })
         }
-	}
+    }
 }

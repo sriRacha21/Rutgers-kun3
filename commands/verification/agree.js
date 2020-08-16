@@ -44,16 +44,18 @@ If you want to designate this as the agreement channel please use \`${msg.guild.
         const agreementRoles = idsToValues( agreementRoleObjs.filter(obj => obj.authenticate != 'permission').map(obj => obj.roleID), msg.guild.roles )
         // ask the user what role they want to add if there is more than one role configured
         msg.author.send( `Please enter the name of the role you want to add. Roles are: ${agreementRoles.map(agreementRole => agreementRole.name).join(', ')}.` )
-        .then( () => {
-            // capture the user's user ID so we can continue the conversation. Set that we're at step 1
-            this.client.settings.set( `agree:${msg.author.id}`, {
-                guildID: msg.guild.id,
-                step: 1
+            .then( () => {
+                // capture the user's user ID so we can continue the conversation. Set that we're at step 1
+                this.client.settings.set( `agree:${msg.author.id}`, {
+                    guildID: msg.guild.id,
+                    step: 1
+                })
             })
-        })
-        .catch( err => {
-            if( err )
-                msg.channel.send(`Error: ${e}`)
-        })
+            .catch( err => {
+                if( err )
+                    msg.channel.send(`Error: \`${err}\`
+This may have happened because you are not accepting DM's.
+Turn on DM's from server members:`, {files: ['resources/setup-images/instructions/notif_settings.png', 'resources/setup-images/instructions/dms_on.png']})
+            })
     }
 }
