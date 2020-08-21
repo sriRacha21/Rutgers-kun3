@@ -42,9 +42,9 @@ function agreeHelper( msg, guilds, settings, provider ) {
     // get agreement roles
     // convert the role IDs to roles
     const agreementRoleObjs = provider.get( guild, `agreementRoles` )
-    const agreementRoles = idsToValues( agreementRoleObjs.map(agreementRoleObj => agreementRoleObj.roleID), guild.roles )
+    const agreementRoles = agreementRoleObjs ? idsToValues( agreementRoleObjs.map(agreementRoleObj => agreementRoleObj.roleID), guild.roles ) : null
     const agreementRoleToAdd = guild.roles.find( role => role.id == roleID )
-    const permissionRoleObj = agreementRoleObjs.find(obj => obj.authenticate == 'permission')
+    const permissionRoleObj = agreementRoleObjs ? agreementRoleObjs.find(obj => obj.authenticate == 'permission') : null
     let permissionRole
     if( permissionRoleObj )
         permissionRole = guild.roles.find( role => role.id == permissionRoleObj.roleID )
@@ -95,7 +95,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         if( fs.existsSync('settings/netids.json') ) {
             const netIDsObj = JSON.parse(fs.readFileSync('settings/netids.json', 'utf-8'))
             if( netIDsObj[msg.author.id] == maybeNetID ) {
-                const agreementRole = agreementRoles.find(role => role.id == roleID)
+                const agreementRole = agreementRoles ? agreementRoles.find(role => role.id == roleID) : role
                 const rolesToAdd = [agreementRole]
                 if( permissionRole && !nowelcome )
                     rolesToAdd.push(permissionRole)

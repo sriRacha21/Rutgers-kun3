@@ -84,7 +84,12 @@ Client.on('providerReady', () => {
     const messagesToCache = Client.settings.get('messagesToCache') ? Client.settings.get('messagesToCache') : []
     messagesToCache.forEach(msgAndChannel => {
         Client.channels.get(msgAndChannel.channel).fetchMessage(msgAndChannel.message)
-        .then(m => console.log(`Cached message: ${m.cleanContent}`));
+            .catch(e => {
+                if(e && e.name == "DiscordAPIError") {
+                    messagesToCache.splice(messagesToCache.indexOf({channel: msgAndChannel.channel, message: msgAndChannel.message}), 1);
+                    Client.settings.set('messagesToCache', messagesToCache);
+                }
+            })
     });
     // periodically flush messages in #agreement in all servers
     flushAgreements( Client.guilds, Client.provider )
@@ -159,7 +164,7 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
         const toRole = messageReaction.message.guild.roles.get(agreementSlim.role);
         // set the agreement setting
         messageReaction.remove(user);
-        user.send(`In order to switch to ${toRole.name} you need to be authenticated through 2-step email verification.
+        user.send(`In order to add the ${toRole.name} role you need to be authenticated through 2-step email verification.
 Please enter your netID. Your netID is a unique identifier given to you by Rutgers that you use to sign in to all your Rutgers services. It is generally your initials followed by a few numbers.`)
             .then(m => {
                 Client.settings.set(`agree:${user.id}`, {
