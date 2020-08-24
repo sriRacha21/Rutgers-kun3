@@ -374,8 +374,6 @@ Client.registry
     .registerDefaults()
     .registerTypesIn(path.join(__dirname, 'types'))
     .registerCommandsIn(path.join(__dirname, 'commands'))
-// set all string args to only take 500 chars max
-validateAllStrArgs(Client.registry)
 // log in
 Client.login(API_Keys.token)
 // exports

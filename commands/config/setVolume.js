@@ -15,7 +15,7 @@ module.exports = class SetVolumeCommand extends Commando.Command {
                 {
                     key: 'volume',
                     type: 'integer|string',
-                    prompt: 'Enter the desired volume for bots in this guild. Type `clear` to reset the setting to default.',
+                    prompt: 'Enter the desired volume for bots in this guild. Default is 20. (0-100). Type `clear` to reset the setting to default.',
                     min: 0,
                     max: 100
                 }

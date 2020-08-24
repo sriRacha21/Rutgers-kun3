@@ -44,7 +44,7 @@ module.exports = class PlayCommand extends Commando.Command {
             if( volume )
                 connection.playFile(path.join(process.cwd(), 'sounds', `${filename}.mp3`), {volume: volume/100})
             else
-                connection.playFile(path.join(process.cwd(), 'sounds', `${filename}.mp3`), {volume: 0.1})
+                connection.playFile(path.join(process.cwd(), 'sounds', `${filename}.mp3`), {volume: 0.2})
         })
         .catch( console.error )
     }
