@@ -38,7 +38,7 @@ command. Type \`nothing\` to have no text for the custom command.`,
                     prompt: 'Enter the text you want the command to output. Enter `nothing` for no text.',
                     type: 'string',
                     default: 'nothing',
-                    validate: str => str.length > 0 && str.length <= 500
+                    validate: str => str.length > 0 && str.length <= 1500
                 }
             ],
             argsPromptLimit: 1,
@@ -62,7 +62,7 @@ command. Type \`nothing\` to have no text for the custom command.`,
         const startEmbed = new RichEmbed()
             .addField( 'Command name:', name )
         if( text != '' )
-            startEmbed.addField( 'Command text:', text )
+            startEmbed.addField( 'Command text:', text.length > 1024 ? "Look below for command text." : text )
         // use approval policy
         implementApprovalPolicy(
             {
@@ -89,6 +89,7 @@ command. Type \`nothing\` to have no text for the custom command.`,
                 title: msg.author.tag,
                 clientUser: this.client.user,
                 msg: msg,
+                text: text,
                 startingEmbed: startEmbed
             }
         )

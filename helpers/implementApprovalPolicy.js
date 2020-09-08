@@ -80,6 +80,9 @@ function submitRequestToChannel( requestSubmissionInfo, settings ) {
     .then( m => {
         m.react('👍')
         .then( setTimeout( () => {m.react('👎')}, 1000 ))
+        // send command text if it exists and if it's too long to be in the embed
+        if( requiredEmbedInfo.text && requiredEmbedInfo.text.length > 1024 )
+            channel.send( requiredEmbedInfo.text )
         settings.set( channel.guild, `request:${m.id}`, {
             approveRequest: () => { runHasPerms() },
             userToNotify: user.id,

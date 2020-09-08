@@ -6,8 +6,8 @@ function sendWelcomeMessage( guild, user, welcomeChannel, text ) {
     channel = channel ? channel : guild.systemChannel
     // output welcome message text to a channel
     const welcomeText = text ? text
-                                .replace('[guild]', guild.name)
-                                .replace('[user]', `<@${user.id}>`) : `Welcome to ${guild.name}, <@${user.id}>!`
+                                .replace(new RegExp('\\[guild\\]', 'g'), guild.name)
+                                .replace(new RegExp('\\[user\\]', 'g'), `<@${user.id}>`) : `Welcome to ${guild.name}, <@${user.id}>!`
     channel.send( welcomeText )
 }
 

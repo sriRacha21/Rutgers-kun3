@@ -18,7 +18,14 @@ function flushAgreements( guilds, provider ) {
                 messages
                 .filter( msg => !msg.webhookID && (msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission))) )
                 .forEach( message => message.delete()
-                    .catch(err => { if(err) logger.warn(`Couldn't delete message in the agreement channel of guild ${message.guild.name}.`) } ) )
+                    .catch(err => { 
+                        if(err) {
+                            logger.warn(`Couldn't delete message in the agreement channel of guild ${message.guild.name}.`);
+                            maybeAgreementChannel.send(`I'm not able to delete messages in this channel. You may want to either give me permission to delete messages here or the Admin permission.`)
+                            .then(m => setTimeout(() => m.delete(), 10000));
+                        }
+                    })
+                )
             })
         })
     }

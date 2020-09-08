@@ -46,8 +46,10 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
         // make sure both roles are in the agreementRoles arr
         const agreementRolePrev = agreementRoles.find(r => r.roleID == prevRole.id);
         const agreementRoleTo = agreementRoles.find(r => r.roleID == toRole.id);
-        if( !agreementRolePrev || !agreementRoleTo )
-            msg.channel.send(`Make sure you enter one of these roles: ${agreementRoles.map(r => msg.guild.roles.get(r.roleID).name)}`);
+        if( !agreementRolePrev || !agreementRoleTo ) {
+            msg.channel.send(`Make sure you enter one of these roles: ${agreementRoles.map(r => msg.guild.roles.get(r.roleID).name).join(', ')}`);
+            return;
+        }
         // if the previous role was not authenticated and the to role is
         if( agreementRolePrev.authenticate == 'false' && agreementRoleTo.authenticate == 'true' ) {
             msg.author.send(`In order to switch to ${toRole.name} you need to be authenticated through 2-step email verification.

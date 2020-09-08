@@ -31,7 +31,6 @@ const { logEvent } = require('./helpers/logEvent')
 const { checkAutoverify } = require('./helpers/checkAutoverify')
 const { sendRoleResponse } = require('./helpers/sendRoleResponse')
 const { checkProtectedRole } = require('./helpers/checkProtectedRole')
-const { validateAllStrArgs } = require('./helpers/validateAllStrArgs')
 const { generatePresence } = require('./helpers/generatePresence')
 const { generateDefaultEmbed } = require('./helpers/generateDefaultEmbed')
 const { reactionListener } = require('./helpers/reactionListener')
@@ -109,8 +108,12 @@ Client.on('message', msg => {
         if( agreementChannel == msg.channel.id ) {
             // ESCAPE and give the user their role if they entered the autoverify code
             if( checkAutoverify( msg, Client.provider ) ) return
-            if( !msg.webhookID && msg.author.id == Client.user.id || (msg.member && !msg.member.hasPermission(defaults.admin_permission)) )
+            if( !msg.webhookID && msg.author.id == Client.user.id || (msg.member && !msg.member.hasPermission(defaults.admin_permission)) ) {
+                if( msg.content != `${msg.guild.commandPrefix}agree` )
+                    msg.channel.send(`Please make sure you send \`${msg.guild.commandPrefix}agree\`. You sent \`${msg.cleanContent}\`.`)
+                    .then(m => setTimeout(() => {m.delete()}, 10000));
                 msg.delete()
+            }
         }
     }
 
@@ -176,7 +179,7 @@ Please enter your netID. Your netID is a unique identifier given to you by Rutge
             })
             .catch(err => {
                 if( err )
-                    msg.channel.send(`Error: \`${err}\`
+                    messageReaction.message.channel.send(`Error: \`${err}\`
 This may have happened because you are not accepting DM's.
 Turn on DM's from server members:`, {files: ['resources/setup-images/instructions/notif_settings.png', 'resources/setup-images/instructions/dms_on.png']})
                     .then(m => {

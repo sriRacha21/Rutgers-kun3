@@ -30,5 +30,6 @@ module.exports = class DocumentationCommand extends Commando.Command {
     If you have any questions please ask the the writer of this bot: ${this.client.owners[0]}.`)
         // check if the server owner is still in the server
         msg.author.send( embed )
+        .then(m => msg.channel.send("Sent you a DM!"));
 	}
 }
