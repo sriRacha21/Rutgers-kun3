@@ -172,12 +172,17 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         const rolesToAdd = [agreementRoleToAdd]
         if( permissionRole && !nowelcome )
             rolesToAdd.push(permissionRole)
-        guild.members.find( member => member.user.id == msg.author.id ).addRoles(rolesToAdd)
-        .then(m => {
-            // if there is a role to remove, remove it
-            if( removerole )
-                m.removeRole(removerole)
-        })
+        const guildMember = guild.members.find( member => member.user.id == msg.author.id );
+        if( guildMember ) {
+            guildMember.addRoles(rolesToAdd)
+            .then(m => {
+                if( removerole )
+                    m.removeRole(removerole)
+            })
+        } else {
+            msg.author.send("You could not be found in the server you started agreeing in. Please go back to that server and type `!agree` or click on the emote again.");
+            return;
+        }
         // send welcome message
         if( !nowelcome )
             sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )

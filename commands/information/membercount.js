@@ -1,5 +1,7 @@
 const Commando = require('discord.js-commando')
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
+const fs = require('fs')
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
 module.exports = class MemberCountCommand extends Commando.Command {
     constructor(client) {
@@ -15,20 +17,29 @@ module.exports = class MemberCountCommand extends Commando.Command {
 
 
     async run( msg, args ) {
-        return msg.channel.send("WIP!");
         const embed = generateDefaultEmbed({
-            author: `Configs for server`,
+            author: `Member Count for`,
             title: msg.guild.name,
             clientUser: this.client.user,
             msg: msg,
             thumbnail: msg.guild.iconURL
-        })
+        });
+        embed.addField('Full member count:', msg.guild.memberCount);
 
         // if there is agreement in this server do a fuller embed
-        if( this.client.provider.get( msg.guild, `agreementRoles` ) || this.client.provider.get( msg.guild, `agreementSlim` ) ) {
+        if( (this.client.provider.get( msg.guild, `agreementRoles` ) || this.client.provider.get( msg.guild, `agreementSlim` )) && msg.member.hasPermission( defaults.moderator_permission ) ) {
+            const unagreedCount = msg.guild.members.filter(m => m.roles.size==1).size;
+            const agreedCount = msg.guild.members.filter(m => m.roles.size>1).size;
 
-        } else {
-
+            embed.setAuthor(`Extended ${embed.author.name}`)
+            .addField('Unagreed:', unagreedCount)
+            .addField('Agreed:', agreedCount)
+            .addField('Unagreed percentage:', unagreedCount/msg.guild.memberCount * 100 + '%');
+            if( msg.guild.memberCount > 250 )
+                embed.setDescription('**Disclaimer**: The agreed count and unagreed counts may not be exact since Discord does not cache all members in large servers for performance reasons.');
         }
+
+        // send the embed
+        msg.channel.send(embed);
 	}
 }

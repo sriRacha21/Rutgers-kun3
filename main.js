@@ -224,7 +224,8 @@ Client.on('guildCreate', guild => {
 // emitted on bot leaving (or getting kicked) from a guild
 Client.on('guildDelete', guild => {
     // clear all the settings for that guild
-    Client.provider.clear( guild )
+    // the bot can apparently get removed and re-added at any time for any reason. We can't just clear the guild settings when this happens anymore
+    // Client.provider.clear( guild )
 })
 
 // emitted on member update

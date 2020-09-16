@@ -4,7 +4,7 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'roleswitch',
-            aliases: [ 'switchrole' ],
+            aliases: [ 'switchrole', 'switchroles' ],
             group: 'verification',
             memberName: 'roleswitch',
             description: 'Switch between verified roles in this server.',

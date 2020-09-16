@@ -47,10 +47,22 @@ module.exports = class SetAutoVerifyCommand extends Commando.Command {
         if( !agreementRoles.filter(r => r.authenticate === 'true').map(r => r.roleID).includes(role.id) )
             return msg.channel.send( `The role you are passing must be marked as requiring verification (\`true\`). Check your configs. (\`${msg.guild.commandPrefix}configs\`)` )
 
-        settings.set( msg.guild, `autoverify`, {
-            phrase: phrase,
-            role: role.id,
-        } )
-        .then( msg.channel.send( `Autoverify phrase successfully set.` ) )
+        const autoverify = settings.get(msg.guild, `autoverify`);
+        let avProm;
+        if( autoverify ) {
+            autoverify.push({
+                phrase: phrase,
+                role: role.id
+            });
+            avProm = settings.set(msg.guild, `autoverify`, autoverify);
+        } else {
+            avProm = settings.set(msg.guild, `autoverify`, [
+                {
+                    phrase: phrase,
+                    role: role.id,
+                }
+            ]);
+        }
+        avProm.then( msg.channel.send( `Autoverify phrase successfully set.` ) )
 	}
 }
