@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/sriRacha21/Rutgers-kun3#readme",
   "dependencies": {
-    "bent": "^7.3.9",
+    "bent": "^7.3.10",
     "common-tags": "^1.8.0",
     "discord.js": "^11.6.4",
     "discord.js-commando": "^0.10.0",
