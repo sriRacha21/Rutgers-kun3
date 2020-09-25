@@ -19,7 +19,11 @@ function detectChain( msg, settings ) {
     // ignore if the chain setting exists and is off
     // comparison to bool is done because the value must be explicitly set (default to true)
     if( settings.get( msg.guild, 'chain' ) === false )
-        return
+        return;
+    // ignore if the highscore command is off
+    const chainCommand = msg.client.registry.commands.get('chain');
+    if( chainCommand && !chainCommand.isEnabledIn(msg.guild) )
+        return;
 
     // in order to start the chain properly a buffer of messages must be maintained
     // add to buffer if the message matches the other ones, ensure buffer is mainainted by key value channel id

@@ -1,51 +1,52 @@
 /*        	IMPORTS AND GENERAL SETUP	        */
 // import sqlite to use as SettingsProvider
-const sqlite = require('sqlite')
+const sqlite = require('sqlite');
 // import path to join paths in a platform-dependent way
-const path = require('path')
+const path = require('path');
 // prepare to read in data from JSON files
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
+const fs = require('fs');
+const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'));
 // read in data from JSON file containing default settings for the bot (ClientOptions object)
-const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', defaults.encoding))
+const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', defaults.encoding));
 // read in data from JSON file containing API keys
-const API_Keys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding)) : {token:''}
+const API_Keys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding)) : {token:''};
 // string formatting
-const { oneLine } = require('common-tags')
+const { oneLine } = require('common-tags');
 // get methods for event helpers
-const { setCommandFields } = require('./helpers/setCommandFields')
-const { latexInterpreter } = require('./helpers/latexInterpreter')
-const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy')
-const { parseCustomCommand } = require('./helpers/parseCustomCommand')
-const { rutgersChan } = require('./helpers/rutgersChan')
-const { reroll } = require('./helpers/reroll')
-const { checkWordCount } = require('./helpers/checkWordCount')
-const { objToEmailBody } = require('./helpers/objToEmailBody')
-const { detectChain } = require('./helpers/detectChain')
-const { agreeHelper } = require('./helpers/agreeHelper')
-const { flushAgreements } = require('./helpers/flushAgreements')
-const { checkRoleMentions } = require('./helpers/checkRoleMentions')
-const { setLiveRole } = require('./helpers/setLiveRole')
-const { flushLiveRoles } = require('./helpers/flushLiveRoles')
-const { logEvent } = require('./helpers/logEvent')
-const { checkAutoverify } = require('./helpers/checkAutoverify')
-const { sendRoleResponse } = require('./helpers/sendRoleResponse')
-const { checkProtectedRole } = require('./helpers/checkProtectedRole')
-const { generatePresence } = require('./helpers/generatePresence')
-const { generateDefaultEmbed } = require('./helpers/generateDefaultEmbed')
-const { reactionListener } = require('./helpers/reactionListener')
-const { removeInvites } = require('./helpers/removeInvites')
-const { payMe } = require('./helpers/payMe')
-const { starMe } = require('./helpers/starMe')
+const { setCommandFields } = require('./helpers/setCommandFields');
+const { latexInterpreter } = require('./helpers/latexInterpreter');
+const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy');
+const { parseCustomCommand } = require('./helpers/parseCustomCommand');
+const { rutgersChan } = require('./helpers/rutgersChan');
+const { reroll } = require('./helpers/reroll');
+const { checkWordCount } = require('./helpers/checkWordCount');
+const { objToEmailBody } = require('./helpers/objToEmailBody');
+const { detectChain } = require('./helpers/detectChain');
+const { agreeHelper } = require('./helpers/agreeHelper');
+const { flushAgreements } = require('./helpers/flushAgreements');
+const { checkRoleMentions } = require('./helpers/checkRoleMentions');
+const { setLiveRole } = require('./helpers/setLiveRole');
+const { flushLiveRoles } = require('./helpers/flushLiveRoles');
+const { logEvent } = require('./helpers/logEvent');
+const { checkAutoverify } = require('./helpers/checkAutoverify');
+const { sendRoleResponse } = require('./helpers/sendRoleResponse');
+const { checkProtectedRole } = require('./helpers/checkProtectedRole');
+const { generatePresence } = require('./helpers/generatePresence');
+const { generateDefaultEmbed } = require('./helpers/generateDefaultEmbed');
+const { reactionListener } = require('./helpers/reactionListener');
+const { removeInvites } = require('./helpers/removeInvites');
+const { payMe } = require('./helpers/payMe');
+const { starMe } = require('./helpers/starMe');
+const { kateBdayEE } = require('./helpers/kateBdayEE');
 // set up winston logging
-const logger = require('./logger')
+const logger = require('./logger');
 // detailed log of objects
-const { inspect } = require('util')
+const { inspect } = require('util');
 // get some Discord fields we need
-const RichEmbed = require('discord.js').RichEmbed
+const RichEmbed = require('discord.js').RichEmbed;
 // initialize the Discord client
-const Commando = require('discord.js-commando')
-const Client = new Commando.Client(ClientOptions)
+const Commando = require('discord.js-commando');
+const Client = new Commando.Client(ClientOptions);
 // don't stop on expired certificate
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 /*        	EVENTS	        */
@@ -61,21 +62,21 @@ Client.on('commandError', (command, err, message, args, fromPattern, result) => 
         fromPattern: fromPattern,
     }
     if( message.guild ) emailBody.guild = message.guild.name;
-    logger.log('error', objToEmailBody(emailBody))
+    logger.log('error', objToEmailBody(emailBody));
 })
-Client.on('warn', (info) => logger.log('warn', info))
-Client.on('debug', (info) => logger.log('debug', info) )
-Client.on('disconnect', () => logger.warn('Websocket disconnected!'))
-Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'))
+Client.on('warn', (info) => logger.log('warn', info));
+Client.on('debug', (info) => logger.log('debug', info) );
+Client.on('disconnect', () => logger.warn('Websocket disconnected!'));
+Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'));
 
 // emitted on bot being ready to operate
 Client.on('ready', () => {
-    logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`)
+    logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`);
     // periodically refresh command settings
-    setCommandFields( Client.registry )
+    setCommandFields( Client.registry );
     // peridiocally update the bot's status
-    generatePresence( Client, 0 )
-})
+    generatePresence( Client, 0 );
+});
 
 // when the settings provider is ready
 Client.on('providerReady', () => {
@@ -91,16 +92,16 @@ Client.on('providerReady', () => {
             })
     });
     // periodically flush messages in #agreement in all servers
-    flushAgreements( Client.guilds, Client.provider )
+    flushAgreements( Client.guilds, Client.provider );
     // periodically flush the live role from users that aren't streaming
-    flushLiveRoles( Client.guilds, Client.provider )
+    flushLiveRoles( Client.guilds, Client.provider );
 })
 
 // emitted on message send
 Client.on('message', msg => {
     // ignore messages by all bots
     if( msg.author.bot )
-        return
+        return;
 
     // delete messages in #agreement if they're made by non-admins or bots
     if( msg.guild ) {
@@ -119,11 +120,11 @@ Client.on('message', msg => {
 
     // agreement process, we need the settings and settingsprovider to access guild and universal settings
     agreeHelper( msg, Client.guilds, Client.settings, Client.provider )
+    // if the member is ignored leave
+    if( msg.guild && msg.member && Client.provider.get( msg.guild, `ignored:${msg.channel.id}` ) )
+        return
     // remove server invite links
     removeInvites( msg, Client )
-    // if the member is ignored leave
-    if( msg.guild && msg.member && Client.provider.get( msg.guild, `ignored:${msg.member.id}` ) )
-        return
     // parse a custom command if the message starts with it, send the first word after the prefix to the method
     if( msg.cleanContent.startsWith(msg.guild && msg.guild.commandPrefix) )
         parseCustomCommand( msg
@@ -132,24 +133,26 @@ Client.on('message', msg => {
             .split(' ')[0]
             .substring(msg.guild.commandPrefix.length), msg.cleanContent.split(' ').slice(1), Client.provider, msg.channel
         )
-    // check if message contains latex formatting, also suggest using latex formatting
+    // check if message contains latex formatting
     latexInterpreter( msg.cleanContent, msg.channel )
     // check if role has been mentioned
     checkRoleMentions( msg, Client.provider, Client.user )
     // check if word counters need to be incremented
     if( !msg.guild || (!Client.provider.get(msg.guild, 'wordCounters') && !Client.provider.get(msg.guild, `wordCounters:${msg.channel.id}`)) )
         checkWordCount( msg, Client.settings )
-    // pay me
+    // pay me or star me
     if( Client.isOwner( msg.author ) ) {
-        payMe( msg, Client.registry.commands )
-        starMe( msg, Client.registry.commands )
+        payMe( msg, Client.registry.commands );
+        starMe( msg, Client.registry.commands );
     }
     // react with rutgerschan, do reroll
-    rutgersChan( msg )
-    reroll( msg )
+    rutgersChan( msg );
+    reroll( msg );
     // detect chains (not in agreement channel)
     if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, `agreementChannel`)) || (msg.guild && Client.provider.get(msg.guild, `agreementChannel`) != msg.channel.id) )
-        detectChain( msg, Client.provider )
+        detectChain( msg, Client.provider );
+    // kate birthday easter egg
+    kateBdayEE( Client, msg );
 })
 
 // emitted on adding a reaction to a message

@@ -17,8 +17,8 @@ module.exports = class RemoveInvitesCommand extends Commando.Command {
     async run( msg ) {
         const settings = this.client.provider
         
-        if( !this.client.provider.get( msg.guild, 'muteRole' ) )
-            return msg.channel.send( 'You need to set up the mute role first.' )
+        // if( !this.client.provider.get( msg.guild, 'muteRole' ) )
+        //     return msg.channel.send( 'You need to set up the mute role first.' )
 
         if( !settings.get( msg.guild, `removeInvites`) ) {
             settings.set( msg.guild, `removeInvites`, true )

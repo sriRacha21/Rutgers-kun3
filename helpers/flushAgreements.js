@@ -21,8 +21,8 @@ function flushAgreements( guilds, provider ) {
                     .catch(err => { 
                         if(err) {
                             logger.warn(`Couldn't delete message in the agreement channel of guild ${message.guild.name}.`);
-                            maybeAgreementChannel.send(`I'm not able to delete messages in this channel. You may want to either give me permission to delete messages here or the Admin permission.`)
-                            .then(m => setTimeout(() => m.delete(), 10000));
+                            // maybeAgreementChannel.send(`I'm not able to delete messages in this channel. You may want to either give me permission to delete messages here or the Admin permission.`)
+                            // .then(m => setTimeout(() => m.delete(), 10000));
                         }
                     })
                 )
