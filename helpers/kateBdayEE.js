@@ -1,7 +1,7 @@
 const execSync = require('child_process').execSync;
 const { getRandomElement } = require('./getRandom')
 
-const kateUserID = '87525135241728000';
+const kateUserID = '579500625704910868';
 const introduction = `Hewo Kate 🥺
 I see this is your first time using me so I'll explain briefly how I work:
 * Your identity is saved by user ID, so even if you change your username I will always recognize you.

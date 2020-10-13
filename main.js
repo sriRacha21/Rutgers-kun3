@@ -22,6 +22,7 @@ const { reroll } = require('./helpers/reroll');
 const { checkWordCount } = require('./helpers/checkWordCount');
 const { objToEmailBody } = require('./helpers/objToEmailBody');
 const { detectChain } = require('./helpers/detectChain');
+const { detectHaiku } = require('./helpers/detectHaiku');
 const { agreeHelper } = require('./helpers/agreeHelper');
 const { flushAgreements } = require('./helpers/flushAgreements');
 const { checkRoleMentions } = require('./helpers/checkRoleMentions');
@@ -151,6 +152,9 @@ Client.on('message', msg => {
     // detect chains (not in agreement channel)
     if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, `agreementChannel`)) || (msg.guild && Client.provider.get(msg.guild, `agreementChannel`) != msg.channel.id) )
         detectChain( msg, Client.provider );
+    // detect haikus
+    if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, 'haiku')) )
+        detectHaiku(msg);
     // kate birthday easter egg
     kateBdayEE( Client, msg );
 })
@@ -163,8 +167,8 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
 
     // if this is the agreement slim message with the agreement slim reaction start agreement process
     const agreementSlim = Client.provider.get(messageReaction.message.guild, 'agreementSlim');
-    if( agreementSlim 
-        && agreementSlim.message == messageReaction.message.id 
+    if( agreementSlim
+        && agreementSlim.message == messageReaction.message.id
         && agreementSlim.emote == messageReaction.emoji.id ) {
         // get the role
         const toRole = messageReaction.message.guild.roles.get(agreementSlim.role);

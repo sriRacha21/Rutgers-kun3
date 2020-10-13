@@ -19,6 +19,7 @@ module.exports = class NetidCommand extends Commando.Command {
                     parse: str => str.toLowerCase()
                 }
             ],
+            ownerOnly: true
         })
     }
 
@@ -60,7 +61,7 @@ module.exports = class NetidCommand extends Commando.Command {
                 guilds.push( guild );
         })
         if( guilds.length > 0 )
-            embed.setDescription(`**Shared Guilds with Bot**:
+            embed.setDescription(`**Shared servers ${guilds.size}**:
 ${guilds.map(g => g.name).join('\n')}`);
 
         // send the embed

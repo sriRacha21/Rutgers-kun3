@@ -9,14 +9,15 @@ module.exports = class RemoveInvitesCommand extends Commando.Command {
             group: 'config',
             memberName: 'removeinvites',
             description: 'Set up the bot to remove server invite links. Automatically excludes some servers by default.',
-            userPermissions: [ defaults.admin_permission ]
+            userPermissions: [ defaults.admin_permission ],
+            guildOnly: true
         })
     }
 
 
     async run( msg ) {
         const settings = this.client.provider
-        
+
         // if( !this.client.provider.get( msg.guild, 'muteRole' ) )
         //     return msg.channel.send( 'You need to set up the mute role first.' )
 

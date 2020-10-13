@@ -12,11 +12,12 @@ module.exports = class AddCommandCommand extends Commando.Command {
             description: 'Add a custom command to the bot.',
             details: oneLine`Attachments to the message calling 
 the command will be attached to subsequent calls of the custom 
-command. Type \`nothing\` to have no text for the custom command.`,
+command. Use {} for a custom argument.`,
             guildOnly: true,
             examples: [
                 `addcommand`,
                 `addcommand commandname example command text`,
+                `addcommand commandname {} has created a custom command with an argument.`,
                 `customcommands:add whenarjuntypes :Pog:`
             ],
             args: [

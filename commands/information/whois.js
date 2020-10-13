@@ -42,6 +42,13 @@ module.exports = class WhoIsCommand extends Commando.Command {
         .addField("User ID:", user.id)
         .addField("Date user joined Discord:", user.createdAt.toDateString());
         
+        // roles
+        if( msg.guild ) {
+            const guildMember = msg.guild.member(user);
+            if( guildMember )
+                embed.addField("Roles:", guildMember.roles.array().slice(1).join('\n'));
+        }
+        
         // is a bot?
         if( user.bot )
             embed.setDescription('This is another bot! 😳');
