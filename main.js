@@ -154,7 +154,7 @@ Client.on('message', msg => {
         detectChain( msg, Client.provider );
     // detect haikus
     if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, 'haiku')) )
-        detectHaiku(msg);
+        detectHaiku(msg, Client);
     // kate birthday easter egg
     kateBdayEE( Client, msg );
 })
@@ -205,7 +205,13 @@ Turn on DM's from server members:`, {files: ['resources/setup-images/instruction
     reactionListener.emit(`class:${user.id}:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'))
     // for the listquotes command
     if( messageReaction.emoji == '📧' )
-        reactionListener.emit(`listquotes:${messageReaction.message.id}`, user)
+        reactionListener.emit(`listquotes:${messageReaction.message.id}`, user);
+    // for haikus
+    if( messageReaction.emoji == '🪶' ) {
+        reactionListener.emit(`haiku:${messageReaction.message.id}`, user);
+        if( !botReaction )
+            reactionListener.emit(`haiku:DEBUG:${messageReaction.message.id}`, user);
+    }
     // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
 })
