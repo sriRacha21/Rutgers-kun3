@@ -62,6 +62,8 @@ function kateModeHandler( settings, msg, dispatcher, author, emojis ) {
 
     messageText = msg.content.toLowerCase();
     if( messageText == 'hey' ) {
+        msg.channel.send('Kate mode is now deprecated.');
+        return false;
         // if kate mode is already on send a message and do nothing
         if( kateModeState ) author.send("Kate mode is already on but I'll turn it on again for you! *boop*");
         else {
@@ -76,6 +78,8 @@ function kateModeHandler( settings, msg, dispatcher, author, emojis ) {
         }
         return true;
     } else if( messageText == 'bye' ) {
+        msg.channel.send('Kate mode is now deprecated.');
+        return false;
         const peepoupset = emojis.find(e => e.name=='peepoUpset');
         if( !kateModeState ) author.send("Kate mode is already off but I'll turn it off again. " + (peepoupset ? peepoupset : ''))
         else {

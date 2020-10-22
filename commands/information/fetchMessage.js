@@ -58,6 +58,24 @@ module.exports = class FetchMessageCommand extends Commando.Command {
             embed.addField('Channel:', `${message.channel} (#${message.channel.name})`);
         if( !fromPattern )
             embed.addField('Source:', `[Jump!](${message.url})`);
+        if( message.reactions.size > 0 ) {
+            message.reactions.forEach(r => {
+                embed.addField(`${r.emoji} used ${r.count} times by:`, r.users.array().join(', '));
+            })
+            // const userReactionDict = {};
+            // message.reactions.forEach(r => {
+            //     r.users.forEach(u => {
+            //         if(userReactionDict[u.id] === undefined)
+            //             userReactionDict[u.id] = [r.emoji];
+            //         else
+            //             userReactionDict[u.id].push(r.emoji);
+            //     });
+            // });
+            // Object.keys(userReactionDict).forEach(uid => {
+            //     let user = this.client.users.get(uid);
+            //     embed.addField((user ? user.tag : uid) + "'s reactions:", userReactionDict[uid].join(', '));
+            // });
+        }
 
         if( message.attachments.size == 1 )
             embed.setImage(message.attachments.first().proxyURL);

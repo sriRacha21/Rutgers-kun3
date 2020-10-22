@@ -45,7 +45,7 @@ module.exports = class NetidCommand extends Commando.Command {
             clientUser: this.client.user,
             msg: msg
         })
-        .addField('User',`<@${foundUserID}>`);
+        .addField('User',`<@${foundUserID}> (${foundUserID})`)
 
         // if the user is in the bot's cache, beautify embed
         const maybeUser = this.client.users.get( foundUserID );
@@ -61,7 +61,7 @@ module.exports = class NetidCommand extends Commando.Command {
                 guilds.push( guild );
         })
         if( guilds.length > 0 )
-            embed.setDescription(`**Shared servers ${guilds.size}**:
+            embed.setDescription(`**Shared servers (${guilds.length})**:
 ${guilds.map(g => g.name).join('\n')}`);
 
         // send the embed

@@ -14,7 +14,7 @@ const API_Keys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFil
 const { oneLine } = require('common-tags');
 // get methods for event helpers
 const { setCommandFields } = require('./helpers/setCommandFields');
-const { latexInterpreter } = require('./helpers/latexInterpreter');
+const { latexInterpreter, getLatexMatches } = require('./helpers/latexInterpreter');
 const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy');
 const { parseCustomCommand } = require('./helpers/parseCustomCommand');
 const { rutgersChan } = require('./helpers/rutgersChan');
@@ -22,7 +22,7 @@ const { reroll } = require('./helpers/reroll');
 const { checkWordCount } = require('./helpers/checkWordCount');
 const { objToEmailBody } = require('./helpers/objToEmailBody');
 const { detectChain } = require('./helpers/detectChain');
-const { detectHaiku } = require('./helpers/detectHaiku');
+// const { detectHaiku } = require('./helpers/detectHaiku');
 const { agreeHelper } = require('./helpers/agreeHelper');
 const { flushAgreements } = require('./helpers/flushAgreements');
 const { checkRoleMentions } = require('./helpers/checkRoleMentions');
@@ -135,7 +135,7 @@ Client.on('message', msg => {
             .substring(msg.guild.commandPrefix.length), msg.cleanContent.split(' ').slice(1), Client.provider, msg.channel
         )
     // check if message contains latex formatting
-    latexInterpreter( msg.cleanContent, msg.channel )
+    latexInterpreter( msg, msg.channel )
     // check if role has been mentioned
     checkRoleMentions( msg, Client.provider, Client.user )
     // check if word counters need to be incremented
@@ -152,9 +152,9 @@ Client.on('message', msg => {
     // detect chains (not in agreement channel)
     if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, `agreementChannel`)) || (msg.guild && Client.provider.get(msg.guild, `agreementChannel`) != msg.channel.id) )
         detectChain( msg, Client.provider );
-    // detect haikus
-    if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, 'haiku')) )
-        detectHaiku(msg, Client);
+    // detect haikus (gone for a while now)
+    // if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, 'haiku')) )
+    //     detectHaiku(msg, Client);
     // kate birthday easter egg
     kateBdayEE( Client, msg );
 })
@@ -207,11 +207,11 @@ Turn on DM's from server members:`, {files: ['resources/setup-images/instruction
     if( messageReaction.emoji == '📧' )
         reactionListener.emit(`listquotes:${messageReaction.message.id}`, user);
     // for haikus
-    if( messageReaction.emoji == '🪶' ) {
-        reactionListener.emit(`haiku:${messageReaction.message.id}`, user);
-        if( !botReaction )
-            reactionListener.emit(`haiku:DEBUG:${messageReaction.message.id}`, user);
-    }
+    // if( messageReaction.emoji == '🪶' ) {
+    //     reactionListener.emit(`haiku:${messageReaction.message.id}`, user);
+    //     if( !botReaction )
+    //         reactionListener.emit(`haiku:DEBUG:${messageReaction.message.id}`, user);
+    // }
     // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
 })
@@ -331,6 +331,13 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
     if( oMsg.content == nMsg.content )
         return
 
+    // update latex
+    if( getLatexMatches(oMsg.cleanContent) && getLatexMatches(nMsg.cleanContent) ) {
+        reactionListener.emit(`latexEdited:${oMsg.id}`);
+        latexInterpreter(nMsg, nMsg.channel);
+    }
+
+    // log edits
     const startEmbed = new RichEmbed()
     const extras = []
     if( oMsg.content ) {

@@ -1,14 +1,16 @@
-const { stripIndents } = require('common-tags')
-const request = require('request-promise')
 const bent = require('bent')
-const { inspect } = require('util')
 const fs = require('fs')
 const path = require('path')
 const template = fs.readFileSync(path.join(__dirname, '../resources/latexTemplate.tex')).toString()
+const { reactionListener } = require('./reactionListener')
 
-async function latexInterpreter( msgContent, channel ) {
+function getLatexMatches( msgContent ) {
+    return msgContent.match( /\$\$.+?\$\$/gs );
+}
+async function latexInterpreter( sentMessage, channel ) {
+    let msgContent = sentMessage.cleanContent;
     // get matches
-    let matches = msgContent.match( /\$\$.+?\$\$/gs )
+    let matches = getLatexMatches(msgContent);
     // if there are none return
     if( !matches )
         return
@@ -32,13 +34,6 @@ async function latexInterpreter( msgContent, channel ) {
             density: 440
         }
 
-        // const reqPromise = request({
-        //     method: 'POST',
-        //     uri: 'https://rtex.probablyaweb.site/api/v2',
-        //     body: payload,
-        //     json: true
-        // }) 
-        // promiseList.push( reqPromise )
         const post = bent('POST','json')
         promiseList.push( post('https://rtex.probablyaweb.site/api/v2',payload) )
     })
@@ -49,7 +44,18 @@ async function latexInterpreter( msgContent, channel ) {
             .filter(response => response.status == 'success' )
             .map(response => `https://rtex.probablyaweb.site/api/v2/${response.filename}`)
         }) 
-        .then( msg => msg.react('🗑') )
+        .then( msg => {
+            msg.react('🗑') 
+            // add a listener that disappears after a minute for latex corrections
+            const eventName = `latexEdited:${sentMessage.id}`
+            const listener = () => {
+                msg.delete();
+            }
+            reactionListener.once(eventName, listener);
+            setTimeout(() => {
+                reactionListener.removeListener(eventName, listener);
+            }, 60000);
+        })
     })
     .catch( err => {
         channel.stopTyping()
@@ -57,4 +63,5 @@ async function latexInterpreter( msgContent, channel ) {
     })
 }
 
-exports.latexInterpreter = latexInterpreter
+exports.latexInterpreter = latexInterpreter;
+exports.getLatexMatches = getLatexMatches;

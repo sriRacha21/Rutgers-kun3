@@ -11,7 +11,8 @@ module.exports = class DetectHaikusCommand extends Commando.Command {
             memberName: 'haiku',
             description: 'Toggle haiku detection.',
             userPermissions: [ defaults.admin_permission ],
-            guildOnly: true
+            guildOnly: true,
+            hidden: true
         })
     }
 
