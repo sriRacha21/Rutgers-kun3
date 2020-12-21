@@ -198,6 +198,14 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
             preReqNotes = ClassCommand.processPreReqNotes(preReqNotes, reactions, emojiClassDict)
             embed.addField('Prereqs:',preReqNotes)
         }
+        // add core codes if theyre there
+        if( classToSend.coreCodes && classToSend.coreCodes.length > 0 ) {
+            let coreCodes = "";
+            classToSend.coreCodes.forEach(coreCode => {
+                coreCodes += `${coreCode.code} (${coreCode.description})\n`;
+            })
+            embed.addField("Requirements Satisfied:", coreCodes);
+        }
         // process professors and the sections they teach
         if( !section ) {
             const professorInfos = []

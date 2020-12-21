@@ -50,7 +50,10 @@ module.exports = class AddQuoteCommand extends Commando.Command {
         while( quotes.length >= 25 )
             quotes.shift()
         // make sure we include attachments
-        quotes.push( message.cleanContent.concat(message.attachments ? '\n'.concat(message.attachments.map(attachment => attachment.proxyURL).join('\n')) : '') )
+        const newQuote = message.cleanContent.concat(message.attachments ? '\n'.concat(message.attachments.map(attachment => attachment.proxyURL).join('\n')) : '');
+        if(newQuote.trim() == '')
+            return msg.channel.send("Unable to save quote (empty quote).");
+        quotes.push( newQuote );
 
         // set setting after push
         settings.set( `quotes:${user.id}`, quotes )

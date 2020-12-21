@@ -10,7 +10,7 @@ const { oneLine } = require('common-tags')
 const logger = require('../logger')
 const { inspect } = require('util')
 
-function agreeHelper( msg, guilds, settings, provider ) {
+async function agreeHelper( msg, guilds, settings, provider ) {
     const agreementObj = settings.get( `agree:${msg.author.id}` )
 
     // ensure the SMTP server is setup
@@ -68,6 +68,8 @@ function agreeHelper( msg, guilds, settings, provider ) {
             const rolesToAdd = [agreementRole]
             if( permissionRole )
                 rolesToAdd.push( permissionRole )
+            // fetch the member from the guild
+            await guild.fetchMember(msg.author.id);
             const guildMember = guild.members.find( member => member.user.id == msg.author.id )
             if( guildMember ) {
                 guildMember.addRoles(rolesToAdd)
@@ -109,6 +111,8 @@ to all your Rutgers services. It is generally your initials followed by a few nu
                 const rolesToAdd = [agreementRole]
                 if( permissionRole && !nowelcome )
                     rolesToAdd.push(permissionRole)
+                // fetch the member from the guild
+                await guild.fetchMember(msg.author.id);
                 const guildMember = guild.members.find( member => member.user.id == msg.author.id )
                 if( guildMember ) {
                     guildMember.addRoles(rolesToAdd)

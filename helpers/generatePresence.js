@@ -8,6 +8,7 @@ function generatePresence( client, which ) {
 		`${getNumLines()} lines of code!`,
 		`Version ${defaults.version}`,
 		`${client.commandPrefix}whoami`,
+		`DM me "addme" to add me to your server!`,
 		`<3 Rutgers-Chan`,
         `New Profile Picture by Jia (@J_Hangz)!`
 	]

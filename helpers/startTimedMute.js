@@ -53,8 +53,8 @@ function startTimedMute( member, settings, reason, expirationTime, clientUser ) 
         // notify the user
         member.user.send( `You have been unmuted in server ${member.guild.name}.` )
         if( permissionRole )
-            member.addRole( permissionRole )
-        member.removeRole( muteRole )
+            member.addRole( permissionRole );
+        member.removeRole( muteRole );
     }
 }
 

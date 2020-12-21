@@ -40,12 +40,14 @@ module.exports = class WhoIsCommand extends Commando.Command {
         });
         embed.addField("Tag:", user)
         .addField("User ID:", user.id)
-        .addField("Date user joined Discord:", user.createdAt.toDateString());
+
+        if( user.createdAt )
+            embed.addField("Date user joined Discord:", user.createdAt.toDateString());
         
         // roles
         if( msg.guild ) {
-            const guildMember = msg.guild.member(user);
-            if( guildMember )
+            const guildMember = await msg.guild.fetchMember(user);
+            if( guildMember && guildMember.roles.size > 1 )
                 embed.addField("Roles:", guildMember.roles.array().slice(1).join('\n'));
         }
         

@@ -24,8 +24,10 @@ function parseCustomCommand( commandName, appends, settings, channel ) {
         else
             throw 'Illegal arguments for parseCustomCommand';
     }
-    if( msgSendPromise )
-        msgSendPromise.then( msg => msg.react('🔧') );
+    if( msgSendPromise ) {
+        msgSendPromise
+        .then( msg => msg.react('🔧') )
+    }
 }
 
 exports.parseCustomCommand = parseCustomCommand;

@@ -84,13 +84,21 @@ Client.on('providerReady', () => {
     // retrieve messages from the cache
     const messagesToCache = Client.settings.get('messagesToCache') ? Client.settings.get('messagesToCache') : []
     messagesToCache.forEach(msgAndChannel => {
-        Client.channels.get(msgAndChannel.channel).fetchMessage(msgAndChannel.message)
-            .catch(e => {
-                if(e && e.name == "DiscordAPIError") {
-                    messagesToCache.splice(messagesToCache.indexOf({channel: msgAndChannel.channel, message: msgAndChannel.message}), 1);
-                    Client.settings.set('messagesToCache', messagesToCache);
-                }
-            })
+        const channel = Client.channels.get(msgAndChannel.channel)
+        if( channel ) {
+            channel.fetchMessage(msgAndChannel.message)
+                .then(m => {
+                    logger.log('info', `Cached message ID ${m.id} from guild ${m.guild.name} (#${m.channel.name})`)
+                })
+                .catch(e => {
+                    if(e && e.name == "DiscordAPIError") {
+                        messagesToCache.splice(messagesToCache.indexOf({channel: msgAndChannel.channel, message: msgAndChannel.message}), 1);
+                        Client.settings.set('messagesToCache', messagesToCache);
+                    }
+                })
+        } else {
+            logger.warn(`Channel ID ${msgAndChannel.channel} could not be found!`);
+        }
     });
     // periodically flush messages in #agreement in all servers
     flushAgreements( Client.guilds, Client.provider );
@@ -206,13 +214,6 @@ Turn on DM's from server members:`, {files: ['resources/setup-images/instruction
     // for the listquotes command
     if( messageReaction.emoji == '📧' )
         reactionListener.emit(`listquotes:${messageReaction.message.id}`, user);
-    // for haikus
-    // if( messageReaction.emoji == '🪶' ) {
-    //     reactionListener.emit(`haiku:${messageReaction.message.id}`, user);
-    //     if( !botReaction )
-    //         reactionListener.emit(`haiku:DEBUG:${messageReaction.message.id}`, user);
-    // }
-    // if the reaction was thumbs up approve, otherwise reject
     parseApprovalReaction( Client.provider, Client.users, messageReaction )
 })
 
@@ -244,10 +245,10 @@ Client.on('guildDelete', guild => {
 // emitted on member update
 Client.on('guildMemberUpdate', (oldM, newM) => {
     if( newM.user.bot )
-        return
+        return;
 
-    sendRoleResponse(oldM, newM, Client.provider)
-    checkProtectedRole(oldM, newM, Client.provider, Client.user)
+    sendRoleResponse(oldM, newM, Client.provider);
+    checkProtectedRole(oldM, newM, Client.provider, Client.user);
 })
 
 /*        	LOGGING	        */
@@ -332,8 +333,9 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
         return
 
     // update latex
-    if( getLatexMatches(oMsg.cleanContent) && getLatexMatches(nMsg.cleanContent) ) {
-        reactionListener.emit(`latexEdited:${oMsg.id}`);
+    if( getLatexMatches(nMsg.cleanContent) ) {
+        if( getLatexMatches(oMsg.cleanContent) )
+            reactionListener.emit(`latexEdited:${oMsg.id}`);
         latexInterpreter(nMsg, nMsg.channel);
     }
 
