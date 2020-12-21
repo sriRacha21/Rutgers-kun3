@@ -26,16 +26,16 @@ module.exports = class FetchMessageCommand extends Commando.Command {
 
         if( fromPattern ) {
             // attempt to fetch the message from the regex match, exit gracefully if message could not be fetched
-            const guild = this.client.guilds.get(args[1]);
+            const guild = this.client.guilds.resolve(args[1]);
             if( !guild ) return;
-            const channel = guild.channels.get(args[2]);
+            const channel = guild.channels.resolve(args[2]);
             if( !channel ) return;
+            let fetchedMessage = null;
             try {
-                await channel.fetchMessage(args[3]);
+                fetchedMessage = await channel.messages.fetch(args[3]);
             } catch(err) {
                 return;
             }
-            let fetchedMessage = channel.messages.get(args[3]);
             if( !fetchedMessage ) return;
             message = fetchedMessage;
         } else {
@@ -47,7 +47,7 @@ module.exports = class FetchMessageCommand extends Commando.Command {
             title: `${message.author.tag} says:`,
             clientUser: this.client.user,
             msg: msg,
-            thumbnail: message.author.displayAvatarURL
+            thumbnail: message.author.displayAvatarURL()
         });
 
         if( message.content )
@@ -58,9 +58,10 @@ module.exports = class FetchMessageCommand extends Commando.Command {
             embed.addField('Channel:', `${message.channel} (#${message.channel.name})`);
         if( !fromPattern )
             embed.addField('Source:', `[Jump!](${message.url})`);
-        message.reactions.forEach(r => {
-            embed.addField(`${r.emoji} used ${r.count} times by:`, r.users.size > 0 ? r.users.map(u => `<@${u.id}>`).join(', ') : 'No users found.');
-        })
+        if(message.reactions.cache.size <= 5)
+            message.reactions.cache.forEach(r => {
+                embed.addField(`${r.emoji} used ${r.count} times by:`, r.users.size > 0 ? r.users.map(u => `<@${u.id}>`).join(', ') : 'N/A');
+            })
 
         if( message.attachments.size == 1 )
             embed.setImage(message.attachments.first().proxyURL);

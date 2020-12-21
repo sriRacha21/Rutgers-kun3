@@ -1,21 +1,22 @@
-const HashTable = require('hashtable')
-const msgChainTable = new HashTable()
-const { getRandomElement } = require('./getRandom')
+// const HashTable = require('hashtable')
+// const msgChainTable = new HashTable()
+const msgChainTable = {};
+const { getRandomElement } = require('./getRandom');
 
 const numberEmotes = [
     '0️⃣', '1️⃣', '2️⃣', '3️⃣',
     '4️⃣', '5️⃣', '6️⃣', '7️⃣',
     '8️⃣', '9️⃣', '🔢',
-]
+];
 
 const angery = [
     '😠', '😡', '💢'
-]
+];
 
 function detectChain( msg, settings ) {
     // ignore messages not in a server
     if( !msg.guild )
-        return
+        return;
     // ignore if the chain setting exists and is off
     // comparison to bool is done because the value must be explicitly set (default to true)
     if( settings.get( msg.guild, 'chain' ) === false )
@@ -30,7 +31,7 @@ function detectChain( msg, settings ) {
     // pass a function that happens when the chain is broken
     const bufferMatchSize = checkBufferMatch(msg, (bufferMatchSize, message) => {
         // react to chain breaking message with an angry face
-        msg.react(getRandomElement(angery))
+        msg.react(getRandomElement(angery));
         // if the chain was the highest ever recorded in the server set the new record and output a message
         // but only if the score is 2 or higher.
         const maybeHighscore = settings.get( msg.guild, 'chain:highscore' )
@@ -42,7 +43,7 @@ function detectChain( msg, settings ) {
                 score: bufferMatchSize,
                 breaker: msg.author.id,
             })
-            msg.channel.send( `New chain highscore for server \`${msg.guild.name}\` of ${bufferMatchSize}!` )
+            msg.channel.send( `New chain highscore for server \`${msg.guild.name}\` of ${bufferMatchSize}!` );
         }
     })
 
@@ -50,16 +51,16 @@ function detectChain( msg, settings ) {
         // react with numbers appropriately
         // cover special case of needing to label first message with 1
         if( bufferMatchSize == 2 )
-            msgChainTable.get(msg.channel.id)[0].react(numberEmotes[1])
-        reactRecursive(msg, numToEmoteArr(bufferMatchSize))
+            msgChainTable[msg.channel.id][0].react(numberEmotes[1]);
+        reactRecursive(msg, numToEmoteArr(bufferMatchSize));
     }
 
-    return
+    return;
 }
 
 function checkBufferMatch( msg, breakingFunction ) {
     let isBufferMatch = false
-    const maybeMsgArr = msgChainTable.get(msg.channel.id)
+    const maybeMsgArr = msgChainTable[msg.channel.id];
     if( maybeMsgArr ) {
         isBufferMatch = maybeMsgArr.reduce( (accumulator, message) => {
             return accumulator
@@ -69,17 +70,17 @@ function checkBufferMatch( msg, breakingFunction ) {
                     && message.content != ''
                 )
         }, true)
-        maybeMsgArr.push( msg )
+        maybeMsgArr.push( msg );
         // reset the entry in the hashtable if the chain is broken
         if( !isBufferMatch ) {
-            msgChainTable.put( msg.channel.id, [ msg ] )
+            msgChainTable[msg.channel.id] = [ msg ];
             if( maybeMsgArr.length > 2 )
-                breakingFunction(maybeMsgArr.length - 1, maybeMsgArr[0] )
+                breakingFunction(maybeMsgArr.length - 1, maybeMsgArr[0] );
         }
     } else
-        msgChainTable.put( msg.channel.id, [ msg ] )
+        msgChainTable[msg.channel.id] = [ msg ];
 
-    const msgArr = msgChainTable.get(msg.channel.id)
+    const msgArr = msgChainTable[msg.channel.id];
 
     // return the chain size
     return isBufferMatch ? msgArr.length : 0

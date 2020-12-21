@@ -16,7 +16,7 @@ function logEvent( logInfo, extras ) {
         return
     // set log channel
     if( !channel )
-        channel = guild.channels.find( c => c.id == logChannelID )
+        channel = guild.channels.cache.find( c => c.id == logChannelID )
     // get default embed
     const embed = generateDefaultEmbed( embedInfo ) 
     // send message to channel
@@ -29,4 +29,4 @@ function logEvent( logInfo, extras ) {
         })
 }
 
-exports.logEvent = logEvent
+exports.logEvent = logEvent;

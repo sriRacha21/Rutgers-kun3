@@ -12,10 +12,10 @@ module.exports = class LeaveCommand extends Commando.Command {
     }
 
     async run( msg, args ) {
-        if( !msg.guild.me.voiceChannel )
-            return msg.reply( 'I am not in a voice channel.' )
+        if( !msg.guild.me.voice.channel )
+            return msg.reply( 'I am not in a voice channel.' );
 
-        msg.guild.me.voiceChannel.leave()
-        msg.react( '👋' )
+        msg.guild.me.voice.channel.leave();
+        msg.react( '👋' );
     }
 }

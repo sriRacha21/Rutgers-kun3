@@ -1,7 +1,7 @@
 function sendWelcomeMessage( guild, user, welcomeChannel, text ) {
     let channel = welcomeChannel
     // turn id into channel
-    channel = guild.channels.find( channel => channel.id == welcomeChannel )
+    channel = guild.channels.cache.find( channel => channel.id == welcomeChannel )
     // if channel cannot be found turn to systemchannel
     channel = channel ? channel : guild.systemChannel
     // output welcome message text to a channel

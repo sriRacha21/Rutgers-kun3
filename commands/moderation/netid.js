@@ -48,16 +48,16 @@ module.exports = class NetidCommand extends Commando.Command {
         .addField('User',`<@${foundUserID}> (${foundUserID})`)
 
         // if the user is in the bot's cache, beautify embed
-        const maybeUser = this.client.users.get( foundUserID );
+        const maybeUser = await this.client.users.fetch( foundUserID );
         if( maybeUser ) {
             embed.setTitle( maybeUser.tag )
-            embed.setThumbnail( maybeUser.displayAvatarURL )
+            embed.setThumbnail( maybeUser.displayAvatarURL() )
         }
 
         // get mutual guilds
         const guilds = [];
-        this.client.guilds.forEach( guild => {
-            if( guild.members.find( m => m.user.id == foundUserID ) )
+        this.client.guilds.cache.forEach( guild => {
+            if( guild.members.cache.find( m => m.user.id == foundUserID ) )
                 guilds.push( guild );
         })
         if( guilds.length > 0 )

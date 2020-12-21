@@ -1,12 +1,12 @@
 function idsToValues( ids, collection ) {
-    const values = []
+    const values = [];
 
     ids.forEach(id => {
-        const value = collection.find( valueI => valueI.id == id )
-        values.push( value )
+        const value = collection.find( valueI => valueI.id == id );
+        values.push( value );
     })
 
-    return values
+    return values;
 }
 
-exports.idsToValues = idsToValues
+exports.idsToValues = idsToValues;

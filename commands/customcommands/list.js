@@ -58,7 +58,7 @@ module.exports = class ListCommandCommands extends Commando.Command {
         let description = '';
         keys.forEach(( key ) => { description += `${msg.guild.commandPrefix}${key}\n` })
         // clean up embed
-        retEmbed.setThumbnail(msg.guild.iconURL)
+        retEmbed.setThumbnail(msg.guild.iconURL())
         .setDescription(description)
 
         msg.channel.send( retEmbed )

@@ -29,17 +29,17 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
         agreementRoles = agreementRoles.filter(r => r.authenticate != 'permission')
         // ensure the user has one of the agreement roles
         let prevRole = -1;
-        msg.member.roles.forEach(r => {
+        msg.member.roles.cache.forEach(r => {
             if( prevRole == -1 && agreementRoles.map(r => r.roleID).includes(r.id) )
                 prevRole = r.id;
         });
         if( prevRole == -1 )
             return msg.channel.send("You do not have any of the roles set up for email verification in this server.");
         // if to role is a role that the member already has stop 
-        if( msg.member.roles.has(toRole.id) )
+        if( msg.member.roles.cache.has(toRole.id) )
             return msg.channel.send("You already have this role.")
         // convert role id's to roles
-        prevRole = msg.guild.roles.get(prevRole);
+        prevRole = msg.guild.roles.cache.get(prevRole);
             // toRole is already a role object
         if( !prevRole || !toRole )
             msg.channel.send("Uh oh. This shouldn't have happened."); // This should be impossible
@@ -47,7 +47,7 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
         const agreementRolePrev = agreementRoles.find(r => r.roleID == prevRole.id);
         const agreementRoleTo = agreementRoles.find(r => r.roleID == toRole.id);
         if( !agreementRolePrev || !agreementRoleTo ) {
-            msg.channel.send(`Make sure you enter one of these roles: ${agreementRoles.map(r => msg.guild.roles.get(r.roleID).name).join(', ')}`);
+            msg.channel.send(`Make sure you enter one of these roles: ${agreementRoles.map(r => msg.guild.roles.cache.get(r.roleID).name).join(', ')}.`);
             return;
         }
         // if the previous role was not authenticated and the to role is
@@ -73,9 +73,9 @@ Turn on DM's from server members:`, {files: ['resources/setup-images/instruction
         } else {
             // any other case
             // just remove the prev role and add the to role
-            msg.member.removeRole(prevRole)
+            msg.member.roles.remove(prevRole)
                 .then(m => {
-                    msg.member.addRole(toRole)
+                    msg.member.roles.add(toRole)
                         .then(m => msg.channel.send(`Successfully switched your role to ${toRole.name}.`))
                         .catch(e => {
                             if(e)

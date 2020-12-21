@@ -6,14 +6,14 @@ function flushAgreements( guilds, provider ) {
     if( guilds ) {
         guilds.forEach( guild => {
             // attempt to get agreement channel from settings
-            let maybeAgreementChannel = provider.get( guild, 'agreementChannel' )
+            let maybeAgreementChannel = provider.get( guild, 'agreementChannel' );
             // skip this guild if its agreement channel does not exist
             if( !maybeAgreementChannel )
-                return
+                return;
             // convert channel id to channel
-            maybeAgreementChannel = guild.channels.find(channel => channel.id == maybeAgreementChannel)
+            maybeAgreementChannel = guild.channels.cache.find(channel => channel.id == maybeAgreementChannel)
             // flush if it does
-            maybeAgreementChannel.fetchMessages()
+            maybeAgreementChannel.messages.fetch({limit: 100})
             .then( messages => {
                 messages
                 .filter( msg => !msg.webhookID && (msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission))) )
@@ -29,7 +29,7 @@ function flushAgreements( guilds, provider ) {
             })
         })
     }
-    setTimeout(flushAgreements, 15000, guilds, provider )
+    setTimeout(flushAgreements, 15000, guilds, provider );
 }
 
 exports.flushAgreements = flushAgreements

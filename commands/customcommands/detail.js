@@ -48,11 +48,11 @@ Run \`${msg.guild.commandPrefix}listcommand\` to see a list of all commands.` )
             retEmbed.addField( 'Attachment:', commandInfo.attachment )
         
         // check if user id is in cache
-        const creator = this.client.users.find( user => user.id == commandInfo.userID )
+        const creator = await this.client.users.fetch( commandInfo.userID );
         // add user if found in cache
         if( creator )
             retEmbed.addField( `Creator:`, `<@${commandInfo.userID}>` )
-            .setThumbnail(creator.displayAvatarURL)
+            .setThumbnail(creator.displayAvatarURL())
 
         retEmbed.addField( `Generated at:`, commandInfo.timestamp )
 

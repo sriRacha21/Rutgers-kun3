@@ -20,6 +20,7 @@ module.exports = class PlayCommand extends Commando.Command {
                 }
             ],
             argsPromptlimit: 1,
+            guildOnly: true
         })
     }
 
@@ -29,22 +30,20 @@ module.exports = class PlayCommand extends Commando.Command {
         if( !msg.member )
             return msg.channel.send( 'You must run this in a server and connected to a voice channel.' )
         // Check if user is in voice channel, if not reply
-        if( !msg.member.voiceChannel )
+        if( !msg.member.voice.channel )
             return msg.channel.send( 'You must join a voice channel first.' )
         if( !getSoundsArr().includes(filename) )
             return msg.channel.send( `That is not a valid sound file. Make sure to pick one from the list.` )
 
         // get volume
-        const volume = settings.get( msg.guild, `volume` )
+        const volume = settings.get( msg.guild, `volume` );
 
         // otherwise join the voice channel and play a file
-        msg.member.voiceChannel.join()
+        msg.member.voice.channel.join()
         .then( connection => {
-            msg.react( '👏' )
-            if( volume )
-                connection.playFile(path.join(process.cwd(), 'sounds', `${filename}.mp3`), {volume: volume/100})
-            else
-                connection.playFile(path.join(process.cwd(), 'sounds', `${filename}.mp3`), {volume: 0.2})
+            msg.react( '👏' );
+            const volumePlaying = volume ? volume/100 : 0.2;
+            connection.play(path.join(process.cwd(), 'sounds', `${filename}.mp3`), {volume: volumePlaying});
         })
         .catch( console.error )
     }

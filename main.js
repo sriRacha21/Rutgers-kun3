@@ -22,34 +22,28 @@ const { reroll } = require('./helpers/reroll');
 const { checkWordCount } = require('./helpers/checkWordCount');
 const { objToEmailBody } = require('./helpers/objToEmailBody');
 const { detectChain } = require('./helpers/detectChain');
-// const { detectHaiku } = require('./helpers/detectHaiku');
 const { agreeHelper } = require('./helpers/agreeHelper');
 const { flushAgreements } = require('./helpers/flushAgreements');
-const { checkRoleMentions } = require('./helpers/checkRoleMentions');
-const { setLiveRole } = require('./helpers/setLiveRole');
-const { flushLiveRoles } = require('./helpers/flushLiveRoles');
 const { logEvent } = require('./helpers/logEvent');
 const { checkAutoverify } = require('./helpers/checkAutoverify');
 const { sendRoleResponse } = require('./helpers/sendRoleResponse');
-const { checkProtectedRole } = require('./helpers/checkProtectedRole');
 const { generatePresence } = require('./helpers/generatePresence');
 const { generateDefaultEmbed } = require('./helpers/generateDefaultEmbed');
 const { reactionListener } = require('./helpers/reactionListener');
 const { removeInvites } = require('./helpers/removeInvites');
 const { payMe } = require('./helpers/payMe');
 const { starMe } = require('./helpers/starMe');
-const { kateBdayEE } = require('./helpers/kateBdayEE');
 // set up winston logging
 const logger = require('./logger');
 // detailed log of objects
 const { inspect } = require('util');
 // get some Discord fields we need
-const RichEmbed = require('discord.js').RichEmbed;
+const RichEmbed = require('discord.js').MessageEmbed;
 // initialize the Discord client
 const Commando = require('discord.js-commando');
 const Client = new Commando.Client(ClientOptions);
 // don't stop on expired certificate
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 /*        	EVENTS	        */
 // emitted on error, warn, debug
 Client.on('error', (error) => logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}
@@ -84,9 +78,9 @@ Client.on('providerReady', () => {
     // retrieve messages from the cache
     const messagesToCache = Client.settings.get('messagesToCache') ? Client.settings.get('messagesToCache') : []
     messagesToCache.forEach(msgAndChannel => {
-        const channel = Client.channels.get(msgAndChannel.channel)
+        const channel = Client.channels.cache.get(msgAndChannel.channel)
         if( channel ) {
-            channel.fetchMessage(msgAndChannel.message)
+            channel.messages.fetch(msgAndChannel.message)
                 .then(m => {
                     logger.log('info', `Cached message ID ${m.id} from guild ${m.guild.name} (#${m.channel.name})`)
                 })
@@ -101,9 +95,7 @@ Client.on('providerReady', () => {
         }
     });
     // periodically flush messages in #agreement in all servers
-    flushAgreements( Client.guilds, Client.provider );
-    // periodically flush the live role from users that aren't streaming
-    flushLiveRoles( Client.guilds, Client.provider );
+    flushAgreements( Client.guilds.cache, Client.provider );
 })
 
 // emitted on message send
@@ -128,7 +120,7 @@ Client.on('message', msg => {
     }
 
     // agreement process, we need the settings and settingsprovider to access guild and universal settings
-    agreeHelper( msg, Client.guilds, Client.settings, Client.provider )
+    agreeHelper( msg, Client.guilds.cache, Client.settings, Client.provider )
     // if the member is ignored leave
     if( msg.guild && msg.member && Client.provider.get( msg.guild, `ignored:${msg.channel.id}` ) )
         return
@@ -144,8 +136,6 @@ Client.on('message', msg => {
         )
     // check if message contains latex formatting
     latexInterpreter( msg, msg.channel )
-    // check if role has been mentioned
-    checkRoleMentions( msg, Client.provider, Client.user )
     // check if word counters need to be incremented
     if( !msg.guild || (!Client.provider.get(msg.guild, 'wordCounters') && !Client.provider.get(msg.guild, `wordCounters:${msg.channel.id}`)) )
         checkWordCount( msg, Client.settings )
@@ -163,8 +153,6 @@ Client.on('message', msg => {
     // detect haikus (gone for a while now)
     // if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, 'haiku')) )
     //     detectHaiku(msg, Client);
-    // kate birthday easter egg
-    kateBdayEE( Client, msg );
 })
 
 // emitted on adding a reaction to a message
@@ -205,7 +193,7 @@ Turn on DM's from server members:`, {files: ['resources/setup-images/instruction
             })
     }
     // if the bot sent one of the messageReactions and it was a wastebin and someone else sent a wastebin, delete it
-    const botReaction = messageReaction.message.reactions.find(mr => mr.me)
+    const botReaction = messageReaction.message.reactions.cache.find(mr => mr.me)
     if( botReaction && botReaction.emoji == '🗑' && messageReaction.emoji == '🗑' )
         messageReaction.message.delete()
     // use reactionListener
@@ -248,7 +236,6 @@ Client.on('guildMemberUpdate', (oldM, newM) => {
         return;
 
     sendRoleResponse(oldM, newM, Client.provider);
-    checkProtectedRole(oldM, newM, Client.provider, Client.user);
 })
 
 /*        	LOGGING	        */
@@ -296,7 +283,7 @@ Client.on('messageDelete', message => {
     if( agreementChannel && message.channel.id == agreementChannel )
         return
 
-    const startEmbed = new RichEmbed()
+    const startEmbed = new RichEmbed();
     const extras = []
     if( message.content ) {
         startEmbed.addField( 'Message content:', message.content.length <= 1024 ? message.content : 'See above for text.' )
@@ -310,8 +297,8 @@ Client.on('messageDelete', message => {
             author: 'Message deleted by',
             title: message.author.tag,
             clientUser: Client.user,
-            authorThumbnail: message.guild.iconURL,
-            thumbnail: message.author.displayAvatarURL,
+            authorThumbnail: message.guild.iconURL(),
+            thumbnail: message.author.displayAvatarURL(),
             startingEmbed: startEmbed,
         },
         guild: message.guild,
@@ -359,8 +346,8 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
             author: 'Message edited by',
             title: oMsg.author.tag,
             clientUser: Client.user,
-            authorThumbnail: oMsg.guild.iconURL,
-            thumbnail: oMsg.author.displayAvatarURL,
+            authorThumbnail: oMsg.guild.iconURL(),
+            thumbnail: oMsg.author.displayAvatarURL(),
             startingEmbed: startEmbed,
         },
         guild: oMsg.guild,
@@ -368,6 +355,9 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
         attachments: oMsg.attachments.array().map(a => a.proxyURL)
     }, extras)
 })
+
+Client.on('unknownCommand', msg => {
+});
 
 // unhandled promise rejection stacktrace
 process.on('unhandledRejection', (reason, p) => {
@@ -382,7 +372,7 @@ Client.setProvider(
     )
     .then( db => new Commando.SQLiteProvider(db) )
     .catch( console.error )
-)
+);
 // set up client's command registry
 Client.registry
     .registerGroups([
@@ -397,10 +387,14 @@ Client.registry
         ['settings', 'Settings'],
         ['verification', 'Verification']
 ])
-    .registerDefaults()
+    .registerDefaultTypes()
+    .registerDefaultGroups()
+    .registerDefaultCommands({
+        unknownCommand: false
+    })
     .registerTypesIn(path.join(__dirname, 'types'))
-    .registerCommandsIn(path.join(__dirname, 'commands'))
+    .registerCommandsIn(path.join(__dirname, 'commands'));
 // log in
-Client.login(API_Keys.token)
+Client.login(API_Keys.token);
 // exports
-exports.Client = Client
+exports.Client = Client;

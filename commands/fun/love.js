@@ -31,46 +31,38 @@ module.exports = class LoveCommand extends Commando.Command {
 
     async run( msg, args ) {
         // let percent be 100 if the strings match or they pass easterEgg compare, otherwise calculate
-        const percent = args.one.localeCompare(args.two) == 0 || this.easterEggStrCompare(args.one, args.two)
+        const percent = args.one.localeCompare(args.two) == 0
             ? 100
             : this.loveCalculation(
                 this.calcValFromStr(args.one), this.calcValFromStr(args.two)
-            )
+            );
 
         // form calculation string
         return msg.channel.send( oneLine`${args.one} loves ${args.two}
             ${percent}%${percent == 100 ? "! :heart:" : "" }` + `\n${this.generateProgressBar(percent)}`, {
                 allowedMentions: {} // don't allow the bot to mention anyone
-            })
+            });
     }
 
     // calculate an integer value from a string by usnig ASCII codes
     calcValFromStr( str ) {
-        let total = 0
+        let total = 0;
         for( let i = 0; i < str.length; i++ )
-            total += str.charCodeAt(i)
-        return total
+            total += str.charCodeAt(i);
+        return total;
     }
 
     // get a percent from two integers
-    loveCalculation( intOne, intTwo ) { return (intOne+intTwo)%100 }
+    loveCalculation( intOne, intTwo ) { return (intOne+intTwo)%100; }
 
     // writing the progress bar to a message
     generateProgressBar( percent ) {
-        const numHashes = percent/5
-        let probar = `[`
+        const numHashes = percent/5;
+        let probar = `[`;
 
-        for( let i = 0; i < 20; i++ ) probar += i < numHashes ? '#' : ' '
-        probar += ']'
+        for( let i = 0; i < 20; i++ ) probar += i < numHashes ? '#' : ' ';
+        probar += ']';
 
-        return '`' + probar + '`'
-    }
-
-    // easter egg string compare
-    easterEggStrCompare( strOne, strTwo ) {
-        const orderingOne = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kate malin' || strTwo == 'kathryn malin')
-        strTwo = [strOne, strOne = strTwo][0]
-        const orderingTwo = (strOne == 'arjun' || strOne == 'arjun srivastav') && (strTwo == 'kate' || strTwo == 'kathryn' || strTwo == 'kate malin' || strTwo == 'kathryn malin')
-        return orderingOne || orderingTwo
+        return '`' + probar + '`';
     }
 }

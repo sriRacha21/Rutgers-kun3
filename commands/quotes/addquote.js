@@ -42,7 +42,8 @@ module.exports = class AddQuoteCommand extends Commando.Command {
         // push quote to settings
         const maybeQuotes = settings.get( `quotes:${user.id}` )
         const quotes = maybeQuotes ? maybeQuotes : []
-        const message = msg.channel.messages.filter(message => message.author.id == user.id).last()
+        await msg.channel.messages.fetch({limit: 100});
+        const message = msg.channel.messages.cache.filter(message => message.author.id == user.id).last()
         // check if message could be found
         if( !message )
             return msg.channel.send( `${user.username}'s last message could not be found in this channel.` )

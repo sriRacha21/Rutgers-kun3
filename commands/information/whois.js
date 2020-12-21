@@ -36,7 +36,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
             title: user.tag,
             clientUser: this.client.user,
             msg: msg,
-            thumbnail: user.displayAvatarURL
+            thumbnail: user.displayAvatarURL()
         });
         embed.addField("Tag:", user)
         .addField("User ID:", user.id)
@@ -46,7 +46,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
         
         // roles
         if( msg.guild ) {
-            const guildMember = await msg.guild.fetchMember(user);
+            const guildMember = await msg.guild.members.fetch(user);
             if( guildMember && guildMember.roles.size > 1 )
                 embed.addField("Roles:", guildMember.roles.array().slice(1).join('\n'));
         }

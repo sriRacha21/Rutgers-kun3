@@ -54,7 +54,7 @@ module.exports = class ListQuotesCommand extends Commando.Command {
             clientUser: this.client.user,
             msg: msg,
         })
-        .setThumbnail( user.displayAvatarURL )
+        .setThumbnail( user.displayAvatarURL() )
 
         abbreviatedEmbed.setDescription("You have been DM'ed the full list of quotes.\nReact with 📧 to also receive the full list.")
 

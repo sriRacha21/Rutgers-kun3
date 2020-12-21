@@ -42,12 +42,12 @@ async function agreeHelper( msg, guilds, settings, provider ) {
     // get agreement roles
     // convert the role IDs to roles
     const agreementRoleObjs = provider.get( guild, `agreementRoles` )
-    const agreementRoles = agreementRoleObjs ? idsToValues( agreementRoleObjs.map(agreementRoleObj => agreementRoleObj.roleID), guild.roles ) : null
-    const agreementRoleToAdd = guild.roles.find( role => role.id == roleID )
+    const agreementRoles = agreementRoleObjs ? idsToValues( agreementRoleObjs.map(agreementRoleObj => agreementRoleObj.roleID), guild.roles.cache ) : null
+    const agreementRoleToAdd = guild.roles.cache.find( role => role.id == roleID )
     const permissionRoleObj = agreementRoleObjs ? agreementRoleObjs.find(obj => obj.authenticate == 'permission') : null
     let permissionRole
     if( permissionRoleObj )
-        permissionRole = guild.roles.find( role => role.id == permissionRoleObj.roleID )
+        permissionRole = guild.roles.cache.find( role => role.id == permissionRoleObj.roleID )
 
     // if the user is on step 1, look for the role they want to add
     if( step == 1 ) {
@@ -69,13 +69,13 @@ async function agreeHelper( msg, guilds, settings, provider ) {
             if( permissionRole )
                 rolesToAdd.push( permissionRole )
             // fetch the member from the guild
-            await guild.fetchMember(msg.author.id);
-            const guildMember = guild.members.find( member => member.user.id == msg.author.id )
+            await guild.members.fetch(msg.author.id);
+            const guildMember = guild.members.cache.find( member => member.user.id == msg.author.id )
             if( guildMember ) {
-                guildMember.addRoles(rolesToAdd)
+                guildMember.roles.add(rolesToAdd)
                 .then(m => {
                     if( removerole )
-                        m.removeRole(removerole)
+                        m.roles.remove(removerole)
                 })
             } else {
                 msg.author.send("You could not be found in the server you started agreeing in. Please go back to that server and type `!agree` or click on the emote again.");
@@ -102,7 +102,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         if( !isValidnetID(maybeNetID) )
             return msg.author.send( `This does not appear to be a valid netID. Please re-enter your netID.` )
         // turn the role ID into a role
-        const role = guild.roles.find( role => role.id == roleID )
+        const role = guild.roles.cache.find( role => role.id == roleID )
         // check if the net id is in our file of already verified netids
         if( fs.existsSync('settings/netids.json') ) {
             const netIDsObj = JSON.parse(fs.readFileSync('settings/netids.json', 'utf-8'))
@@ -112,13 +112,13 @@ to all your Rutgers services. It is generally your initials followed by a few nu
                 if( permissionRole && !nowelcome )
                     rolesToAdd.push(permissionRole)
                 // fetch the member from the guild
-                await guild.fetchMember(msg.author.id);
-                const guildMember = guild.members.find( member => member.user.id == msg.author.id )
+                await guild.members.fetch(msg.author.id);
+                const guildMember = guild.members.cache.find( member => member.user.id == msg.author.id )
                 if( guildMember ) {
-                    guildMember.addRoles(rolesToAdd)
+                    guildMember.roles.add(rolesToAdd)
                     .then(m => {
                         if( removerole )
-                            m.removeRole(removerole)
+                            m.roles.remove(removerole)
                     })
                 } else {
                     msg.author.send("You could not be found in the server you started agreeing in. Please go back to that server and type `!agree` or click on the emote again.");
@@ -176,12 +176,12 @@ to all your Rutgers services. It is generally your initials followed by a few nu
         const rolesToAdd = [agreementRoleToAdd]
         if( permissionRole && !nowelcome )
             rolesToAdd.push(permissionRole)
-        const guildMember = guild.members.find( member => member.user.id == msg.author.id );
+        const guildMember = guild.members.cache.find( member => member.user.id == msg.author.id );
         if( guildMember ) {
-            guildMember.addRoles(rolesToAdd)
+            guildMember.roles.add(rolesToAdd)
             .then(m => {
                 if( removerole )
-                    m.removeRole(removerole)
+                    m.roles.remove(removerole)
             })
         } else {
             msg.author.send("You could not be found in the server you started agreeing in. Please go back to that server and type `!agree` or click on the emote again.");

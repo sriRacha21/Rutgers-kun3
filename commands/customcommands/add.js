@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando')
 const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy')
-const RichEmbed = require('discord.js').RichEmbed;
+const RichEmbed = require('discord.js').MessageEmbed;
 const { oneLine } = require('common-tags')
 
 module.exports = class AddCommandCommand extends Commando.Command {

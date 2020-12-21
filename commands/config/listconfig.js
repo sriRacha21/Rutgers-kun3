@@ -34,7 +34,6 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const agreementRoles = settings.get( msg.guild, `agreementRoles` )
         const protectedRoles = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
         const muteRoleID = settings.get( msg.guild, `muteRole` )
-        const liveRoleID = settings.get( msg.guild, `liveRole` )
         const unpingableRoleIDs = settings.get( msg.guild, `unpingableRoles` )
 
         // generate embed
@@ -43,39 +42,37 @@ module.exports = class ListConfigCommand extends Commando.Command {
             title: msg.guild.name,
             clientUser: this.client.user,
             msg: msg,
-            thumbnail: msg.guild.iconURL
-        })
+            thumbnail: msg.guild.iconURL()
+        });
 
         if( volume )
-            embed.addField( `Volume:`, volume )
+            embed.addField( `Volume:`, volume );
         if( approvalChannelID )
-            embed.addField( `Approval channel:`, `<#${approvalChannelID}>` )
+            embed.addField( `Approval channel:`, `<#${approvalChannelID}>` );
         if( agreementChannelID )
-            embed.addField( `Agreement channel:`, `<#${agreementChannelID}>` )
+            embed.addField( `Agreement channel:`, `<#${agreementChannelID}>` );
         if( autoverifyArr )
-            embed.addField( `Autoverify phrase and role:`, autoverifyArr.map(av => `\`${av.phrase}\`, <@&${av.role}>`).join('\n') )
+            embed.addField( `Autoverify phrase and role:`, autoverifyArr.map(av => `\`${av.phrase}\`, <@&${av.role}>`).join('\n') );
         if( welcomeChannelID )
-            embed.addField( `Welcome channel:`, `<#${welcomeChannelID}>` )
+            embed.addField( `Welcome channel:`, `<#${welcomeChannelID}>` );
         if( logChannelID )
-            embed.addField( `Log channel:`, `<#${logChannelID}>` )
+            embed.addField( `Log channel:`, `<#${logChannelID}>` );
         if( modChannelID )
-            embed.addField( `Mod log channel:`, `<#${modChannelID}>` )
+            embed.addField( `Mod log channel:`, `<#${modChannelID}>` );
         if( welcomeText )
-            embed.addField( `Welcome text:`, welcomeText )
-        embed.addField( `Removing invites?:`, removeInvites ? 'On' : 'Off' )
+            embed.addField( `Welcome text:`, welcomeText );
+        embed.addField( `Removing invites?:`, removeInvites ? 'On' : 'Off' );
         // embed.addField( 'Detecting haikus?:', haiku ? 'Off' : 'On' )
-        embed.addField( `Word Count Messages?:`, !wordCountMessages ? 'On' : 'Off' )
+        embed.addField( `Word Count Messages?:`, !wordCountMessages ? 'On' : 'Off' );
         if( muteRoleID )
-            embed.addField( `Mute role:`, `<@&${muteRoleID}>` )
-        if( liveRoleID )
-            embed.addField( `Live role:`, `<@&${liveRoleID}>` )
+            embed.addField( `Mute role:`, `<@&${muteRoleID}>` );
         if( agreementRoles && agreementRoles.length > 0 )
-            embed.addField( `Agreement Roles:`, agreementRoles.map(role => `<@&${role.roleID}>, ${role.authenticate}`).join('\n') )
+            embed.addField( `Agreement Roles:`, agreementRoles.map(role => `<@&${role.roleID}>, ${role.authenticate}`).join('\n') );
         if( unpingableRoleIDs )
-            embed.addField( `Unpingable Roles:`, unpingableRoleIDs.map(role => `<@&${role}>`).join('\n') )
+            embed.addField( `Unpingable Roles:`, unpingableRoleIDs.map(role => `<@&${role}>`).join('\n') );
         if( protectedRoles.length > 0 )
-            embed.addField( 'Protected Roles:', protectedRoles.map(role => `<@&${role}>`).join('\n') )
+            embed.addField( 'Protected Roles:', protectedRoles.map(role => `<@&${role}>`).join('\n') );
 
-        return msg.channel.send( embed.fields.length > 0 ? embed : `No configs for this server. Set them up with \`${msg.guild.commandPrefix}help\` then run the commands under the \`config\` group.` )
+        return msg.channel.send( embed.fields.length > 0 ? embed : `No configs for this server. Set them up with \`${msg.guild.commandPrefix}help\` then run the commands under the \`config\` group.` );
     }
 }

@@ -22,7 +22,7 @@ module.exports = class AddMeCommand extends Commando.Command {
             guild: msg.guild,
         })
 
-        const emote = msg.guild && msg.guild.emojis.array().length > 0 ? getRandomElement(msg.guild.emojis.array()) : getRandomElement(this.client.emojis.array())
+        const emote = msg.guild && msg.guild.emojis.cache.size > 0 ? getRandomElement(msg.guild.emojis.cache.array()) : getRandomElement(this.client.emojis.cache.array())
         embed.setThumbnail(emote.url)
 
         this.client.generateInvite()

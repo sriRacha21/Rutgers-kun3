@@ -16,10 +16,10 @@ module.exports = class JoinCommand extends Commando.Command {
         if( !msg.member )
             return msg.reply( 'You must run this in a server and connected to a voice channel.' )
         // Check if user is in voice channel, if not reply
-        if( !msg.member.voiceChannel )
+        if( !msg.member.voice.channel )
             return msg.reply( 'You must join a voice channel first.' )
         
-        msg.member.voiceChannel.join()
+        msg.member.voice.channel.join()
         .catch( console.log )
         msg.react( '👏' )
     }

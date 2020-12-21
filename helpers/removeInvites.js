@@ -1,13 +1,12 @@
 const logger = require('../logger')
-const { startTimedMute } = require('./startTimedMute')
 const fs = require('fs')
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
 function removeInvites( msg, client ) {
     if( !msg.guild )
-        return 
+        return;
 
-    const removeInvites = client.provider.get( msg.guild, 'removeInvites' )
+    const removeInvites = client.provider.get( msg.guild, 'removeInvites' );
 
     const universalInvOverrides = [
         '143013824679641088', // rutgers esports
@@ -28,20 +27,19 @@ function removeInvites( msg, client ) {
                 client.fetchInvite(inviteMatch)
                 .then( invite => {
                     if( universalInvOverrides.includes(invite.guild.id) )
-                        return
+                        return;
                     if( !msg.member.hasPermission(defaults.trusted_permission) ) {
-                        msg.delete()
-                        if( client.provider.get(msg.guild, `muteRole`) )
-                            startTimedMute( msg.member, client.provider, 'Sending a server invite link', 4*60*60*1000, client.user )
+                        msg.delete();
+                        msg.author.send(`Sending server invites is not allowed in ${msg.guild.name}.`);
                     }
-                } )
+                })
                 .catch( err => {
                     if( err )
-                        logger.log( 'warn', `Unable to resolve invite ${inviteMatch}. Error: ${err}` ) 
+                        logger.log( 'warn', `Unable to resolve invite ${inviteMatch}. Error: ${err}` ) ;
                 })
             })
         }
     }
 }
 
-exports.removeInvites = removeInvites
+exports.removeInvites = removeInvites;

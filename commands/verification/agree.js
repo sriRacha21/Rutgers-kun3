@@ -41,7 +41,7 @@ If you want to designate this as the agreement channel please use \`${msg.guild.
 
         // begin user verification process
         // turn role ID's into roles
-        const agreementRoles = idsToValues( agreementRoleObjs.filter(obj => obj.authenticate != 'permission').map(obj => obj.roleID), msg.guild.roles )
+        const agreementRoles = idsToValues( agreementRoleObjs.filter(obj => obj.authenticate != 'permission').map(obj => obj.roleID), msg.guild.roles.cache );
         // ask the user what role they want to add if there is more than one role configured
         msg.author.send( `Please enter the name of the role you want to add. Roles are: ${agreementRoles.map(agreementRole => agreementRole.name).join(', ')}.` )
             .then( () => {
