@@ -53,18 +53,17 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
 }
 
 function submitRequestToChannel( requestSubmissionInfo, settings ) {
-    const type = requestSubmissionInfo.type
-    const submissionName = requestSubmissionInfo.submissionName
-    const user = requestSubmissionInfo.user
-    const guild = requestSubmissionInfo.guild
-    const approvalChannelID = requestSubmissionInfo.approvalChannelID
-    const requiredEmbedInfo = requestSubmissionInfo.requiredEmbedInfo
-    const runHasPerms = requestSubmissionInfo.runHasPerms
-    const attachments = requestSubmissionInfo.attachments
-    const errChannel = requestSubmissionInfo.errChannel
+    const type = requestSubmissionInfo.type;
+    const submissionName = requestSubmissionInfo.submissionName;
+    const user = requestSubmissionInfo.user;
+    const guild = requestSubmissionInfo.guild;
+    const approvalChannelID = requestSubmissionInfo.approvalChannelID;
+    const requiredEmbedInfo = requestSubmissionInfo.requiredEmbedInfo;
+    const runHasPerms = requestSubmissionInfo.runHasPerms;
+    const attachments = requestSubmissionInfo.attachments;
+    const errChannel = requestSubmissionInfo.errChannel;
     // find channel by ID
-    const channel = guild.channels
-    .find( channel => channel.id == approvalChannelID )
+    const channel = guild.channels.resolve(approvalChannelID);
     // check if channel exists
     if( !channel ) 
         errChannel.send( oneLine`Approval channel was not found. Please set approval channel

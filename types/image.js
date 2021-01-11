@@ -10,7 +10,7 @@ class ImageArgumentType extends Commando.ArgumentType {
     }
 
     validate( val, msg ) {
-        const filename = msg.attachments.first().filename
+        const filename = msg.attachments.first().name
         const endsWithValid = filename.endsWith('.png') 
         || filename.endsWith('.gif') 
         || filename.endsWith('.jpg')

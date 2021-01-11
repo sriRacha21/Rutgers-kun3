@@ -22,14 +22,14 @@ module.exports = class MemberCountCommand extends Commando.Command {
             title: msg.guild.name,
             clientUser: this.client.user,
             msg: msg,
-            thumbnail: msg.guild.iconURL
+            thumbnail: msg.guild.iconURL()
         });
         embed.addField('Full member count:', msg.guild.memberCount);
 
         // if there is agreement in this server do a fuller embed
         if( (this.client.provider.get( msg.guild, `agreementRoles` ) || this.client.provider.get( msg.guild, `agreementSlim` )) && msg.member.hasPermission( defaults.moderator_permission ) ) {
-            const unagreedCount = msg.guild.members.filter(m => m.roles.size==1).size;
-            const agreedCount = msg.guild.members.filter(m => m.roles.size>1).size;
+            const unagreedCount = msg.guild.members.cache.filter(m => m.roles.size==1).size;
+            const agreedCount = msg.guild.members.cache.filter(m => m.roles.size>1).size;
 
             embed.setAuthor(`Extended ${embed.author.name}`)
             .addField('Unagreed:', unagreedCount)

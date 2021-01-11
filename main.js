@@ -167,7 +167,7 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
         && agreementSlim.message == messageReaction.message.id
         && agreementSlim.emote == messageReaction.emoji.id ) {
         // get the role
-        const toRole = messageReaction.message.guild.roles.get(agreementSlim.role);
+        const toRole = messageReaction.message.guild.roles.cache.get(agreementSlim.role);
         // set the agreement setting
         messageReaction.remove(user);
         user.send(`In order to add the ${toRole.name} role you need to be authenticated through 2-step email verification.

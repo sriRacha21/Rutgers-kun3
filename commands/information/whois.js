@@ -55,7 +55,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
         if( user.bot )
             embed.setDescription('This is another bot! 😳');
         if( user.id == this.client.user.id ) {
-            const kirbyay = this.client.emojis.find(e => e.name=='kirbyay');
+            const kirbyay = this.client.emojis.cache.find(e => e.name=='kirbyay');
             embed.setDescription(`If you want to find out more about me use \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}whoami\` . ${kirbyay ? kirbyay : ''}`);
         }
         
@@ -63,13 +63,13 @@ module.exports = class WhoIsCommand extends Commando.Command {
         const isOwner = this.client.owners.find(u => u.id == msg.author.id);
         if( isOwner && !msg.content.includes('whois') ) {
             const guilds = [];
-            const fetchMemberPromises = this.client.guilds.map(g => g.fetchMember(user.id));
+            const fetchMemberPromises = this.client.guilds.cache.map(g => g.members.fetch(user.id));
             Promise.all(fetchMemberPromises)
             .catch(err => {
                 if( err ) console.warn(`Error returned: ${err}`);
             });
-            this.client.guilds.forEach(g => {
-                const maybeFoundMember = g.members.find(m => m.user.id == user.id);
+            this.client.guilds.cache.forEach(g => {
+                const maybeFoundMember = g.members.cache.find(m => m.user.id == user.id);
                 if( maybeFoundMember ) guilds.push( g );
             })
             if( guilds.length > 0 ) embed.addField(`Shared servers (${guilds.length}):`, guilds.map(g => g.name).join('\n'));

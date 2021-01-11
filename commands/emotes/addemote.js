@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando')
 const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy')
-const RichEmbed = require('discord.js').RichEmbed;
+const RichEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class AddEmoteCommand extends Commando.Command {
     constructor(client) {
@@ -38,7 +38,7 @@ module.exports = class AddEmoteCommand extends Commando.Command {
                 submissionName: `:${name}:`,
                 member: msg.member,
                 runHasPerms: () => {
-                    msg.guild.emojis.create( image.proxyURL, name, null, `Created by ${this.client.user.tag}.` )
+                    msg.guild.emojis.create( image.proxyURL, name, {reason:`Created by ${this.client.user.tag}.`} )
                     .then( msg.react('👍') )
                     .catch( e => { if(e) { msg.channel.send(`Emoji ${name} could not be added to the server: \`${e}\``) } })
                 },
