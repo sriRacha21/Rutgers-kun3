@@ -24,6 +24,8 @@ const { objToEmailBody } = require('./helpers/objToEmailBody');
 const { detectChain } = require('./helpers/detectChain');
 const { agreeHelper } = require('./helpers/agreeHelper');
 const { flushAgreements } = require('./helpers/flushAgreements');
+const { flushAgreementEmotes } = require('./helpers/flushAgreementEmotes');
+const { flushMessagesToCache } = require('./helpers/flushMessagesToCache');
 const { logEvent } = require('./helpers/logEvent');
 const { checkAutoverify } = require('./helpers/checkAutoverify');
 const { sendRoleResponse } = require('./helpers/sendRoleResponse');
@@ -46,8 +48,11 @@ const Client = new Commando.Client(ClientOptions);
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 /*        	EVENTS	        */
 // emitted on error, warn, debug
-Client.on('error', (error) => logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}
-Stacktrace: ${error.stack}`))
+Client.on('error', (error) => {
+    // log the error (email as well)
+    logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}
+Stacktrace: ${error.stack}`)
+})
 Client.on('commandError', (command, err, message, args, fromPattern, result) => {
     const emailBody = {
         command: `${command.groupID}:${command.memberName} or ${command.name}`,
@@ -96,6 +101,10 @@ Client.on('providerReady', () => {
     });
     // periodically flush messages in #agreement in all servers
     flushAgreements( Client.guilds.cache, Client.provider );
+    // periodicially flush agreement emotes
+    flushAgreementEmotes( Client.channels, Client.settings ); 
+    // flush out unfindable channels from messagesToCache once
+    flushMessagesToCache( Client.channels, Client.settings );
 })
 
 // emitted on message send
@@ -169,7 +178,7 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
         // get the role
         const toRole = messageReaction.message.guild.roles.cache.get(agreementSlim.role);
         // set the agreement setting
-        messageReaction.remove(user);
+        messageReaction.users.remove(user);
         user.send(`In order to add the ${toRole.name} role you need to be authenticated through 2-step email verification.
 Please enter your netID. Your netID is a unique identifier given to you by Rutgers that you use to sign in to all your Rutgers services. It is generally your initials followed by a few numbers.`)
             .then(m => {
@@ -193,16 +202,16 @@ Turn on DM's from server members:`, {files: ['resources/setup-images/instruction
             })
     }
     // if the bot sent one of the messageReactions and it was a wastebin and someone else sent a wastebin, delete it
-    const botReaction = messageReaction.message.reactions.cache.find(mr => mr.me)
-    if( botReaction && botReaction.emoji == '🗑' && messageReaction.emoji == '🗑' )
-        messageReaction.message.delete()
+    const botReaction = messageReaction.message.reactions.cache.find(mr => mr.emoji.name == '🗑' && mr.users.cache.find(u=>u==Client.user.id));
+    if( !!botReaction && botReaction.emoji.name == '🗑' && messageReaction.emoji.name == '🗑' )
+        messageReaction.message.delete();
     // use reactionListener
     // for the class command
     reactionListener.emit(`class:${user.id}:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'))
     // for the listquotes command
     if( messageReaction.emoji == '📧' )
         reactionListener.emit(`listquotes:${messageReaction.message.id}`, user);
-    parseApprovalReaction( Client.provider, Client.users, messageReaction )
+    parseApprovalReaction( Client.provider, Client.users.cache, messageReaction )
 })
 
 // emitted on change of guild member properties
@@ -362,6 +371,13 @@ Client.on('unknownCommand', msg => {
 // unhandled promise rejection stacktrace
 process.on('unhandledRejection', (reason, p) => {
     logger.warn(`Unhandled Rejection at: Promise ${inspect(p)}\nreason: ${reason}`);
+    console.log("Promise name: ", p);
+    console.log("Reason:", reason.name);
+    // if there's no API key it's probably Travis-CI
+    if(reason.name=='Error [TOKEN_INVALID]') { // this feels wrong :(
+        logger.log('error', 'No API token was found. This may have happened because this is a build triggered from Travis-CI or you have not written an "api_keys.json" file.');
+        process.exit(0);
+    }
 });
 
 /*        	CLEAN UP	        */

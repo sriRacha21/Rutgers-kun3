@@ -111,7 +111,7 @@ function reactRecursive( msg, array, cb ) {
             reactPromise.then( mr => cb(mr) )
         setTimeout(() => {
             reactRecursive( msg, array.slice(1), cb )
-        }, 1000)
+        }, 500)
     }
 }
 

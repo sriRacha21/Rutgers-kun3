@@ -50,13 +50,15 @@ Just enter \`clear\` followed by \`finish\` to clear the current setting.`,
             if( permissionUsedCount > 1 )
                 failure = 'Too many permission roles.'
             
-            const roleToPush = msg.guild.roles.find( role => role.name.toLowerCase() == agreementRole )
+            const roleToPush = msg.guild.roles.cache.find( role => role.name.toLowerCase() == agreementRole )
             if( !roleToPush )
                 failure = 'One or more roles could not be found.'
-            agreementRoleObjs.push({
-                roleID: roleToPush.id,
-                authenticate: authenticate
-            })
+            else {
+                agreementRoleObjs.push({
+                    roleID: roleToPush.id,
+                    authenticate: authenticate
+                })
+            }
         })
         if( failure )
             return msg.channel.send( `Command could not be completed: ${failure}` )

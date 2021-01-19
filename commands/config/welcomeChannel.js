@@ -24,16 +24,16 @@ module.exports = class SetWelcomeChannelCommand extends Commando.Command {
     }
 
     async run( msg, { welcomeChannel } ) {
-        const settings = this.client.provider
+        const settings = this.client.provider;
 
         if( typeof welcomeChannel === 'object' ) {
             settings.set( msg.guild, `welcomeChannel`, welcomeChannel.id )
-            .then( msg.channel.send( `Welcome channel successfully set as ${welcomeChannel}.` ) )
+            .then( msg.channel.send( `Welcome channel successfully set as ${welcomeChannel}.` ) );
         }
         else if( welcomeChannel === 'clear' )
             settings.remove( msg.guild, `welcomeChannel` )
-            .then( msg.channel.send( `Welcome channel successfully removed.` ) )
+            .then( msg.channel.send( `Welcome channel successfully removed.` ) );
         else
-            msg.channel.send(`Invalid input. Try again.`)
+            msg.channel.send(`Invalid input. Try again.`);
     }
 }

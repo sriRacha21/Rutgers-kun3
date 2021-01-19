@@ -1,33 +1,33 @@
 // import for tranports setup
-const winston = require('winston')
-require('winston-daily-rotate-file')
-const { Mail } = require('winston-mail')
+const winston = require('winston');
+require('winston-daily-rotate-file');
+require('winston-mail');
 // import for reading in emails for transports
 const fs = require('fs')
 const { host, port, domain, username, password } = fs.existsSync('settings/smtp_server.json') ? JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8')) : { host: null, port: null, domain: null, username: null, password: null }
 const emails = fs.existsSync('settings/email_logging.json') ? JSON.parse(fs.readFileSync('settings/email_logging.json','utf-8')) : null
 
 function getWinstonTransports() {
-    const transports = []
+    const transports = [];
 
     // put all logs in files
     for( const level in winston.config.npm.levels ) {
         if( level == 'silly' )
-            continue
+            continue;
 
         transports.push(new winston.transports.DailyRotateFile({
             filename: `logs/${level}-%DATE%.log`,
             level: level,
             maxFiles: '14d',
-        }))
+        }));
     }
 
     // email errors
-    if( !host ) {
+    if( !!host ) {
         for( const level in emails ) {
-            const email = emails[level].email
+            const email = emails[level].email;
             if( email ) {
-                transports.push(new Mail({
+                transports.push(new winston.transports.Mail({
                     to: email,
                     from: `winston-error@${domain}`, // think about making this configurable
                     host: host,
@@ -37,7 +37,7 @@ function getWinstonTransports() {
                     level: level,
                     subject: `Rutgers-kun3 error! Severity level: ${level}.`,
                     html: true,
-                }))
+                }));
             }
         }
     }
@@ -45,9 +45,9 @@ function getWinstonTransports() {
     // output debugs straight to the console
     transports.push(new winston.transports.Console({
         level: 'debug',
-    }))
+    }));
 
-    return transports
+    return transports;
 }
 
 exports.getWinstonTransports = getWinstonTransports

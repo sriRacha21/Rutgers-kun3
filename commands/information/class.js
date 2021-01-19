@@ -111,11 +111,11 @@ module.exports = class ClassCommand extends Commando.Command {
         if( seasonYear === 'default' ) {
             if( month >= 7 && (month < 11 || ( month == 11 && date < 23 )) ) // fall
                 season = '9'
-            else if( (month == 0 && date >= 21) || (month > 0 && month < 4) || (month == 4 && date < 23) ) // spring
+            else if( (month == 0 && date >= 12) || (month > 0 && month < 4) || (month == 4 && date < 23) ) // spring
                 season = '1'
             else if( (month == 4) && (date >= 23) || (month > 4 && month < 7) || (month == 7 && date < 12) ) // summer
                 season = '7'
-            else if( (month == 11 && date >= 23) || (month == 0 && date < 17) ) // winter
+            else if( (month == 11 && date >= 23) || (month == 0 && date < 12) ) // winter
                 season = '0'
             else
                 throw 'Oh no.'

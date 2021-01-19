@@ -125,8 +125,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
                     return;
                 }
                 settings.remove( `agree:${msg.author.id}` )
-                if( !nowelcome )
-                    sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
+                sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
                 return msg.author.send( `Your netID has already been verified! You have successfully been given the ${agreementRole.name} role in ${guild.name}!` )
             }
         }
@@ -188,8 +187,7 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             return;
         }
         // send welcome message
-        if( !nowelcome )
-            sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
+        sendWelcomeMessage( guild, msg.author, provider.get( guild, 'welcomeChannel' ), provider.get( guild, 'welcomeText' ) )
         // save the email to a file
         if( fs.existsSync('settings/netids.json') ) {
             const netIDsObj = JSON.parse(fs.readFileSync('settings/netids.json', 'utf-8'))

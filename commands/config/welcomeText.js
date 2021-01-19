@@ -37,7 +37,7 @@ Just enter \`clear\` to clear the setting.`,
             return
         }
 
-        if( !settings.get( msg.guild, `agreementChannel` ) )
+        if( !settings.get( msg.guild, `agreementChannel` ) && !settings.get(msg.guild, 'agreementSlim') )
             return msg.channel.send( `You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.` )
 
         settings.set( msg.guild, `welcomeText`, welcomeText )
