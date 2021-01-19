@@ -3,6 +3,7 @@ const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'u
 const logger = require('../logger')
 
 function flushAgreementEmotes( channels, provider ) {
+    logger.log('info', `Running microtask flushAgreementEmotes.`);
     // check for default settings
     if( !defaults || !defaults.agreementSetupSlimEmote )
         return msg.channel.send("There are no default settings! Add a `default_settings.json` into the settings folder and give it a `agreementSetupSlimEmote` field with the value being the ID for the emote you want to use for the emote reaction.");

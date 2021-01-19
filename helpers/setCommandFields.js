@@ -1,8 +1,11 @@
 const { requestBreeds } = require('./requestBreeds')
 const { getSoundsArr } = require('./sounds')
 const { getCommandByName } = require('./registryUtility')
+const logger = require('../logger')
 
 async function setCommandFields(registry) {
+    logger.log('info', 'Running microtask setCommandFields.');
+
     setWoofCommandFields(registry)
     setPlayCommandFields(registry)
     setAddSoundCommandFields(registry)

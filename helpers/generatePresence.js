@@ -2,8 +2,11 @@ const exec = require('child_process').execSync;
 const Activity = require('discord.js').Activity;
 const fs = require('fs');
 const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'));
+const logger = require('../logger')
 
 function generatePresence( client, which ) {
+    logger.log('info', 'Running microtask generatePresence.');
+
 	const names = [
 		`${getNumLines()} lines of code!`,
 		`Version ${defaults.version}`,

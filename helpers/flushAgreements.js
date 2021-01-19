@@ -3,6 +3,7 @@ const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'u
 const logger = require('../logger')
 
 function flushAgreements( guilds, provider ) {
+    logger.log('info', `Running microtask flushAgreements.`);
     if( guilds ) {
         guilds.forEach( guild => {
             // attempt to get agreement channel from settings
@@ -11,7 +12,11 @@ function flushAgreements( guilds, provider ) {
             if( !maybeAgreementChannel )
                 return;
             // convert channel id to channel
-            maybeAgreementChannel = guild.channels.cache.find(channel => channel.id == maybeAgreementChannel)
+            maybeAgreementChannel = guild.channels.resolve(maybeAgreementChannel);
+            if(!maybeAgreementChannel) {
+                logger.log('warn', `Agreement channel ID ${maybeAgreementChannel.id}`)
+                return;
+            }
             // flush if it does
             maybeAgreementChannel.messages.fetch({limit: 100})
             .then( messages => {

@@ -2,6 +2,7 @@ const fs = require('fs')
 const logger = require('../logger')
 
 function flushMessagesToCache( channels, provider ) {
+    logger.log('info', `Running microtask flushMessagesToCache.`);
     // check for default settings
     const channelMessages = provider.get('messagesToCache');
     if(!channelMessages) return;
