@@ -14,8 +14,8 @@ module.exports = class EchoCommand extends Commando.Command {
             args: [
                 {
                     key: 'channel',
-                    prompt: 'Enter the name of the channel you want to echo into.',
-                    type: 'channel'
+                    prompt: 'Enter the name of the channel or user you want to echo into.',
+                    type: 'channel|user'
                 },
                 {
                     key: 'message',

@@ -41,7 +41,7 @@ function flushAgreementEmotes( channels, provider ) {
         });
     });
 
-    setTimeout(flushAgreementEmotes, 15000, channels, provider );
+    setTimeout(flushAgreementEmotes, 3600000, channels, provider );
 }
 
 exports.flushAgreementEmotes = flushAgreementEmotes;

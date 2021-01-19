@@ -26,8 +26,7 @@ module.exports = class DocumentationCommand extends Commando.Command {
             thumbnail: msg.guild.iconURL(),
         })
         .setDescription(`I see you've decided to add me to your server! I have a bunch of commands to configure the server to your liking.
-    Read the documentation [here](https://github.com/sriRacha21/Rutgers-kun3/tree/master/documentation/setup.md).
-    If you have any questions please ask the the writer of this bot: ${this.client.owners[0]} in this server: https://discord.gg/YDEpNDV .`)
+    Read the documentation [here](https://github.com/sriRacha21/Rutgers-kun3/tree/master/documentation/setup.md).`)
         .addField('Have questions, feedback, or are interested in following the bot\'s development? Join the development server!:', 'https://discord.gg/YDEpNDV/');
         // check if the server owner is still in the server
         msg.author.send( embed )

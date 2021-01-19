@@ -159,9 +159,6 @@ Client.on('message', msg => {
     // detect chains (not in agreement channel)
     if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, `agreementChannel`)) || (msg.guild && Client.provider.get(msg.guild, `agreementChannel`) != msg.channel.id) )
         detectChain( msg, Client.provider );
-    // detect haikus (gone for a while now)
-    // if( !msg.guild || (msg.guild && !Client.provider.get(msg.guild, 'haiku')) )
-    //     detectHaiku(msg, Client);
 })
 
 // emitted on adding a reaction to a message
@@ -230,13 +227,6 @@ Client.on('guildCreate', guild => {
             guild: guild,
             author: guild.owner
         })
-})
-
-// emitted on bot leaving (or getting kicked) from a guild
-Client.on('guildDelete', guild => {
-    // clear all the settings for that guild
-    // the bot can apparently get removed and re-added at any time for any reason. We can't just clear the guild settings when this happens anymore
-    // Client.provider.clear( guild )
 })
 
 // emitted on member update

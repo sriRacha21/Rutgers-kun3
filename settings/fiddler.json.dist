@@ -1,8 +1,0 @@
-{
-    "c": {
-        "user": "fiddler",
-        "templateFolder": "/home/fiddler/",
-        "templateName": "template.c",
-        "replacementText": "#CONTENT"
-    }
-}
