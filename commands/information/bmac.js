@@ -5,7 +5,7 @@ module.exports = class BMACCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'bmac',
-            aliases: [ 'buymeacoffee', 'coffee' ],
+            aliases: [ 'buymeacoffee', 'coffee', 'payme' ],
             group: 'information',
             memberName: 'bmac',
             description: 'Buy me a coffee?',
