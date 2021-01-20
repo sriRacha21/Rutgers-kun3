@@ -273,14 +273,14 @@ Client.on('guildMemberRemove', member => {
 Client.on('messageDelete', message => {
     // ignore if not in guild
     if( !message.guild )
-        return
+        return;
     // ignore deletions by bots
     if( message.author.bot )
-        return
+        return;
     // ignore deletions in agreement channel
     const agreementChannel = Client.provider.get( message.guild, `agreementChannel` )
     if( agreementChannel && message.channel.id == agreementChannel )
-        return
+        return;
 
     const startEmbed = new RichEmbed();
     const extras = []
@@ -302,7 +302,7 @@ Client.on('messageDelete', message => {
         },
         guild: message.guild,
         settings: Client.provider,
-        attachments: message.attachments.array().map(a => a.proxyURL)
+        attachments: message.attachments.map(a => a.proxyURL)
     }, extras)
 })
 

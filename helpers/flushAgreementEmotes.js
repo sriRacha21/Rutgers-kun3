@@ -12,37 +12,43 @@ function flushAgreementEmotes( channels, provider ) {
 
     const channelMessages = provider.get('messagesToCache');
 
-    channelMessages.forEach(async channelMessage => {
-        // malformed object
-        if( !channelMessage.channel || !channelMessage.message ) return;
-        const channelID = channelMessage.channel;
-        const messageID = channelMessage.message;
-        const channel = channels.resolve(channelID);
-        // unable to find channel
-        if( !channel || channel.type!='text' ) {
-            logger.log('warn', `Unable to fetch channel with ID ${channelID}`);
-            return;
-        }
-        let message;
-        try {
-            message = await channel.messages.fetch(messageID);
-        } catch(err) {
-            logger.log('warn', `Unable to fetch message with ID ${messageID} in channel ${channelID}`);
-            return;
-        }
-        if(!message) {
-            logger.log('warn', `Unable to fetch message with ID ${messageID} in channel ${channelID}`);
-            return;
-        }
-        // message and channel are guaranteed to be filled
-        message.reactions.cache.forEach(async mr => {
-            await mr.fetch();
-            await mr.remove();
-            message.react(agreementSetupSlimEmote);
+    let nextMicrotask = 3600000;
+    if(!channelMessages) {
+        logger.log('warn', "No messagesToCache found, running next microtask sooner.");
+        nextMicrotask = 15000;
+    } else {
+        channelMessages.forEach(async channelMessage => {
+            // malformed object
+            if( !channelMessage.channel || !channelMessage.message ) return;
+            const channelID = channelMessage.channel;
+            const messageID = channelMessage.message;
+            const channel = channels.resolve(channelID);
+            // unable to find channel
+            if( !channel || channel.type!='text' ) {
+                logger.log('warn', `Unable to fetch channel with ID ${channelID}`);
+                return;
+            }
+            let message;
+            try {
+                message = await channel.messages.fetch(messageID);
+            } catch(err) {
+                logger.log('warn', `Unable to fetch message with ID ${messageID} in channel ${channelID}`);
+                return;
+            }
+            if(!message) {
+                logger.log('warn', `Unable to fetch message with ID ${messageID} in channel ${channelID}`);
+                return;
+            }
+            // message and channel are guaranteed to be filled
+            message.reactions.cache.forEach(async mr => {
+                await mr.fetch();
+                await mr.remove();
+                message.react(agreementSetupSlimEmote);
+            });
         });
-    });
+    }
 
-    setTimeout(flushAgreementEmotes, 3600000, channels, provider );
+    setTimeout(flushAgreementEmotes, nextMicrotask, channels, provider );
 }
 
 exports.flushAgreementEmotes = flushAgreementEmotes;

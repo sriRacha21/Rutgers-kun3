@@ -124,3 +124,4 @@ settings.sqlite3
 
 # pem files
 *.pem
+settings/default_settings.json
