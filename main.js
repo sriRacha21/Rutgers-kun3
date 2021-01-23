@@ -184,8 +184,7 @@ Please enter your netID. Your netID is a unique identifier given to you by Rutge
                 Client.settings.set(`agree:${user.id}`, {
                     guildID: messageReaction.message.guild.id,
                     roleID: agreementSlim.role,
-                    step: 2,
-                    nowelcome: true
+                    step: 2
                 })
             })
             .catch(err => {
@@ -248,8 +247,8 @@ Client.on('guildMemberAdd', member => {
             author: 'Member joined',
             title: member.user.tag,
             clientUser: Client.user,
-            authorThumbnail: member.guild.iconURL,
-            thumbnail: member.user.displayAvatarURL,
+            authorThumbnail: member.guild.iconURL(),
+            thumbnail: member.user.displayAvatarURL(),
         },
         guild: member.guild,
         settings: Client.provider
@@ -263,8 +262,8 @@ Client.on('guildMemberRemove', member => {
             author: 'Member left',
             title: member.user.tag,
             clientUser: Client.user,
-            authorThumbnail: member.guild.iconURL,
-            thumbnail: member.user.displayAvatarURL
+            authorThumbnail: member.guild.iconURL(),
+            thumbnail: member.user.displayAvatarURL()
         },
         guild: member.guild,
         settings: Client.provider,
