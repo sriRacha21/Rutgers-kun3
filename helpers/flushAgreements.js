@@ -14,7 +14,8 @@ function flushAgreements( guilds, provider ) {
             // convert channel id to channel
             const maybeAgreementChannel = guild.channels.resolve(maybeAgreementChannelID);
             if(!maybeAgreementChannel) {
-                logger.log('warn', `Agreement channel ID ${maybeAgreementChannelID}`)
+                logger.log('warn', `Agreement channel ID ${maybeAgreementChannelID} not found. Cleaning from database.`);
+                provider.remove(guild, 'agreementChannel');
                 return;
             }
             // flush if it does

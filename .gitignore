@@ -111,7 +111,7 @@ api_keys.json
 email_logging.json
 smtp_server.json
 netids.json
-fiddler.json
+default_settings.json
 
 # VSCode folder
 .vscode/
@@ -124,4 +124,3 @@ settings.sqlite3
 
 # pem files
 *.pem
-settings/default_settings.json

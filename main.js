@@ -212,14 +212,6 @@ Turn on DM's from server members:`, {files: ['resources/setup-images/instruction
     parseApprovalReaction( Client.provider, Client.users.cache, messageReaction )
 })
 
-// emitted on change of guild member properties
-Client.on('presenceUpdate', (oldMember, newMember) => {
-    if( newMember.user.bot )
-        return
-
-    setLiveRole( oldMember, newMember, Client.provider )
-})
-
 // emitted on bot joining a guild
 Client.on('guildCreate', guild => {
     // run documentation command
