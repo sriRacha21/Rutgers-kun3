@@ -7,14 +7,14 @@ function flushAgreements( guilds, provider ) {
     if( guilds ) {
         guilds.forEach( guild => {
             // attempt to get agreement channel from settings
-            let maybeAgreementChannel = provider.get( guild, 'agreementChannel' );
+            let maybeAgreementChannelID = provider.get( guild, 'agreementChannel' );
             // skip this guild if its agreement channel does not exist
-            if( !maybeAgreementChannel )
+            if( !maybeAgreementChannelID )
                 return;
             // convert channel id to channel
-            maybeAgreementChannel = guild.channels.resolve(maybeAgreementChannel);
+            const maybeAgreementChannel = guild.channels.resolve(maybeAgreementChannelID);
             if(!maybeAgreementChannel) {
-                logger.log('warn', `Agreement channel ID ${maybeAgreementChannel.id}`)
+                logger.log('warn', `Agreement channel ID ${maybeAgreementChannelID}`)
                 return;
             }
             // flush if it does

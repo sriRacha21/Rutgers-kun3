@@ -22,7 +22,7 @@ module.exports = class BMACCommand extends Commando.Command {
 
         const author = this.client.owners[0];
         if( msg.guild ) {
-            const authorInGuild = await msg.guild.members.fetch(author.id)
+            const authorInGuild = await msg.guild.members.resolve(author.id);
             if( authorInGuild )
                 embedInfo.title = `Buy @${authorInGuild.user.tag} a Coffee?`
         }

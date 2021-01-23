@@ -145,25 +145,34 @@ to all your Rutgers services. It is generally your initials followed by a few nu
             subject: `Verify your ${role.name} role in ${guild.name}!`,
             html: `Your verification code is:<br><code style="font-size:2.5em;line-height:2em">${verificationCode}</code>`
         }
-        transporter.sendMail(emailInfo)
-        .then( () => {
-            msg.author.send(`Email successfully sent! Please check your school email for a verification code and enter it here to verify your identity.`)
-            logger.log( 'info', `Email successfully sent! Info: ${inspect(emailInfo)}` )
-        })
+        const toEdit = await msg.author.send('Attempting to send email...');
+        transporter.sendMail(emailInfo, (err, info) => {
+            logger.log('info', `Email sent: ${inspect(info)}
+${inspect(err)}`);
+            if( err ) {
+                toEdit.edit(`An error was encountered sending the email. You may have entered your netID incorrectly. Please try again or contact sriRacha#1999 in this server: https://discord.gg/YDEpNDV
+${err}`);
+                logger.log('error', err);
+            } else {
+                toEdit.edit(`Email successfully queued. Please check your school email for a verification code and enter it here to verify your identity.
+If you still haven't received an email, you may have entered your netID incorrectly.`)
+                logger.log( 'info', `Email successfully sent! Info: ${inspect(emailInfo)}` )
 
-        // now that we've sent the verification code, wrap up by storing what happened in the settings and prepare for the final input
-        let agreementObjTwo = {
-            guildID: guild.id,
-            roleID: roleID,
-            code: verificationCode,
-            netID: maybeNetID,
-            step: 3
-        };
-        if( nowelcome )
-            agreementObjTwo.nowelcome = true;
-        if( removerole )
-            agreementObjTwo.removerole = removerole;
-        settings.set( `agree:${msg.author.id}`, agreementObjTwo )
+                // now that we've sent the verification code, wrap up by storing what happened in the settings and prepare for the final input
+                let agreementObjTwo = {
+                    guildID: guild.id,
+                    roleID: roleID,
+                    code: verificationCode,
+                    netID: maybeNetID,
+                    step: 3
+                };
+                if( nowelcome )
+                    agreementObjTwo.nowelcome = true;
+                if( removerole )
+                    agreementObjTwo.removerole = removerole;
+                settings.set( `agree:${msg.author.id}`, agreementObjTwo )
+            }
+        })
     }
 
     if( step == 3 ) {
