@@ -103,7 +103,7 @@ Client.on('providerReady', () => {
     // periodically flush messages in #agreement in all servers
     flushAgreements( Client.guilds.cache, Client.provider );
     // periodicially flush agreement emotes
-    flushAgreementEmotes( Client.channels, Client.settings ); 
+    flushAgreementEmotes( Client.channels, Client.settings );
     // flush out unfindable channels from messagesToCache once
     flushMessagesToCache( Client.channels, Client.settings );
 })
