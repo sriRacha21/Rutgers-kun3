@@ -11,7 +11,7 @@ A complete rewrite of the Rutgers-kun Discord bot built for Rutgers University D
 * Rutgers-kun **is** a bot that creates a feeling of connectedness between Rutgers servers with a lot of data being saved between servers (such as quotes and phrase tracking).
     * This bot is in many of the biggest Discord servers in the Rutgers community and can make your community look more attractive to students who have joined servers that already have Rutgers-kun.
 * Rutgers-kun **is** a bot you can drop in a personal server if you like the less serious features (such as the fun commands, quoting, and phrase tracking).
-* Rutgers-kun **does** optionally support recording netID's. THe hosted version that is linked above has this feature enabled, and is used solely for safety and convenience.
+* Rutgers-kun **does** optionally support recording netID's. The hosted version that is linked above has this feature enabled, and is used solely for safety and convenience.
     * Why is my netID recorded? Can I opt-out?
         * If you are a new Rutgers student or you just joined Discord it can be overwhelming joining a variety of servers. The bot remembering your netID saves our email client a lot of emails and saves you a lot of time from having to check your email repeatedly.
         * Feel free to fork this project and run this bot on your own machine for your Discord server. At this time there is no way to opt out of netID recording on the already hosted version.
