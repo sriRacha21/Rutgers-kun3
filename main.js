@@ -279,11 +279,11 @@ Client.on('messageDelete', message => {
         return;
 
     const startEmbed = new RichEmbed();
-    const extras = []
+    const extras = [];
     if( message.content ) {
-        startEmbed.addField( 'Message content:', message.content.length <= 1024 ? message.content : 'See above for text.' )
+        startEmbed.addField( 'Message content:', message.content.length <= 1024 ? message.content : 'See above for text.' );
         if( message.content.length > 1024 )
-            extras.push( `**Deleted:**\n${message.cleanContent}` )
+            extras.push( `**Deleted:**\n${message.cleanContent}` );
     }
     startEmbed.addField( 'In channel:', message.channel )
 
@@ -299,7 +299,7 @@ Client.on('messageDelete', message => {
         guild: message.guild,
         settings: Client.provider,
         attachments: message.attachments.map(a => a.proxyURL)
-    }, extras)
+    }, extras);
 })
 
 // emitted when a message gets edited

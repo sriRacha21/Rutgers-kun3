@@ -2,31 +2,37 @@ const { generateDefaultEmbed } = require('./generateDefaultEmbed')
 
 function logEvent( logInfo, extras ) {
     // get fields
-    const embedInfo = logInfo.embedInfo
-    const guild = logInfo.guild
-    const settings = logInfo.settings
-    let channel = logInfo.channel
-    const attachments = logInfo.attachments ? logInfo.attachments : []
+    const embedInfo = logInfo.embedInfo;
+    const guild = logInfo.guild;
+    const settings = logInfo.settings;
+    let channel = logInfo.channel;
+    const attachments = logInfo.attachments ? logInfo.attachments : [];
     // exit if there is no guild
     if( !guild )
-        return
+        return;
     // exit if there is no log channel for the guild
-    const logChannelID = settings.get( guild, `logChannel` )
+    const logChannelID = settings.get( guild, `logChannel` );
     if( !logChannelID )
-        return
+        return;
     // set log channel
     if( !channel )
-        channel = guild.channels.resolve(logChannelID)
+        channel = guild.channels.resolve(logChannelID);
     // get default embed
-    const embed = generateDefaultEmbed( embedInfo ) 
+    const embed = generateDefaultEmbed( embedInfo );
     // send message to channel
-    channel.send( embed )
+    channel.send( embed );
     if( attachments.length > 0 )
-        channel.send({ files: attachments })
+        channel.send({ files: attachments });
     if( extras )
         extras.forEach(extra => {
-            channel.send( extra, {split: true} )
-        })
+            if(extra.length <= 2000)
+                channel.send( extra, {
+                    disableMentions: 'all',
+                    split: true
+                });
+            else
+                channel.send('Text too long.');
+        });
 }
 
 exports.logEvent = logEvent;

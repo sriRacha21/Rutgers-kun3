@@ -1,10 +1,10 @@
-const Commando = require('discord.js-commando')
-const https = require('https')
-const fs = require('fs')
-const path = require('path')
-const { setPlayCommandFields, setAddSoundCommandFields } = require('../../helpers/setCommandFields')
-const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy')
-const RichEmbed = require('discord.js').RichEmbed
+const Commando = require('discord.js-commando');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+const { setPlayCommandFields, setAddSoundCommandFields } = require('../../helpers/setCommandFields');
+const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy');
+const RichEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class AddSoundCommand extends Commando.Command {
     constructor(client) {

@@ -1,5 +1,4 @@
 const exec = require('child_process').execSync;
-const Activity = require('discord.js').Activity;
 const fs = require('fs');
 const package = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 const logger = require('../logger')

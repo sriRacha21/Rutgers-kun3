@@ -2,6 +2,8 @@ const Commando = require('discord.js-commando');
 const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy');
 const RichEmbed = require('discord.js').MessageEmbed;
 const { oneLine } = require('common-tags');
+const { getCommandList } = require('../../helpers/dbUtilities');
+const commandCountGuildLimit = 50;
 
 module.exports = class AddCommandCommand extends Commando.Command {
     constructor(client) {
@@ -47,6 +49,14 @@ command. Use {} for a custom argument.`,
     }
 
     async run( msg, { name, text } ) {
+        // check if there are 100 commands first
+        // get command names from db
+        let keys;
+        try {
+            keys = await getCommandList(this.client.provider.db, msg.guild, null);
+        } catch(err) {
+        }
+
         // replace text with empty string if the string is nothing
         text = text == 'nothing' ? '' : text
         // remove new lines to not allow abuse
@@ -80,7 +90,13 @@ command. Use {} for a custom argument.`,
                     if( attachment )
                         commandSettings.attachment = attachment.proxyURL
                     settings.set( msg.guild, `commands:${name}`, commandSettings )
-                    .then( msg.react('👍') )
+                    .then( () => {
+                        msg.react('👍');
+                        while(keys && keys.length > commandCountGuildLimit) {
+                            settings.remove(msg.guild, `commands:${keys[0]}`);
+                            keys.shift();
+                        }
+                    });
                 },
                 attachments: [ attachment ],
                 settings: this.client.provider,

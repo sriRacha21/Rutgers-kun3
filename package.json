@@ -4,6 +4,7 @@
   "description": "A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports discord server.",
   "main": "main.js",
   "scripts": {
+    "run": "node main.js",
     "test": "node main.js"
   },
   "repository": {
@@ -26,19 +27,14 @@
     "bent": "^7.3.12",
     "better-sqlite3": "^7.1.2",
     "common-tags": "^1.8.0",
-    "compromise": "^13.8.0",
     "discord.js": "^12.5.1",
     "discord.js-commando": "github:discordjs/Commando",
+    "ffmpeg-static": "^4.2.7",
     "node-opus": "^0.3.3",
     "nodemailer": "^6.4.17",
     "parse-git-config": "^3.0.0",
-    "pretty-ms": "^6.0.1",
-    "request": "^2.88.2",
-    "request-promise": "^4.2.6",
-    "rss-feed-emitter": "^3.2.2",
     "sqlite": "^3.0.6",
     "string-strip-html": "^6.3.0",
-    "wetty.js": "^1.1.4",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0",
     "winston-mail": "^2.0.0",

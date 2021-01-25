@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando')
-const request = require('request-promise')
+const bent = require('bent');
+const getJSON = bent('json');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
 const { reactionListener } = require('../../helpers/reactionListener')
 const xRay = require('x-ray')
@@ -94,50 +95,52 @@ module.exports = class ClassCommand extends Commando.Command {
 
     async run( msg, args ) {
         if( !args.class )
-            return msg.channel.send( `That's not a valid class code. Class codes are formatted as \`<school code>:<subject code>:<course code>\`.` )
-        const subject = args.class[1]
-        const course = args.class[2]
-        const section = args.class[3]
-        const campus = args.campus
-        const level = args.level
-        const seasonYear = args.seasonYear
+            return msg.channel.send( `That's not a valid class code. Class codes are formatted as \`<school code>:<subject code>:<course code>\`.` );
+        let subject = args.class[1];
+        let course = args.class[2];
+        let section = args.class[3];
+        let campus = args.campus;
+        let level = args.level;
+        let seasonYear = args.seasonYear;
 
         // we need to construct the current semester given the date
-        const date = new Date().getDate()
-        const month = new Date().getMonth()
-        let year = new Date().getFullYear()
-        let season
-        let semester
+        const date = new Date().getDate();
+        const month = new Date().getMonth();
+        let year = new Date().getFullYear();
+        let season;
+        let semester;
         if( seasonYear === 'default' ) {
             if( month >= 7 && (month < 11 || ( month == 11 && date < 23 )) ) // fall
-                season = '9'
+                season = '9';
             else if( (month == 0 && date >= 12) || (month > 0 && month < 4) || (month == 4 && date < 23) ) // spring
-                season = '1'
+                season = '1';
             else if( (month == 4) && (date >= 23) || (month > 4 && month < 7) || (month == 7 && date < 12) ) // summer
-                season = '7'
+                season = '7';
             else if( (month == 11 && date >= 23) || (month == 0 && date < 12) ) // winter
-                season = '0'
+                season = '0';
             else
-                throw 'Oh no.'
+                throw 'Oh no.';
         } else {
-            if( seasonYear[1] === 'spring' ) season = '1'
-            else if( seasonYear[1] === 'fall' ) season = '9'
-            else if( seasonYear[1] === 'summer' ) season = '7'
-            else if( seasonYear[1] === 'winter' ) season = '0'
-            else throw 'Oh no.'
-            year = seasonYear[2]
+            if( seasonYear[1] === 'spring' ) season = '1';
+            else if( seasonYear[1] === 'fall' ) season = '9';
+            else if( seasonYear[1] === 'summer' ) season = '7';
+            else if( seasonYear[1] === 'winter' ) season = '0';
+            else throw 'Oh no.';
+            year = seasonYear[2];
         }
 
+        // if the class is greater than 500, it's probably a grad course
+        if(+course >= 500) level = 'G';
+
         // assign variables to prepare to make request
-        semester = `${season}${year}`
+        semester = `${season}${year}`;
 
         // make request
         msg.channel.startTyping()
         const url = `http://sis.rutgers.edu/oldsoc/courses.json?subject=${subject}&semester=${semester}&campus=${campus}&level=${level}`
         logger.info(`Requesting URL: ${url}`)
-        request(url)
-        .then( data => {
-            const json = JSON.parse(data)
+        getJSON(url)
+        .then( json => {
             const classToSend = json.find(d => +d.courseNumber == course)
             msg.channel.stopTyping()
             if( classToSend ) {

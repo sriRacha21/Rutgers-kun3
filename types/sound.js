@@ -10,7 +10,7 @@ class SoundArgumentType extends Commando.ArgumentType {
 
     validate( val, msg ) {
         const result = msg.attachments.first() && 
-        msg.attachments.first().filename.endsWith('.mp3')
+        msg.attachments.first().name.endsWith('.mp3')
         return result
     }
 

@@ -1,9 +1,9 @@
-const request = require('request-promise')
+const bent = require('bent');
+const getJSON = bent('json');
 
 async function requestBreeds() {
-    const req = await request("https://api.woofbot.io/v1/breeds")
-    const json = JSON.parse(req)
-    return json.response.breeds
+    const res = await getJSON("https://api.woofbot.io/v1/breeds");
+    return res.response.breeds;
 }
 
-exports.requestBreeds = requestBreeds
+exports.requestBreeds = requestBreeds;
