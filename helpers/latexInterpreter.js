@@ -22,7 +22,7 @@ async function latexInterpreter( sentMessage, channel ) {
 
     // push new image for each request
     const promiseList = []
-    channel.startTyping()
+    channel.startTyping();
     matches.forEach( async match => {
         // replace parts of template
         const latex = template.replace(/#CONTENT/g, match)
@@ -32,19 +32,27 @@ async function latexInterpreter( sentMessage, channel ) {
             format: 'png',
             quality: 100,
             density: 440
-        }
+        };
 
-        const post = bent('POST','json')
-        promiseList.push( post('https://rtex.probablyaweb.site/api/v2',payload) )
+        const post = bent('POST','json');
+        promiseList.push( post('https://rtex.probablyaweb.site/api/v2',payload) );
     });
     Promise.all( promiseList ).then( responses => {
-        channel.stopTyping()
-        channel.send({
-            files: responses
-            .filter(response => response.status == 'success' )
-            .map(response => `https://rtex.probablyaweb.site/api/v2/${response.filename}`)
-        }) 
-        .then( msg => {
+        // filter and map responses
+        const mappedResponses = responses
+            .filter(response => response.status == 'success')
+            .map(response => `https://rtex.probablyaweb.site/api/v2/${response.filename}`);
+
+        let sentMessagePromise;
+        if(mappedResponses.length == 0) {
+            sentMessagePromise = channel.send('There were issue(s) parsing your LaTeX expression(s). Please edit your message with a valid LaTeX expression.');
+        } else {
+            sentMessagePromise = channel.send({
+                files: mappedResponses
+            });
+        }
+
+        sentMessagePromise.then( msg => {
             msg.react('🗑') 
             // add a listener that disappears after a minute for latex corrections
             const eventName = `latexEdited:${sentMessage.id}`
@@ -58,8 +66,10 @@ async function latexInterpreter( sentMessage, channel ) {
         })
     })
     .catch( err => {
-        channel.stopTyping()
         if( err ) channel.send(`The LaTeX interpreter API returned an error: \`${err}\`.`);
+    })
+    .finally(() => {
+        channel.stopTyping();
     })
 }
 
