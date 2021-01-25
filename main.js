@@ -103,7 +103,7 @@ Client.on('providerReady', () => {
     // periodically flush messages in #agreement in all servers
     flushAgreements( Client.guilds.cache, Client.provider );
     // periodicially flush agreement emotes
-    flushAgreementEmotes( Client.channels, Client.settings ); 
+    flushAgreementEmotes( Client.channels, Client.settings );
     // flush out unfindable channels from messagesToCache once
     flushMessagesToCache( Client.channels, Client.settings );
 })
@@ -210,14 +210,6 @@ Turn on DM's from server members:`, {files: ['resources/setup-images/instruction
     if( messageReaction.emoji == '📧' )
         reactionListener.emit(`listquotes:${messageReaction.message.id}`, user);
     parseApprovalReaction( Client.provider, Client.users.cache, messageReaction )
-})
-
-// emitted on change of guild member properties
-Client.on('presenceUpdate', (oldMember, newMember) => {
-    if( newMember.user.bot )
-        return
-
-    setLiveRole( oldMember, newMember, Client.provider )
 })
 
 // emitted on bot joining a guild
