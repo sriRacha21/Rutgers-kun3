@@ -36,10 +36,10 @@ async function latexInterpreter( sentMessage, channel ) {
 
         const post = bent('POST','json')
         promiseList.push( post('https://rtex.probablyaweb.site/api/v2',payload) )
-    })
+    });
     Promise.all( promiseList ).then( responses => {
         channel.stopTyping()
-        channel.send( `Parsed \`${matches.join('\`, \`')}\`:`, {
+        channel.send({
             files: responses
             .filter(response => response.status == 'success' )
             .map(response => `https://rtex.probablyaweb.site/api/v2/${response.filename}`)
