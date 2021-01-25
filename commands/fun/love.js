@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando')
-const { oneLine} = require('common-tags');
+const { oneLine } = require('common-tags');
 
 module.exports = class LoveCommand extends Commando.Command {
     constructor(client) {

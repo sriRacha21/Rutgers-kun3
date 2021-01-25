@@ -1,9 +1,14 @@
 const RichEmbed = require('discord.js').MessageEmbed
 const { oneLine } = require('common-tags')
 const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
+const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : {err: true};
 
 function generateDefaultEmbed( requiredEmbedInfo ) {
+    if(defaults.err) {
+        logger.log('error', 'No default_settings.json file was found. Unintended behavior may occur. Make sure you rename settings/default_settings.json.dist to settings/default_settings.json.');
+        return;
+    }
+
     const author = requiredEmbedInfo.author;
     const title = requiredEmbedInfo.title;
     const clientUser = requiredEmbedInfo.clientUser;

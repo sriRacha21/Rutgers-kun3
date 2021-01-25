@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando')
 const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
 
 module.exports = class SetlogChannelCommand extends Commando.Command {
     constructor(client) {

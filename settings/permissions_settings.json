@@ -1,0 +1,6 @@
+{
+    "admin_permission": "ADMINISTRATOR",
+    "moderator_permission": "KICK_MEMBERS",
+    "officer_permission": "MENTION_EVERYONE",
+    "trusted_permission": "PRIORITY_SPEAKER"
+}

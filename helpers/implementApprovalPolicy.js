@@ -1,9 +1,13 @@
 const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
+const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : {err: true};
+const permissions = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
+const logger = require('../logger')
 const { generateDefaultEmbed } = require('./generateDefaultEmbed')
 const { oneLine } = require('common-tags')
 
 function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
+    if(defaults.err)
+        logger.log('error', 'No default_settings.json file was found. Unintended behavior may occur. Make sure you rename settings/default_settings.json.dist to settings/default_settings.json.');
     // declare fields
     let type
     let submissionName
@@ -17,7 +21,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     // extract fields from object, throw errors or use defaults if fields aren't provided
     type = approvalPolicyOptions.type ? approvalPolicyOptions.type : null
     submissionName = approvalPolicyOptions.submissionName ? approvalPolicyOptions.submissionName : null
-    permission = approvalPolicyOptions.permission ? approvalPolicyOptions.permission : defaults.moderator_permission // by default moderator (kick permission)
+    permission = approvalPolicyOptions.permission ? approvalPolicyOptions.permission : permissions.moderator_permission // by default moderator (kick permission)
     if( approvalPolicyOptions.member ) { member = approvalPolicyOptions.member } else { throw "member is a required field." }
     if( approvalPolicyOptions.runNoPerms ) { runNoPerms = approvalPolicyOptions.runNoPerms } 
     else { runNoPerms = () => { 

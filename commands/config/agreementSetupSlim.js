@@ -1,6 +1,7 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
-const default_settings = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : null;
+const default_settings = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : {err:true};
+const logger = require('../../logger');
 
 module.exports = class Command extends Commando.Command {
     constructor(client) {
@@ -29,6 +30,8 @@ module.exports = class Command extends Commando.Command {
 
 
     async run( msg, { role, message }) {
+        if(defaults.err)
+            logger.log('error', 'No default_settings.json file was found. Unintended behavior may occur. Make sure you rename settings/default_settings.json.dist to settings/default_settings.json.');
         // check for default settings
         if( !default_settings || !default_settings.agreementSetupSlimEmote )
             return msg.channel.send("There are no default settings! Add a `default_settings.json` into the settings folder and give it a `agreementSetupSlimEmote` field with the value being the ID for the emote you want to use for the emote reaction.");

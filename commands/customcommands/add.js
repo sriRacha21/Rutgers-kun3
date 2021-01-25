@@ -1,7 +1,7 @@
-const Commando = require('discord.js-commando')
-const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy')
+const Commando = require('discord.js-commando');
+const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy');
 const RichEmbed = require('discord.js').MessageEmbed;
-const { oneLine } = require('common-tags')
+const { oneLine } = require('common-tags');
 
 module.exports = class AddCommandCommand extends Commando.Command {
     constructor(client) {

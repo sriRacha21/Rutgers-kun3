@@ -1,7 +1,6 @@
 const Commando = require('discord.js-commando');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const fs = require('fs');
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
 
 module.exports = class NetidCommand extends Commando.Command {
     constructor(client) {
@@ -10,7 +9,6 @@ module.exports = class NetidCommand extends Commando.Command {
             group: 'moderation',
             memberName: 'netid',
             description: 'Lookup a netID with the bot.',
-            userPermissions: [ defaults.admin_permission ],
             args: [
                 {
                     key: 'netid',
@@ -26,7 +24,8 @@ module.exports = class NetidCommand extends Commando.Command {
 
     async run( msg, { netid } ) {
         // make sure the netids file exists
-        if( !fs.existsSync('settings/netids.json') ) return;
+        if( !fs.existsSync('settings/netids.json') ) 
+            return msg.channel.send("You are not logging netID's so you cannot use this command.");
         const userIDs = JSON.parse(fs.readFileSync('settings/netids.json','utf-8'));
         // iterate over whole json object <key: userID, value: netID> to find netID
         let foundUserID;

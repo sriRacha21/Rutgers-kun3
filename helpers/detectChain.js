@@ -1,5 +1,3 @@
-// const HashTable = require('hashtable')
-// const msgChainTable = new HashTable()
 const msgChainTable = {};
 const { getRandomElement } = require('./getRandom');
 

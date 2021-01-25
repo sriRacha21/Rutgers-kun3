@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando')
 const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'))
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
 
 module.exports = class RemoveInvitesCommand extends Commando.Command {
     constructor(client) {
@@ -17,9 +17,6 @@ module.exports = class RemoveInvitesCommand extends Commando.Command {
 
     async run( msg ) {
         const settings = this.client.provider
-
-        // if( !this.client.provider.get( msg.guild, 'muteRole' ) )
-        //     return msg.channel.send( 'You need to set up the mute role first.' )
 
         if( !settings.get( msg.guild, `removeInvites`) ) {
             settings.set( msg.guild, `removeInvites`, true )
