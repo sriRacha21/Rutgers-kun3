@@ -5,7 +5,7 @@ const sqlite = require('sqlite');
 const path = require('path');
 // prepare to read in data from JSON files
 const fs = require('fs');
-const defaults = JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8'));
+const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : {err: true};
 // read in data from JSON file containing default settings for the bot (ClientOptions object)
 const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', defaults.encoding));
 // read in data from JSON file containing API keys
@@ -73,6 +73,9 @@ Client.on('reconnecting', () => logger.warn('Websocket reconnecting...'));
 // emitted on bot being ready to operate
 Client.on('ready', () => {
     logger.log( 'info', `Logged onto as ${Client.user.tag}${` at ${new Date(Date.now())}.`}`);
+    // output warning on no defaults found
+    if(defaults.err)
+        logger.log('error', 'No default_settings.json file was found. Unintended behavior may occur. Make sure you rename settings/default_settings.json.dist to settings/default_settings.json.');
     // periodically refresh command settings
     setCommandFields( Client.registry );
     // peridiocally update the bot's status
