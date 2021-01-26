@@ -21,8 +21,7 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
     startingEmbed
         .setTitle( title )
         .setThumbnail( thumbnail )
-        .setFooter( oneLine`${msg ? `Requested ${msg.createdAt.toLocaleString()}
-by ${msg.author.tag}${guild ? ` in ${guild.name}` : ``}` : clientUser.tag }`
+        .setFooter( oneLine`${msg ? `Requested by ${msg.author.tag}${guild ? ` in ${guild.name}` : ``}` : clientUser.tag }`
                     , msg ? msg.author.displayAvatarURL() : clientUser.displayAvatarURL() )
         .setColor( defaults.richembed_color );
 

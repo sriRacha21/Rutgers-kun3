@@ -7,6 +7,7 @@ function logEvent( logInfo, extras ) {
     const settings = logInfo.settings;
     let channel = logInfo.channel;
     const attachments = logInfo.attachments ? logInfo.attachments : [];
+    const timestamp = logInfo.timestamp;
     // exit if there is no guild
     if( !guild )
         return;
@@ -18,7 +19,9 @@ function logEvent( logInfo, extras ) {
     if( !channel )
         channel = guild.channels.resolve(logChannelID);
     // get default embed
-    const embed = generateDefaultEmbed( embedInfo );
+    const embed = generateDefaultEmbed( embedInfo )
+    if(timestamp)
+        embed.setTimestamp(timestamp);
     // send message to channel
     channel.send( embed );
     if( attachments.length > 0 )

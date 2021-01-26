@@ -48,7 +48,8 @@ module.exports = class FetchMessageCommand extends Commando.Command {
             clientUser: this.client.user,
             msg: msg,
             thumbnail: message.author.displayAvatarURL()
-        });
+        })
+        .setTimestamp(message.createdAt);
 
         if( message.content )
             embed.setDescription(message.content);
