@@ -294,11 +294,12 @@ Client.on('messageDelete', message => {
             clientUser: Client.user,
             authorThumbnail: message.guild.iconURL(),
             thumbnail: message.author.displayAvatarURL(),
-            startingEmbed: startEmbed,
+            startingEmbed: startEmbed
         },
         guild: message.guild,
         settings: Client.provider,
-        attachments: message.attachments.map(a => a.proxyURL)
+        attachments: message.attachments.map(a => a.proxyURL),
+        timestamp: message.createdAt
     }, extras);
 })
 
@@ -306,13 +307,13 @@ Client.on('messageDelete', message => {
 Client.on('messageUpdate', (oMsg, nMsg) => {
     // ignore if not in guild
     if( !oMsg.guild )
-        return
+        return;
     // ignore updates by bots
     if( oMsg.author.bot )
-        return
+        return;
     // if the message content is the same, exit
     if( oMsg.content == nMsg.content )
-        return
+        return;
 
     // update latex
     if( getLatexMatches(nMsg.cleanContent) ) {
@@ -322,19 +323,19 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
     }
 
     // log edits
-    const startEmbed = new RichEmbed()
-    const extras = []
+    const startEmbed = new RichEmbed();
+    const extras = [];
     if( oMsg.content ) {
-        startEmbed.addField( 'Old message content:', oMsg.content.length <= 1024 ? oMsg.content : 'See above for text.' )
+        startEmbed.addField( 'Old message content:', oMsg.content.length <= 1024 ? oMsg.content : 'See above for text.' );
         if( oMsg.content.length > 1024 )
-            extras.push( `**Old:**\n${oMsg.cleanContent}` )
+            extras.push( `**Old:**\n${oMsg.cleanContent}` );
     }
     if( nMsg.content ) {
-        startEmbed.addField( 'New message content:', nMsg.content.length <= 1024 ? nMsg.content : 'See above for text.' )
+        startEmbed.addField( 'New message content:', nMsg.content.length <= 1024 ? nMsg.content : 'See above for text.' );
         if( nMsg.content.length > 1024 )
-            extras.push( `**New:**\n${nMsg.cleanContent}` )
+            extras.push( `**New:**\n${nMsg.cleanContent}` );
     }
-    startEmbed.addField( 'In channel:', oMsg.channel )
+    startEmbed.addField( 'In channel:', oMsg.channel );
 
     logEvent({
         embedInfo: {
@@ -347,7 +348,8 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
         },
         guild: oMsg.guild,
         settings: Client.provider,
-        attachments: oMsg.attachments.array().map(a => a.proxyURL)
+        attachments: oMsg.attachments.array().map(a => a.proxyURL),
+        timestamp: oMsg.createdAt
     }, extras)
 })
 
