@@ -8,13 +8,8 @@
     "lint": "./node_modules/.bin/eslint .",
     "postinstall": "husky install"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
-    "*.js": "./node_modules/.bin/eslint --fix"
+    "*.js": "eslint --cache --fix"
   },
   "repository": {
     "type": "git",
