@@ -1,3 +1,4 @@
 {
-	"token": "your token goes here"
+	"token": "your token goes here",
+	"mailgun": "OPTIONAL, mailgun api key for diagnosing email issues"
 }

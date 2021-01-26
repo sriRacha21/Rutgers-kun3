@@ -45,6 +45,7 @@ const RichEmbed = require('discord.js').MessageEmbed;
 // initialize the Discord client
 const Commando = require('discord.js-commando');
 const Client = new Commando.Client(ClientOptions);
+Client.invite = ClientOptions.invite;
 // don't stop on expired certificate
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 /*        	EVENTS	        */
