@@ -23,7 +23,8 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
         .setThumbnail( thumbnail )
         .setFooter( oneLine`${msg ? `Requested by ${msg.author.tag}${guild ? ` in ${guild.name}` : ``}` : clientUser.tag }`
                     , msg ? msg.author.displayAvatarURL() : clientUser.displayAvatarURL() )
-        .setColor( defaults.richembed_color );
+        .setColor( defaults.richembed_color )
+        .setTimestamp();
 
     if( requiredEmbedInfo.author )
         startingEmbed.setAuthor( author, authorThumbnail );

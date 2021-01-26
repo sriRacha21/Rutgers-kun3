@@ -30,7 +30,7 @@ module.exports = class Command extends Commando.Command {
 
 
     async run( msg, { role, message }) {
-        if(defaults.err)
+        if(default_settings.err)
             logger.log('error', 'No default_settings.json file was found. Unintended behavior may occur. Make sure you rename settings/default_settings.json.dist to settings/default_settings.json.');
         // check for default settings
         if( !default_settings || !default_settings.agreementSetupSlimEmote )
