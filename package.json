@@ -4,7 +4,17 @@
   "description": "A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports discord server.",
   "main": "main.js",
   "scripts": {
-    "test": "node main.js"
+    "test": "node main.js",
+    "lint": "./node_modules/.bin/eslint .",
+    "postinstall": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "./node_modules/.bin/eslint --fix"
   },
   "repository": {
     "type": "git",
@@ -43,5 +53,14 @@
     "winston-daily-rotate-file": "^4.5.0",
     "winston-mail": "^2.0.0",
     "x-ray": "^2.3.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.18.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "husky": "^5.0.6",
+    "lint-staged": "^10.5.3"
   }
 }
