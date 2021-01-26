@@ -59,7 +59,7 @@ module.exports = class DiagnoseCommand extends Commando.Command {
             await msg.channel.send("**Yes**, the user did receive a DM from me.");
         }
         // Diagnose user DM's
-        const lastTwenty = user.dmChannel.messages.cache.last(20);
+        const lastTwenty = user.dmChannel.messages.cache.last(20).reverse();
         let stepTwo = `**Step 2.** Did they DM the bot the right thing? Here are my last ${lastTwenty.length} messages with ${user.tag}:\n\n`;
         lastTwenty.forEach(message => {
             stepTwo += `**${message.author.tag}**: ${message.cleanContent}\n`;
@@ -80,7 +80,6 @@ I'll scan the last ${lastTwenty.length} messages for something that looks like a
             netID = lastTwenty
                 .filter(m=>m.author.id==user.id)
                 .map(m=>m.content)
-                .reverse()
                 .find(str=>isValidnetID(str));
             if(netID)
                 await msg.channel.send(`Match found. Checking bounces table for netID \`${netID}\`. If this doesn't look like a netID to you consider supplying it manually as a second argument.`);
