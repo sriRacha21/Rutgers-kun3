@@ -37,7 +37,7 @@ module.exports = class Command extends Commando.Command {
             return msg.channel.send("There are no default settings! Add a `default_settings.json` into the settings folder and give it a `agreementSetupSlimEmote` field with the value being the ID for the emote you want to use for the emote reaction.");
         // keep the message in settings so we can retrieve it from cache
         let messagesToCache = this.client.settings.get('messagesToCache') ? this.client.settings.get('messagesToCache') : [];
-        if(!messagesToCache.filter(m => m.channel == message.channel.id && m.message == message.id))
+        if(messagesToCache.filter(m => m.channel == message.channel.id && m.message == message.id).length == 0)
             messagesToCache.push({
                 channel: message.channel.id,
                 message: message.id
