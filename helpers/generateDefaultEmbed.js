@@ -14,7 +14,7 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
     const clientUser = requiredEmbedInfo.clientUser;
     const msg = requiredEmbedInfo.msg;
     const guild = requiredEmbedInfo.guild ? requiredEmbedInfo.guild : (msg ? msg.guild : null);
-    const authorThumbnail = requiredEmbedInfo.authorThumbnail ? requiredEmbedInfo.authorThumbnail : (guild ? guild.iconURL : clientUser.displayAvatarURL);
+    const authorThumbnail = requiredEmbedInfo.authorThumbnail ? requiredEmbedInfo.authorThumbnail : (guild ? guild.iconURL() : clientUser.displayAvatarURL());
     const thumbnail = requiredEmbedInfo.thumbnail ? requiredEmbedInfo.thumbnail : clientUser.displayAvatarURL();
     const startingEmbed = requiredEmbedInfo.startingEmbed ? requiredEmbedInfo.startingEmbed : new RichEmbed();
 
