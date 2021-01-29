@@ -27,7 +27,6 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const autoverifyArr = settings.get( msg.guild, `autoverify` );
         const welcomeChannelID = settings.get( msg.guild, `welcomeChannel` );
         const logChannelID = settings.get( msg.guild, `logChannel` );
-        const modChannelID = settings.get( msg.guild, `modChannel`);
         const welcomeText = settings.get( msg.guild, `welcomeText` );
         const removeInvites = settings.get( msg.guild, `removeInvites` );
         const wordCountMessages = settings.get( msg.guild, `wordCounters` );
@@ -59,8 +58,6 @@ module.exports = class ListConfigCommand extends Commando.Command {
             embed.addField( `Welcome channel:`, `<#${welcomeChannelID}>` );
         if( logChannelID )
             embed.addField( `Log channel:`, `<#${logChannelID}>` );
-        if( modChannelID )
-            embed.addField( `Mod log channel:`, `<#${modChannelID}>` );
         if( welcomeText )
             embed.addField( `Welcome text:`, welcomeText );
         embed.addField( `Removing invites?:`, removeInvites ? 'On' : 'Off' );
