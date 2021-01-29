@@ -35,7 +35,7 @@ module.exports = class EchoCommand extends Commando.Command {
         } // this is a user object
 
         messageToSend += message;
-        channel.send( messageToSend )
+        channel.send( messageToSend, { disableMentions: channel.type==='dm' ? 'none' : 'all' } )
         .then( msg.react( '👍' ) )
     }
 }
