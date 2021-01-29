@@ -1,6 +1,6 @@
 {
   "name": "rutgers-kun3",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports discord server.",
   "main": "main.js",
   "scripts": {

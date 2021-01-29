@@ -20,21 +20,21 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const settings = this.client.provider
 
         // get fields we're putting in the embed
-        const volume = settings.get( msg.guild, `volume` )
-        const approvalChannelID = settings.get( msg.guild, `approvalChannel` )
-        const agreementChannelID = settings.get( msg.guild, `agreementChannel` )
-        const autoverifyArr = settings.get( msg.guild, `autoverify` )
-        const welcomeChannelID = settings.get( msg.guild, `welcomeChannel` )
-        const logChannelID = settings.get( msg.guild, `logChannel` )
-        const modChannelID = settings.get( msg.guild, `modChannel`)
-        const welcomeText = settings.get( msg.guild, `welcomeText` )
-        const removeInvites = settings.get( msg.guild, `removeInvites` )
-        // const haiku = settings.get( msg.guild, 'haiku' );
-        const wordCountMessages = settings.get( msg.guild, `wordCounters` )
-        const agreementRoles = settings.get( msg.guild, `agreementRoles` )
-        const protectedRoles = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : []
-        const muteRoleID = settings.get( msg.guild, `muteRole` )
-        const unpingableRoleIDs = settings.get( msg.guild, `unpingableRoles` )
+        const volume = settings.get( msg.guild, `volume` );
+        const approvalChannelID = settings.get( msg.guild, `approvalChannel` );
+        const agreementChannelID = settings.get( msg.guild, `agreementChannel` );
+        const agreementSlim = settings.get( msg.guild, 'agreementSlim' );
+        const autoverifyArr = settings.get( msg.guild, `autoverify` );
+        const welcomeChannelID = settings.get( msg.guild, `welcomeChannel` );
+        const logChannelID = settings.get( msg.guild, `logChannel` );
+        const modChannelID = settings.get( msg.guild, `modChannel`);
+        const welcomeText = settings.get( msg.guild, `welcomeText` );
+        const removeInvites = settings.get( msg.guild, `removeInvites` );
+        const wordCountMessages = settings.get( msg.guild, `wordCounters` );
+        const agreementRoles = settings.get( msg.guild, `agreementRoles` );
+        const protectedRoles = settings.get( msg.guild, `protectedRoles` ) ? settings.get( msg.guild, `protectedRoles` ) : [];
+        const muteRoleID = settings.get( msg.guild, `muteRole` );
+        const unpingableRoleIDs = settings.get( msg.guild, `unpingableRoles` );
 
         // generate embed
         const embed = generateDefaultEmbed({
@@ -51,6 +51,8 @@ module.exports = class ListConfigCommand extends Commando.Command {
             embed.addField( `Approval channel:`, `<#${approvalChannelID}>` );
         if( agreementChannelID )
             embed.addField( `Agreement channel:`, `<#${agreementChannelID}>` );
+        if( agreementSlim )
+            embed.addField( 'Agreement Slim Setup:', `**Message ID:** ${agreementSlim.message}\n**Emote:** ${this.client.emojis.resolve(agreementSlim.emote)}\n**Role:** ${msg.guild.roles.resolve(agreementSlim.role)}`);
         if( autoverifyArr )
             embed.addField( `Autoverify phrase and role:`, autoverifyArr.map(av => `\`${av.phrase}\`, <@&${av.role}>`).join('\n') );
         if( welcomeChannelID )

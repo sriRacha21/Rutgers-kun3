@@ -18,11 +18,16 @@ module.exports = class DevelopmentServerCommand extends Commando.Command {
             title: 'Join the development server!',
             clientUser: this.client.user,
             msg: msg,
-        }
+        };
 
         const embed = generateDefaultEmbed(embedInfo)
-        .setURL( 'https://discord.gg/YDEpNDV' );
+        .addField( 'Discord Server Link:', '[Click here to join.](https://discord.gg/YDEpNDV)' )
+        .addField('Why should I join this server?', `* If you have questions regarding development or setup
+* Feedback for current systems
+* Suggestions for new features
+* General small-scale bot discussion
+* Bug reports`);
 
-        msg.channel.send( embed )
+        msg.channel.send( embed );
     }
 }

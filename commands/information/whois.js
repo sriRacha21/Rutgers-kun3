@@ -46,7 +46,10 @@ module.exports = class WhoIsCommand extends Commando.Command {
         
         // roles
         if( msg.guild ) {
-            const guildMember = await msg.guild.members.fetch(user);
+            let guildMember;
+            try {
+                guildMember = await msg.guild.members.fetch(user);
+            } catch(err) {}
             if( guildMember && guildMember.roles.size > 1 )
                 embed.addField("Roles:", guildMember.roles.array().slice(1).join('\n'));
         }
