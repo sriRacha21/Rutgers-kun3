@@ -1,11 +1,20 @@
-# Rutgers-kun3 [![Build Status](https://travis-ci.com/sriRacha21/Rutgers-kun3.svg?branch=master)](https://travis-ci.com/sriRacha21/Rutgers-kun3)
-A complete rewrite of the Rutgers-kun Discord bot built for Rutgers University Discord servers. Old version is hosted [here](https://github.com/sriRacha21/Rutgers-kun).
+# Rutgers-kun3 [![Build Status](https://travis-ci.com/sriRacha21/Rutgers-kun3.svg?branch=master)](https://travis-ci.com/sriRacha21/Rutgers-kun3) [![Discord](https://discordapp.com/api/guilds/770415315674857482/embed.png)](https://discord.gg/ydepndv)
 
-### How to Use
+> Rutgers-kun is a Discord bot dedicated to providing utility and a sense of connectedness between Discord servers under Rutgers University.
+
+
+## Table of contents
+
+- [How to Use](#how-to-use)
+- [What is (and isn't) Rutgers-kun?](#what-is-and-isnt-rutgers-kun)
+- [Features](#features)
+- [Run me locally!](#run-me-locally)
+
+## How to Use
 1. [Click me to add me to your server!](https://discordapp.com/api/oauth2/authorize?client_id=291355097919913985&permissions=0&scope=bot)
 2. [Setup](documentation/setup.md).
 
-### What is (and isn't) Rutgers-kun?
+## What is (and isn't) Rutgers-kun?
 * Rutgers-kun **is** a bot that lets you manage your userbase by helping you designate who is and isn't a Rutgers student reliably.
     * This is done with netID verification. [Here's a little demo.](https://streamable.com/pz31rc)
 * Rutgers-kun **is** a bot that creates a feeling of connectedness between Rutgers servers with a lot of data being saved between servers (such as quotes and phrase tracking).
@@ -21,7 +30,16 @@ A complete rewrite of the Rutgers-kun Discord bot built for Rutgers University D
     * Rutgers-kun has been being worked on for 2+ years by a one-man team. It's improved a lot over the years but it's not going to have 100% uptime and it's not always going to work as expected.
     * If you find bugs or have feature requests PLEASE open an [issue](https://github.com/sriRacha21/Rutgers-kun3/issues) and/or [join the development Discord](https://discord.gg/YDEpNDV) and feel free to ping me (@sriRacha#1999)!
 
-### How to run me locally!
+## Features
+* 2-step **netID verification** attached to a role (or multiple). [Here's a demo.](https://streamable.com/pz31rc) You can also use this as entry gate.
+* LaTeX interpreter (trigger `$$like this$$`).
+* Quoting (quotes are saved cross-server).
+* Custom commands with shallow command templating.
+* Soundboard.
+* Emote, custom command, soundboard addition screening.
+* Bring up Rutgers class information (`!class 198:112`).
+
+## Run me locally!
 1. Clone me somewhere you feel comfortable keeping Github projects: `git clone https://github.com/sriRacha21/Rutgers-kun3.git`
 2. Navigate to the `settings` folder within the project.
 3. Edit `api_keys.json.dist` and replace the "your token here text" with your API token (surrounded by double quotation marks), obtained from the Discord developer portal. Rename the file to `api_keys.json`.

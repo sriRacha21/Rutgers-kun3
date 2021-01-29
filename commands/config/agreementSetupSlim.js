@@ -2,6 +2,7 @@ const Commando = require('discord.js-commando');
 const fs = require('fs');
 const default_settings = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : {err:true};
 const logger = require('../../logger');
+const permissions = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
 
 module.exports = class Command extends Commando.Command {
     constructor(client) {
@@ -11,6 +12,7 @@ module.exports = class Command extends Commando.Command {
             group: 'config',
             memberName: 'agreementsetupslim',
             description: 'Run this command to run a slim version of the agreement setup. Uses emote reaction to serve roles.',
+            userPermissions: [ permissions.admin_permission ],
             args: [
                 {
                     key: 'role',
