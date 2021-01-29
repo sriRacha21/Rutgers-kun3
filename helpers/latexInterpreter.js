@@ -38,7 +38,7 @@ async function latexInterpreter( sentMessage, channel ) {
     });
 
     // normalize spoilers
-    matches.map(match => isSpoiler(match) ? match.substring(2, match.length-2) : match);
+    matches = matches.map(match => isSpoiler(match) ? match.substring(2, match.length-2) : match);
 
     // push new image for each request
     const promiseList = [];
