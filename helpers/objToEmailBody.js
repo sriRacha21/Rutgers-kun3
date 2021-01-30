@@ -1,12 +1,11 @@
-const { inspect } = require('util')
+const { inspect } = require('util');
 
 function objToEmailBody( obj ) {
-    let retStr = ""
+    let retStr = '';
 
-    for( const field in obj )
-        retStr += `<b>${field.charAt(0).toUpperCase() + field.slice(1)}:</b> ${inspect(obj[field])}<br>`
-    
-    return retStr
+    for ( const field in obj ) { retStr += `<b>${field.charAt(0).toUpperCase() + field.slice(1)}:</b> ${inspect(obj[field])}<br>`; }
+
+    return retStr;
 }
 
-exports.objToEmailBody = objToEmailBody
+exports.objToEmailBody = objToEmailBody;

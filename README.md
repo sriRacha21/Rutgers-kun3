@@ -11,6 +11,7 @@
 - [Features](#features)
 - [Contributing](#contributing)
     - [Run me locally!](#run-me-locally)
+    - [Linting](#linting)
     - [Submit a Pull Request](#submit-a-pull-request)
 - [Contact](#contact)
 
@@ -57,6 +58,11 @@
 8. `cd` to root directory of the project.
 9. `npm install`
 10. `node main.js`
+
+### Linting
+* Rutger-kun uses ESLint to maintain and enforce code quality.
+* Before you commit code, run ESlint by using `npm run lint`. ESLint will check the project for any issues/errors.
+* Husky and lint-staged will prevent you from pushing code with issues. Travis will additonally check for any lint issues on your build. 
 
 ### Submit a Pull Request
 1. Fork this repository (should be on the top right of this page).

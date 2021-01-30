@@ -1,6 +1,9 @@
 language: node_js
 node_js:
-    - 11
+    - 14
+script:
+    - npm run lint
+    - npm test
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh

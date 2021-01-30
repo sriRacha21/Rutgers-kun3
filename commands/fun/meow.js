@@ -12,19 +12,19 @@ module.exports = class MeowCommand extends Commando.Command {
             memberName: 'meow',
             description: 'Cute kitty.',
             details: 'Output a picture of a cute kitty chosen at random.',
-            throttling: { 
-                usages: 1, 
+            throttling: {
+                usages: 1,
                 duration: 3
-            },
-        })
+            }
+        });
     }
-    
+
     async run( msg ) {
-        const url = `https://api.thecatapi.com/v1/images/search`
+        const url = 'https://api.thecatapi.com/v1/images/search';
         getJSON(url)
-        .then( res => {
-            loadingEdit( msg.channel, this.client.emojis, null, { files: [res[0].url] } );
-        })
-        .catch(err => msg.channel.send( `There was an error: ${err}`));
+            .then( res => {
+                loadingEdit( msg.channel, this.client.emojis, null, { files: [res[0].url] } );
+            })
+            .catch(err => msg.channel.send( `There was an error: ${err}`));
     }
-}
+};

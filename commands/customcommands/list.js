@@ -20,11 +20,11 @@ module.exports = class ListCommandCommands extends Commando.Command {
                     key: 'filter',
                     prompt: 'Enter text used to filter.',
                     type: 'string',
-                    default: '',
+                    default: ''
                 }
             ],
-            argsPromptLimit: 0,
-        })
+            argsPromptLimit: 0
+        });
     }
 
     async run( msg, { filter } ) {
@@ -34,31 +34,29 @@ module.exports = class ListCommandCommands extends Commando.Command {
         let keys;
         try {
             keys = await getCommandList(this.client.provider.db, msg.guild, err);
-        } catch(err) {
+        } catch (err) {
             msg.channel.send(err);
             return;
         }
 
-        if( filter )
-            keys = keys.filter( key => key.includes(filter) );
+        if ( filter ) { keys = keys.filter( key => key.includes(filter) ); }
         // perform another check on keys
-        if( keys.length == 0 )
-            return msg.channel.send( err );
+        if ( keys.length === 0 ) { return msg.channel.send( err ); }
         // prepare to return keys
-        let retEmbed = generateDefaultEmbed({
-            author: `Command list for`,
+        const retEmbed = generateDefaultEmbed({
+            author: 'Command list for',
             title: msg.guild.name,
             clientUser: this.client.user,
             msg: msg
         });
         // add keys to embed's description
         let description = '';
-        keys.forEach(( key ) => { description += `${msg.guild.commandPrefix}${key}\n` });
+        keys.forEach(( key ) => { description += `${msg.guild.commandPrefix}${key}\n`; });
         // clean up embed
         retEmbed.setThumbnail(msg.guild.iconURL())
-        .setDescription(description);
+            .setDescription(description);
 
         msg.channel.send( retEmbed )
-        .then( m => m.react('🗑') );
+            .then( m => m.react('🗑') );
     }
-}
+};

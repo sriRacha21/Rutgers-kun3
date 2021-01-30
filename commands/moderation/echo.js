@@ -1,6 +1,6 @@
-const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
+const Commando = require('discord.js-commando');
+const fs = require('fs');
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
 
 module.exports = class EchoCommand extends Commando.Command {
     constructor(client) {
@@ -23,19 +23,19 @@ module.exports = class EchoCommand extends Commando.Command {
                     type: 'string'
                 }
             ]
-        })
+        });
     }
 
     async run( msg, { channel, message } ) {
-        let messageToSend = "";
-        if( channel.username ) {
+        let messageToSend = '';
+        if ( channel.username ) {
             messageToSend += `You have been sent a message by the moderators of **${msg.guild.name}**:
 
-`
+`;
         } // this is a user object
 
         messageToSend += message;
-        channel.send( messageToSend, { disableMentions: channel.type==='dm' ? 'none' : 'all' } )
-        .then( msg.react( '👍' ) )
+        channel.send( messageToSend, { disableMentions: channel.type === 'dm' ? 'none' : 'all' } )
+            .then( msg.react( '👍' ) );
     }
-}
+};

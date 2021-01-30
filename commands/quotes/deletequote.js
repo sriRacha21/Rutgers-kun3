@@ -1,5 +1,5 @@
-const Commando = require('discord.js-commando')
-const { oneLine } = require('common-tags')
+const Commando = require('discord.js-commando');
+const { oneLine } = require('common-tags');
 
 module.exports = class DeleteQuoteCommand extends Commando.Command {
     constructor(client) {
@@ -10,9 +10,9 @@ module.exports = class DeleteQuoteCommand extends Commando.Command {
             memberName: 'delete',
             description: 'Delete your own quotes.',
             examples: [
-                `deletequote`,
-                `deletequote 9`,
-                `deletequotes 7 8 9`,
+                'deletequote',
+                'deletequote 9',
+                'deletequotes 7 8 9'
             ],
             args: [
                 {
@@ -23,36 +23,36 @@ module.exports = class DeleteQuoteCommand extends Commando.Command {
                     type: 'integer',
                     min: 1,
                     max: 25,
-                    infinite: true,
+                    infinite: true
                 }
             ]
-        })
+        });
     }
 
     async run( msg, { indices } ) {
         // get all the quotes
-        let quotes = this.client.settings.get( `quotes:${msg.author.id}` )
+        let quotes = this.client.settings.get( `quotes:${msg.author.id}` );
 
         // move all indices down one since arrays are zero-indexed
         const zeroBasedIndices = indices
-        .map( index => index - 1 )
-        .filter( index => index < quotes.length )
+            .map( index => index - 1 )
+            .filter( index => index < quotes.length );
 
         // make sure we're going to output the quotes that were actually deleted
-        indices = zeroBasedIndices.map( index => index + 1 )
+        indices = zeroBasedIndices.map( index => index + 1 );
 
         // set the quotes we don't want to null, don't just instantly remove them so we can do this in-place
         zeroBasedIndices.forEach(( index ) => {
-            quotes[index] = null
-        })
+            quotes[index] = null;
+        });
 
         // remove the quotes with the null index
-        quotes = quotes.filter( quote => quote != null )
+        quotes = quotes.filter( quote => quote != null );
 
         // set quotes back
         this.client.settings.set( `quotes:${msg.author.id}`, quotes )
-        .then( msg.channel.send(indices.length > 0
-            ? `Successfully removed quotes ${indices.join(', ')}.`
-            : `Failed to remove quotes.`) )
+            .then( msg.channel.send(indices.length > 0
+                ? `Successfully removed quotes ${indices.join(', ')}.`
+                : 'Failed to remove quotes.') );
     }
-}
+};

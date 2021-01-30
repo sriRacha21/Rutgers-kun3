@@ -1,6 +1,6 @@
-const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
+const Commando = require('discord.js-commando');
+const fs = require('fs');
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
 
 module.exports = class RemoveInvitesCommand extends Commando.Command {
     constructor(client) {
@@ -11,19 +11,18 @@ module.exports = class RemoveInvitesCommand extends Commando.Command {
             description: 'Set up the bot to remove server invite links. Automatically excludes some servers by default.',
             userPermissions: [ defaults.admin_permission ],
             guildOnly: true
-        })
+        });
     }
 
-
     async run( msg ) {
-        const settings = this.client.provider
+        const settings = this.client.provider;
 
-        if( !settings.get( msg.guild, `removeInvites`) ) {
-            settings.set( msg.guild, `removeInvites`, true )
-            msg.channel.send( 'Remove invites setting turned on.' )
+        if ( !settings.get( msg.guild, 'removeInvites') ) {
+            settings.set( msg.guild, 'removeInvites', true );
+            msg.channel.send( 'Remove invites setting turned on.' );
         } else {
-            settings.remove( msg.guild, `removeInvites` )
-            msg.channel.send( 'Remove invites setting turned off.' )
+            settings.remove( msg.guild, 'removeInvites' );
+            msg.channel.send( 'Remove invites setting turned off.' );
         }
-	}
-}
+    }
+};

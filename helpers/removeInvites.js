@@ -1,10 +1,9 @@
-const logger = require('../logger')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
+const logger = require('../logger');
+const fs = require('fs');
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
 
 function removeInvites( msg, client ) {
-    if( !msg.guild )
-        return;
+    if ( !msg.guild ) { return; }
 
     const removeInvites = client.provider.get( msg.guild, 'removeInvites' );
 
@@ -17,27 +16,25 @@ function removeInvites( msg, client ) {
         '643670268404826142', // league of legends
         '277296577469612033', // pokemon
         '430957374124326913', // rainbow 6
-        '692027761081974925', // RU economics
-    ]
+        '692027761081974925' // RU economics
+    ];
 
-    if( removeInvites ) {
-        let inviteMatches = msg.content.match( /discord(app)?.(gg|com)\/(invite\/)?([a-z]|[A-Z]|[0-9])+/gi )
-        if( inviteMatches ) {
+    if ( removeInvites ) {
+        const inviteMatches = msg.content.match( /discord(app)?.(gg|com)\/(invite\/)?([a-z]|[A-Z]|[0-9])+/gi );
+        if ( inviteMatches ) {
             inviteMatches.forEach( inviteMatch => {
                 client.fetchInvite(inviteMatch)
-                .then( invite => {
-                    if( universalInvOverrides.includes(invite.guild.id) )
-                        return;
-                    if( !msg.member.hasPermission(defaults.trusted_permission) ) {
-                        msg.delete();
-                        msg.author.send(`Sending server invites is not allowed in ${msg.guild.name}.`);
-                    }
-                })
-                .catch( err => {
-                    if( err )
-                        logger.log( 'warn', `Unable to resolve invite ${inviteMatch}. Error: ${err}` ) ;
-                })
-            })
+                    .then( invite => {
+                        if ( universalInvOverrides.includes(invite.guild.id) ) { return; }
+                        if ( !msg.member.hasPermission(defaults.trusted_permission) ) {
+                            msg.delete();
+                            msg.author.send(`Sending server invites is not allowed in ${msg.guild.name}.`);
+                        }
+                    })
+                    .catch( err => {
+                        if ( err ) { logger.log( 'warn', `Unable to resolve invite ${inviteMatch}. Error: ${err}` ); }
+                    });
+            });
         }
     }
 }

@@ -1,5 +1,5 @@
-const Commando = require('discord.js-commando')
-const util = require('util')
+const Commando = require('discord.js-commando');
+const util = require('util');
 
 module.exports = class GetSettingCommand extends Commando.Command {
     constructor(client) {
@@ -18,17 +18,17 @@ module.exports = class GetSettingCommand extends Commando.Command {
                 {
                     key: 'guild',
                     prompt: 'Do you want to get the setting for this guild?',
-                    type: 'boolean',
+                    type: 'boolean'
                 }
             ],
             argsPromptLimit: 1,
-            ownerOnly: true,
-        })
+            ownerOnly: true
+        });
     }
-    
-    async run( msg, { key, guild } ) {
-        const value = guild ? this.client.provider.get( msg.guild, key ) : this.client.settings.get( key )
 
-        return msg.channel.send( value ? 'Value: ```' + util.inspect(value) + '\n```' : `Could not get value by key, \`${key}\`, from settings.`, {split: true} )
+    async run( msg, { key, guild } ) {
+        const value = guild ? this.client.provider.get( msg.guild, key ) : this.client.settings.get( key );
+
+        return msg.channel.send( value ? 'Value: ```' + util.inspect(value) + '\n```' : `Could not get value by key, \`${key}\`, from settings.`, { split: true } );
     }
-}
+};

@@ -1,5 +1,5 @@
-const Commando = require('discord.js-commando')
-const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy')
+const Commando = require('discord.js-commando');
+const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy');
 const RichEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class AddEmoteCommand extends Commando.Command {
@@ -14,7 +14,7 @@ module.exports = class AddEmoteCommand extends Commando.Command {
                 {
                     key: 'name',
                     type: 'string',
-                    prompt: 'Set a name for the emote.',
+                    prompt: 'Set a name for the emote.'
                 },
                 {
                     key: 'image',
@@ -26,9 +26,9 @@ module.exports = class AddEmoteCommand extends Commando.Command {
             argsPromptLimit: 0,
             throttling: {
                 usages: 1,
-                duration: 10,
+                duration: 10
             }
-        })
+        });
     }
 
     async run( msg, { name, image } ) {
@@ -38,9 +38,9 @@ module.exports = class AddEmoteCommand extends Commando.Command {
                 submissionName: `:${name}:`,
                 member: msg.member,
                 runHasPerms: () => {
-                    msg.guild.emojis.create( image.proxyURL, name, {reason:`Created by ${this.client.user.tag}.`} )
-                    .then( msg.react('👍') )
-                    .catch( e => { if(e) { msg.channel.send(`Emoji ${name} could not be added to the server: \`${e}\``) } })
+                    msg.guild.emojis.create( image.proxyURL, name, { reason: `Created by ${this.client.user.tag}.` } )
+                        .then( msg.react('👍') )
+                        .catch( e => { if (e) { msg.channel.send(`Emoji ${name} could not be added to the server: \`${e}\``); } });
                 },
                 settings: this.client.provider,
                 attachments: [ image ],
@@ -53,6 +53,6 @@ module.exports = class AddEmoteCommand extends Commando.Command {
                 startingEmbed: new RichEmbed()
                     .addField('Emote name:', `:${name}:`)
             }
-        )
+        );
     }
-}
+};

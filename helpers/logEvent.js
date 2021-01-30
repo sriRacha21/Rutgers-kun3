@@ -1,4 +1,4 @@
-const { generateDefaultEmbed } = require('./generateDefaultEmbed')
+const { generateDefaultEmbed } = require('./generateDefaultEmbed');
 
 function logEvent( logInfo, extras ) {
     // get fields
@@ -9,33 +9,28 @@ function logEvent( logInfo, extras ) {
     const attachments = logInfo.attachments ? logInfo.attachments : [];
     const timestamp = logInfo.timestamp;
     // exit if there is no guild
-    if( !guild )
-        return;
+    if ( !guild ) { return; }
     // exit if there is no log channel for the guild
-    const logChannelID = settings.get( guild, `logChannel` );
-    if( !logChannelID )
-        return;
+    const logChannelID = settings.get( guild, 'logChannel' );
+    if ( !logChannelID ) { return; }
     // set log channel
-    if( !channel )
-        channel = guild.channels.resolve(logChannelID);
+    if ( !channel ) { channel = guild.channels.resolve(logChannelID); }
     // get default embed
-    const embed = generateDefaultEmbed( embedInfo )
-    if(timestamp)
-        embed.setTimestamp(timestamp);
+    const embed = generateDefaultEmbed( embedInfo );
+    if (timestamp) { embed.setTimestamp(timestamp); }
     // send message to channel
     channel.send( embed );
-    if( attachments.length > 0 )
-        channel.send({ files: attachments });
-    if( extras )
+    if ( attachments.length > 0 ) { channel.send({ files: attachments }); }
+    if ( extras ) {
         extras.forEach(extra => {
-            if(extra.length <= 2000)
+            if (extra.length <= 2000) {
                 channel.send( extra, {
                     disableMentions: 'all',
                     split: true
                 });
-            else
-                channel.send('Text too long.');
+            } else { channel.send('Text too long.'); }
         });
+    }
 }
 
 exports.logEvent = logEvent;

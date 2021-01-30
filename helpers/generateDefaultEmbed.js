@@ -1,10 +1,11 @@
-const RichEmbed = require('discord.js').MessageEmbed
-const { oneLine } = require('common-tags')
-const fs = require('fs')
-const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : {err: true};
+const RichEmbed = require('discord.js').MessageEmbed;
+const { oneLine } = require('common-tags');
+const fs = require('fs');
+const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : { err: true };
+const logger = require('../logger');
 
 function generateDefaultEmbed( requiredEmbedInfo ) {
-    if(defaults.err) {
+    if (defaults.err) {
         logger.log('error', 'No default_settings.json file was found. Unintended behavior may occur. Make sure you rename settings/default_settings.json.dist to settings/default_settings.json.');
         return;
     }
@@ -21,13 +22,12 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
     startingEmbed
         .setTitle( title )
         .setThumbnail( thumbnail )
-        .setFooter( oneLine`${msg ? `Requested by ${msg.author.tag}${guild ? ` in ${guild.name}` : ``}` : clientUser.tag }`
-                    , msg ? msg.author.displayAvatarURL() : clientUser.displayAvatarURL() )
+        .setFooter( oneLine`${msg ? `Requested by ${msg.author.tag}${guild ? ` in ${guild.name}` : ''}` : clientUser.tag}`
+            , msg ? msg.author.displayAvatarURL() : clientUser.displayAvatarURL() )
         .setColor( defaults.richembed_color )
         .setTimestamp();
 
-    if( requiredEmbedInfo.author )
-        startingEmbed.setAuthor( author, authorThumbnail );
+    if ( requiredEmbedInfo.author ) { startingEmbed.setAuthor( author, authorThumbnail ); }
 
     return startingEmbed;
 }

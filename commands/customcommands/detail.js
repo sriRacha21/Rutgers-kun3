@@ -1,6 +1,6 @@
-const Commando = require('discord.js-commando')
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
-const { oneLine } = require('common-tags')
+const Commando = require('discord.js-commando');
+const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { oneLine } = require('common-tags');
 
 module.exports = class DetailCommandCommand extends Commando.Command {
     constructor(client) {
@@ -14,7 +14,7 @@ module.exports = class DetailCommandCommand extends Commando.Command {
             guildOnly: true,
             examples: [
                 'detailcommand',
-                'detailcommand testcommand',
+                'detailcommand testcommand'
             ],
             args: [
                 {
@@ -23,39 +23,39 @@ module.exports = class DetailCommandCommand extends Commando.Command {
                     type: 'string'
                 }
             ],
-            argsPromptLimit: 1,
-        })
+            argsPromptLimit: 1
+        });
     }
 
     async run( msg, { name } ) {
-        const settings = this.client.provider
+        const settings = this.client.provider;
 
         // check if command exists
-        const commandInfo = settings.get(msg.guild, `commands:${name}`)
-        if( !commandInfo )
+        const commandInfo = settings.get(msg.guild, `commands:${name}`);
+        if ( !commandInfo ) {
             return msg.channel.send( oneLine`A custom command by this name could not be found. 
-Run \`${msg.guild.commandPrefix}listcommand\` to see a list of all commands.` )
+Run \`${msg.guild.commandPrefix}listcommand\` to see a list of all commands.` );
+        }
 
         const retEmbed = generateDefaultEmbed({
             author: 'Command details:',
             title: `Name: ${name}`,
             clientUser: this.client.user,
             msg: msg
-        })
-        if( commandInfo.text )
-            retEmbed.addField( `Contents:`, commandInfo.text )
-        if( commandInfo.attachment )
-            retEmbed.addField( 'Attachment:', commandInfo.attachment )
-        
+        });
+        if ( commandInfo.text ) { retEmbed.addField( 'Contents:', commandInfo.text ); }
+        if ( commandInfo.attachment ) { retEmbed.addField( 'Attachment:', commandInfo.attachment ); }
+
         // check if user id is in cache
         const creator = await this.client.users.fetch( commandInfo.userID );
         // add user if found in cache
-        if( creator )
-            retEmbed.addField( `Creator:`, `<@${commandInfo.userID}>` )
-            .setThumbnail(creator.displayAvatarURL())
+        if ( creator ) {
+            retEmbed.addField( 'Creator:', `<@${commandInfo.userID}>` )
+                .setThumbnail(creator.displayAvatarURL());
+        }
 
-        retEmbed.addField( `Generated at:`, commandInfo.timestamp )
+        retEmbed.addField( 'Generated at:', commandInfo.timestamp );
 
-        return msg.channel.send( retEmbed )
+        return msg.channel.send( retEmbed );
     }
-}
+};

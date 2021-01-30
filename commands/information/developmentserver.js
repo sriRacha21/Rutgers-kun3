@@ -1,5 +1,5 @@
-const Commando = require('discord.js-commando')
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
+const Commando = require('discord.js-commando');
+const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 
 module.exports = class DevelopmentServerCommand extends Commando.Command {
     constructor(client) {
@@ -8,21 +8,20 @@ module.exports = class DevelopmentServerCommand extends Commando.Command {
             aliases: [ 'developmentserver', 'fanclub', 'server', 'development', 'dev' ],
             group: 'information',
             memberName: 'devserver',
-            description: 'Join the development server!',
-        })
+            description: 'Join the development server!'
+        });
     }
-
 
     async run( msg ) {
         const embedInfo = {
             title: 'Join the development server!',
             clientUser: this.client.user,
-            msg: msg,
+            msg: msg
         };
 
         const embed = generateDefaultEmbed(embedInfo)
-        .addField( 'Discord Server Link:', '[Click here to join.](https://discord.gg/YDEpNDV)' )
-        .addField('Why should I join this server?', `* If you have questions regarding development or setup
+            .addField( 'Discord Server Link:', '[Click here to join.](https://discord.gg/YDEpNDV)' )
+            .addField('Why should I join this server?', `* If you have questions regarding development or setup
 * Feedback for current systems
 * Suggestions for new features
 * General small-scale bot discussion
@@ -30,4 +29,4 @@ module.exports = class DevelopmentServerCommand extends Commando.Command {
 
         msg.channel.send( embed );
     }
-}
+};

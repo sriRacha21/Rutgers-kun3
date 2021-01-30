@@ -1,7 +1,7 @@
-const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
-const { oneLine } = require('common-tags')
+const Commando = require('discord.js-commando');
+const fs = require('fs');
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
+const { oneLine } = require('common-tags');
 
 module.exports = class SetAgreementRolesCommand extends Commando.Command {
     constructor(client) {
@@ -24,46 +24,43 @@ Just enter \`clear\` followed by \`finish\` to clear the current setting.`,
                     type: 'string',
                     infinite: true,
                     parse: str => str.toLowerCase(),
-                    validate: str => str.match(/^([a-z]| )+, (true|false|permission)$/i) || str=='clear'
+                    validate: str => str.match(/^([a-z]| )+, (true|false|permission)$/i) || str === 'clear'
                 }
             ]
-        })
+        });
     }
 
     async run( msg, { agreementRolesAndBools } ) {
-        const agreementRoleObjs = []
-        let permissionUsedCount = 0
+        const agreementRoleObjs = [];
+        let permissionUsedCount = 0;
 
-        if( agreementRolesAndBools[0] == 'clear' )
-            return this.client.provider.remove( msg.guild, `agreementRoles` )
-            .then( msg.channel.send(`Agreement roles succcessfully cleared.`) )
+        if ( agreementRolesAndBools[0] === 'clear' ) {
+            return this.client.provider.remove( msg.guild, 'agreementRoles' )
+                .then( msg.channel.send('Agreement roles succcessfully cleared.') );
+        }
 
-        let failure = false
+        let failure = false;
         agreementRolesAndBools.forEach( agreementRoleAndBool => {
-            const roleAndBool = agreementRoleAndBool.split(', ')
-            const agreementRole = roleAndBool[0]
-            const authenticate = roleAndBool[1]
+            const roleAndBool = agreementRoleAndBool.split(', ');
+            const agreementRole = roleAndBool[0];
+            const authenticate = roleAndBool[1];
 
             // count the number of times permission is used
-            permissionUsedCount += authenticate == 'permission' ? 1 : 0
+            permissionUsedCount += authenticate === 'permission' ? 1 : 0;
             // if permission has been used twice or more, indicate an input failure state.
-            if( permissionUsedCount > 1 )
-                failure = 'Too many permission roles.'
-            
-            const roleToPush = msg.guild.roles.cache.find( role => role.name.toLowerCase() == agreementRole )
-            if( !roleToPush )
-                failure = 'One or more roles could not be found.'
-            else {
+            if ( permissionUsedCount > 1 ) { failure = 'Too many permission roles.'; }
+
+            const roleToPush = msg.guild.roles.cache.find( role => role.name.toLowerCase() === agreementRole );
+            if ( !roleToPush ) { failure = 'One or more roles could not be found.'; } else {
                 agreementRoleObjs.push({
                     roleID: roleToPush.id,
                     authenticate: authenticate
-                })
+                });
             }
-        })
-        if( failure )
-            return msg.channel.send( `Command could not be completed: ${failure}` )
+        });
+        if ( failure ) { return msg.channel.send( `Command could not be completed: ${failure}` ); }
 
-        this.client.provider.set( msg.guild, `agreementRoles`, agreementRoleObjs )
-        .then( msg.channel.send(`Agreement roles successfully set.`) )
+        this.client.provider.set( msg.guild, 'agreementRoles', agreementRoleObjs )
+            .then( msg.channel.send('Agreement roles successfully set.') );
     }
-}
+};

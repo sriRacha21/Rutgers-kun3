@@ -1,4 +1,4 @@
-const Commando = require('discord.js-commando')
+const Commando = require('discord.js-commando');
 const { oneLine } = require('common-tags');
 
 module.exports = class ClearSettingsCommand extends Commando.Command {
@@ -7,7 +7,7 @@ module.exports = class ClearSettingsCommand extends Commando.Command {
             name: 'clear-settings',
             group: 'settings',
             memberName: 'clear',
-            description: 'Clear all settings saved for a guild.', 
+            description: 'Clear all settings saved for a guild.',
             examples: [ 'clear' ],
             args: [
                 {
@@ -19,30 +19,32 @@ module.exports = class ClearSettingsCommand extends Commando.Command {
                         'y',
                         'Y',
                         'n',
-                        'N'
-                    ]
+                        'N',
+                        'yes',
+                        'no'
+                    ] // TODO Consider making a confirmation type
                 },
                 {
                     key: 'guild',
                     prompt: 'Do you want to remove the setting for this guild?',
-                    type: 'boolean',
+                    type: 'boolean'
                 }
             ],
             argsPromptLimit: 1,
-            ownerOnly: true,
-        })
+            ownerOnly: true
+        });
     }
 
     async run( msg, { sureness, guild } ) {
         sureness =
-        sureness == 'Y' ||
-        sureness == 'y'
+        sureness === 'Y' ||
+        sureness === 'y';
 
-        if( sureness ) {
+        if ( sureness ) {
             (guild ? this.client.provider.clear(msg.guild) : this.client.settings.clear())
-            .then( msg.channel.send( `Settings ${ guild ? `for guild ${msg.guild.name} ` : '' }cleared.` ) )
+                .then( msg.channel.send( `Settings ${guild ? `for guild ${msg.guild.name} ` : ''}cleared.` ) );
         } else {
-            return msg.channel.send( 'Exiting.' )
+            return msg.channel.send( 'Exiting.' );
         }
     }
-}
+};

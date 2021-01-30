@@ -1,6 +1,6 @@
-const Commando = require('discord.js-commando')
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
-const { getRandomElement } = require('../../helpers/getRandom')
+const Commando = require('discord.js-commando');
+const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { getRandomElement } = require('../../helpers/getRandom');
 
 module.exports = class AddMeCommand extends Commando.Command {
     constructor(client) {
@@ -8,10 +8,9 @@ module.exports = class AddMeCommand extends Commando.Command {
             name: 'addme',
             group: 'information',
             memberName: 'addme',
-            description: 'Add me to another server!',
-        })
+            description: 'Add me to another server!'
+        });
     }
-
 
     async run( msg ) {
         const embed = generateDefaultEmbed({
@@ -19,17 +18,17 @@ module.exports = class AddMeCommand extends Commando.Command {
             title: 'Add me to another server!',
             clientUser: this.client.user,
             msg: msg,
-            guild: msg.guild,
-        })
+            guild: msg.guild
+        });
 
-        const emote = msg.guild && msg.guild.emojis.cache.size > 0 ? getRandomElement(msg.guild.emojis.cache.array()) : getRandomElement(this.client.emojis.cache.array())
-        embed.setThumbnail(emote.url)
+        const emote = msg.guild && msg.guild.emojis.cache.size > 0 ? getRandomElement(msg.guild.emojis.cache.array()) : getRandomElement(this.client.emojis.cache.array());
+        embed.setThumbnail(emote.url);
 
         this.client.generateInvite()
-        .then(link => {
-            embed.setURL(link)
-            msg.channel.send( embed )
-        })
-        .catch(e => { if(e) msg.channel.send(`Error encountered: ${e}`) })
-	}
-}
+            .then(link => {
+                embed.setURL(link);
+                msg.channel.send( embed );
+            })
+            .catch(e => { if (e) msg.channel.send(`Error encountered: ${e}`); });
+    }
+};
