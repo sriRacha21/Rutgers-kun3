@@ -1,18 +1,22 @@
 # Rutgers-kun3 [![Build Status](https://travis-ci.com/sriRacha21/Rutgers-kun3.svg?branch=master)](https://travis-ci.com/sriRacha21/Rutgers-kun3) [![Discord](https://discordapp.com/api/guilds/770415315674857482/embed.png)](https://discord.gg/ydepndv)
 
-> Rutgers-kun is a Discord bot dedicated to providing utility and a sense of connectedness between Discord servers under Rutgers University.
+> Rutgers-kun is a Discord bot built on [Discord.js](https://github.com/discordjs/discord.js) and [Commando](https://github.com/discordjs/Commando) dedicated to provide utility and a sense of connectedness between Discord servers under Rutgers University. He was originally built under [Rutgers Esports](http://www.rutgersesports.com/) but since his inception, his functionality has become generalized for use by any server.
 
+<img align="right" src="resources/branding/chibi_rutgers-kun.png" alt="Profile Art by @J_Hangz" width="200"/>
 
 ## Table of contents
 
 - [How to Use](#how-to-use)
 - [What is (and isn't) Rutgers-kun?](#what-is-and-isnt-rutgers-kun)
 - [Features](#features)
-- [Run me locally!](#run-me-locally)
+- [Contributing](#contributing)
+    - [Run me locally!](#run-me-locally)
+    - [Submit a Pull Request](#submit-a-pull-request)
+- [Contact](#contact)
 
 ## How to Use
 1. [Click me to add me to your server!](https://discordapp.com/api/oauth2/authorize?client_id=291355097919913985&permissions=0&scope=bot)
-2. [Setup](documentation/setup.md).
+2. [Setup](documentation/setup.md) (if you want netID verification).
 
 ## What is (and isn't) Rutgers-kun?
 * Rutgers-kun **is** a bot that lets you manage your userbase by helping you designate who is and isn't a Rutgers student reliably.
@@ -39,7 +43,10 @@
 * Emote, custom command, soundboard addition screening.
 * Bring up Rutgers class information (`!class 198:112`).
 
-## Run me locally!
+
+## Contributing
+
+### Run me locally!
 1. Clone me somewhere you feel comfortable keeping Github projects: `git clone https://github.com/sriRacha21/Rutgers-kun3.git`
 2. Navigate to the `settings` folder within the project.
 3. Edit `api_keys.json.dist` and replace the "your token here text" with your API token (surrounded by double quotation marks), obtained from the Discord developer portal. Rename the file to `api_keys.json`.
@@ -50,3 +57,22 @@
 8. `cd` to root directory of the project.
 9. `npm install`
 10. `node main.js`
+
+### Submit a Pull Request
+1. Fork this repository (should be on the top right of this page).
+2. Clone the fork of the repository locally.
+3. Switch to a new feature branch `git checkout -b <awesome-new-feature-name>`
+4. Code your cool new feature!
+5. [Run](#run-me-locally) and test your cool new feature.
+6. Stage, commit, and push your files:
+```
+git add <changed-files...>
+git commit -m "Cool new commit for my cool new feature"
+git push origin <awesome-new-feature-name>
+```
+7. `git` will output a link to help you create a new pull request from there.
+
+## Contact
+- Arjun Srivastav
+    - [@srirachaIsSpicy](https://twitter.com/sriRachaIsSpicy)
+    - [Support Discord Server](https://discord.gg/ydepndv) - @sriRacha#1999 

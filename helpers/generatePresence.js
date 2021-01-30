@@ -12,7 +12,7 @@ function generatePresence( client, which ) {
 		`${client.commandPrefix}whoami`,
 		`DM me "addme" to add me to your server!`,
 		`<3 Rutgers-Chan`,
-        `New Profile Picture by Jia (@J_Hangz)!`
+        `Profile Picture by Jia (@J_Hangz)!`
 	];
 	const presence = {
 		name: names[which],

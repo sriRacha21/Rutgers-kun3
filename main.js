@@ -33,9 +33,6 @@ const { generatePresence } = require('./helpers/generatePresence');
 const { generateDefaultEmbed } = require('./helpers/generateDefaultEmbed');
 const { reactionListener } = require('./helpers/reactionListener');
 const { removeInvites } = require('./helpers/removeInvites');
-const { payMe } = require('./helpers/payMe');
-const { starMe } = require('./helpers/starMe');
-const { followMe } = require('./helpers/followMe');
 // set up winston logging
 const logger = require('./logger');
 // detailed log of objects
@@ -153,12 +150,6 @@ Client.on('message', msg => {
     // check if word counters need to be incremented
     if( !msg.guild || (!Client.provider.get(msg.guild, 'wordCounters') && !Client.provider.get(msg.guild, `wordCounters:${msg.channel.id}`)) )
         checkWordCount( msg, Client.settings )
-    // pay me or star me
-    if( Client.isOwner( msg.author ) ) {
-        payMe( msg, Client.registry.commands );
-        starMe( msg, Client.registry.commands );
-        followMe( msg, Client.registry.commands );
-    }
     // react with rutgerschan, do reroll
     rutgersChan( msg );
     reroll( msg );

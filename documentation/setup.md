@@ -1,4 +1,7 @@
 # Rutgers-kun 3.0 Documentation
+
+<img align="center" src="../resources/branding/Chibiarjun_horizontal_text.png" alt="Profile Art by @J_Hangz" width="80%"/>
+
 ## Hiya!
 If you just added me to a server you're probably wondering how to set me up to verify Rutgers emails just like Rutgers Esports! Since v3.0 of this bot, I've been able to do that on any server with some setup. I'll show you how to set that up (and more, if you're interested) in this document. If you want to just skip the fluff and get to the good parts, the important text will be in **bold**. This guide will assume your prefix is `!`, but if you set the prefix to something else you will have to use that prefix.
 
@@ -67,8 +70,8 @@ Writing `[user]` and `[guild]` in your string will replace those parts of the te
 You can use `!setautoverify` to set a phrase that users can enter in the agreement channel to skip verification and instantly get their role. This is useful for events such as the involvement fair where user retention is critical to the success of your club or Discord server.
 
 
-# Setting up your Rutgers email verification system (slim) **BETA**:
-Many people have been asking for an easier way to set this up for months. After a few hours of just sitting down and typing out code I think I finally got a system to do this working, but **it has some limitations and I haven't tested it thoroughly so use at your own risk**.
+# Setting up your Rutgers email verification system (slim):
+Use an emote reaction to grant a single role gated by netID verification.
 
 ### Send a message to some channel
 To use this, you should send a message that you intend for people to react to to get their role:
@@ -109,15 +112,10 @@ Rutgers-kun can log:
 
 To log these **run `!setlogchannel`** on a channel.
 
-## Moderation action logging
-Rutgers-kun logs mutes, too.
-
-To log these **run `!setmodchannel`** on a channel.
-
 # Role Responses
 Have you ever wished you had a system that would automatically DM users something when they add a role?
 
-You can do this with **`!setroleresponse`! Run the command and follow the instructions.** Responses are limited to 500 characters.
+You can do this with **`!setroleresponse`! Run the command and follow the instructions.**
 
 # Find the word counter messages annoying? Turn them off:
 Rutgers-kun has a feature that allows users to track certain words and output a new count of that word every time a user uses that word.
