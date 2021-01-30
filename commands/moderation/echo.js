@@ -29,7 +29,7 @@ module.exports = class EchoCommand extends Commando.Command {
     async run( msg, { channel, message } ) {
         let messageToSend = '';
         if ( channel.username ) {
-            messageToSend += `You have been sent a message by the moderators of ${msg.guild.name}:
+            messageToSend += `You have been sent a message by the moderators of **${msg.guild.name}**:
 
 `;
         } // this is a user object
