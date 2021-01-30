@@ -21,26 +21,25 @@ Just enter \`clear\` to clear the setting.`,
                     prompt: oneLine`Enter the text you want a user to see when they enter the server. Use \`[guild]\` to replace that
 part of the text with the guild name and \`[user]\` to replace that part of the text with a string mentioning the joining user. 
 Just enter \`clear\` to clear the setting.`,
-                    type: 'string',
+                    type: 'string'
                 }
             ],
-            argsPromptLimit: 1,
-        })
+            argsPromptLimit: 1
+        });
     }
 
     async run( msg, { welcomeText } ) {
-        const settings = this.client.provider
+        const settings = this.client.provider;
 
-        if( welcomeText === 'clear' ) {
-            settings.remove( msg.guild, `welcomeText` )
-            .then( msg.channel.send( `Welcome successfully removed.` ) )
-            return
+        if ( welcomeText === 'clear' ) {
+            settings.remove( msg.guild, 'welcomeText' )
+                .then( msg.channel.send( 'Welcome successfully removed.' ) );
+            return;
         }
 
-        if( !settings.get( msg.guild, `agreementChannel` ) && !settings.get(msg.guild, 'agreementSlim') )
-            return msg.channel.send( `You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.` )
+        if ( !settings.get( msg.guild, 'agreementChannel' ) && !settings.get(msg.guild, 'agreementSlim') ) { return msg.channel.send( `You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.` ); }
 
-        settings.set( msg.guild, `welcomeText`, welcomeText )
-        .then( msg.channel.send( `Welcome text successfully set.` ))
+        settings.set( msg.guild, 'welcomeText', welcomeText )
+            .then( msg.channel.send( 'Welcome text successfully set.' ));
     }
-}
+};

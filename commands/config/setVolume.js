@@ -1,6 +1,6 @@
-const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
+const Commando = require('discord.js-commando');
+const fs = require('fs');
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
 
 module.exports = class SetVolumeCommand extends Commando.Command {
     constructor(client) {
@@ -20,20 +20,19 @@ module.exports = class SetVolumeCommand extends Commando.Command {
                     max: 100
                 }
             ]
-        })
+        });
     }
 
-
     async run( msg, { volume } ) {
-        const settings = this.client.provider
+        const settings = this.client.provider;
 
-        if( typeof volume === 'string' ) {
-            settings.remove( msg.guild, `volume` )
-            msg.channel.send( `Cleared volume setting.` )
-            return
+        if ( typeof volume === 'string' ) {
+            settings.remove( msg.guild, 'volume' );
+            msg.channel.send( 'Cleared volume setting.' );
+            return;
         }
 
-        settings.set( msg.guild, `volume`, volume )
-        .then( msg.channel.send( `Volume successfully set to ${volume}.` ))
-	}
-}
+        settings.set( msg.guild, 'volume', volume )
+            .then( msg.channel.send( `Volume successfully set to ${volume}.` ));
+    }
+};

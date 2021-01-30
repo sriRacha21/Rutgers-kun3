@@ -1,6 +1,6 @@
-const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
+const Commando = require('discord.js-commando');
+const fs = require('fs');
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
 
 module.exports = class SetRoleResponseCommand extends Commando.Command {
     constructor(client) {
@@ -15,7 +15,7 @@ module.exports = class SetRoleResponseCommand extends Commando.Command {
                 {
                     key: 'role',
                     prompt: 'Enter the role whose response you want to set.',
-                    type: 'role',
+                    type: 'role'
                 },
                 {
                     key: 'response',
@@ -23,19 +23,18 @@ module.exports = class SetRoleResponseCommand extends Commando.Command {
                     type: 'string'
                 }
             ]
-        })
+        });
     }
 
-
     async run( msg, { role, response } ) {
-        const settings = this.client.provider
+        const settings = this.client.provider;
 
-        if( response == 'clear' ) {
-            settings.remove( msg.guild, `roleResponse:${role.id}` )
-            return msg.channel.send( `Successfully cleared role response.` )
+        if ( response === 'clear' ) {
+            settings.remove( msg.guild, `roleResponse:${role.id}` );
+            return msg.channel.send( 'Successfully cleared role response.' );
         }
 
         settings.set( msg.guild, `roleResponse:${role.id}`, response )
-        .then( msg.channel.send( 'Role response successfully set.' ) )
-	}
-}
+            .then( msg.channel.send( 'Role response successfully set.' ) );
+    }
+};

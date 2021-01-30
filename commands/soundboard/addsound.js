@@ -21,8 +21,8 @@ module.exports = class AddSoundCommand extends Commando.Command {
                     prompt: 'Set a name for the sound.',
                     error: 'The name of the file must be alphanumeric and less than or equal to 20 characters.',
                     validate: str => {
-                        const matches = str.match(/([a-z]|[0-9]){1,20}/g)
-                        return matches ? matches[0].length == str.length : false
+                        const matches = str.match(/([a-z]|[0-9]){1,20}/g);
+                        return matches ? matches[0].length === str.length : false;
                     },
                     parse: str => `${str.toLowerCase()}.mp3`
                 },
@@ -30,11 +30,11 @@ module.exports = class AddSoundCommand extends Commando.Command {
                     key: 'sound',
                     label: 'attach .mp3 file',
                     type: 'sound',
-                    prompt: 'Attach a sound file. .mp3\'s only.',
+                    prompt: 'Attach a sound file. .mp3\'s only.'
                 }
             ],
             argsPromptLimit: 0
-        })
+        });
     }
 
     async run( msg, { name, sound } ) {
@@ -44,15 +44,15 @@ module.exports = class AddSoundCommand extends Commando.Command {
                 submissionName: name,
                 member: msg.member,
                 runHasPerms: () => {
-                    const filename = path.join(process.cwd(), 'sounds', name )
-                    const file = fs.createWriteStream(filename)
+                    const filename = path.join(process.cwd(), 'sounds', name );
+                    const file = fs.createWriteStream(filename);
                     // write file to sounds folder
-                    https.get( sound.proxyURL, res => res.pipe(file) )
+                    https.get( sound.proxyURL, res => res.pipe(file) );
                     // set command fields for play and addsound to add the new sound
-                    setPlayCommandFields(this.client.registry)
-                    setAddSoundCommandFields(this.client.registry)
-                    
-                    msg.react( '👍' )
+                    setPlayCommandFields(this.client.registry);
+                    setAddSoundCommandFields(this.client.registry);
+
+                    msg.react( '👍' );
                 },
                 settings: this.client.provider,
                 attachments: [ sound ],
@@ -65,6 +65,6 @@ module.exports = class AddSoundCommand extends Commando.Command {
                 startingEmbed: new RichEmbed()
                     .addField( 'Sound name:', name.split('.')[0] )
             }
-        )
+        );
     }
-}
+};

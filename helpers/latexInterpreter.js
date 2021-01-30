@@ -1,13 +1,13 @@
-const bent = require('bent')
-const fs = require('fs')
-const path = require('path')
-const template = fs.readFileSync(path.join(__dirname, '../resources/latexTemplate.tex')).toString()
-const { reactionListener } = require('./reactionListener')
+const bent = require('bent');
+const fs = require('fs');
+const path = require('path');
+const template = fs.readFileSync(path.join(__dirname, '../resources/latexTemplate.tex')).toString();
+const { reactionListener } = require('./reactionListener');
 
 function getLatexMatches( msgContent ) {
     // match $$ thing $$
     const matches = msgContent.match( /\$\$.+?\$\$/gs );
-    return matches ? matches : [];
+    return matches || [];
 }
 
 function isSpoiler( match ) {
@@ -15,22 +15,21 @@ function isSpoiler( match ) {
 }
 
 async function latexInterpreter( sentMessage, channel ) {
-    let msgContent = sentMessage.cleanContent;
+    const msgContent = sentMessage.cleanContent;
 
     // get matches
     let matches = getLatexMatches(msgContent);
 
     // if there are none return
-    if( matches.length == 0 )
-        return;
+    if ( matches.length === 0 ) { return; }
 
     // remove dollar signs from matches and trim them
     matches = matches
-    .map(match => match
-        .substring(2, match.length-2)
-        .trim()
-        .replace(/`/g, ''));
-    
+        .map(match => match
+            .substring(2, match.length - 2)
+            .trim()
+            .replace(/`/g, ''));
+
     // figure out which are spoilers and mark em
     const spoilers = [];
     matches.forEach((match, idx) => {
@@ -38,7 +37,7 @@ async function latexInterpreter( sentMessage, channel ) {
     });
 
     // normalize spoilers
-    matches = matches.map(match => isSpoiler(match) ? match.substring(2, match.length-2) : match);
+    matches = matches.map(match => isSpoiler(match) ? match.substring(2, match.length - 2) : match);
 
     // push new image for each request
     const promiseList = [];
@@ -54,15 +53,15 @@ async function latexInterpreter( sentMessage, channel ) {
             density: 440
         };
 
-        const post = bent('POST','json');
+        const post = bent('POST', 'json');
         promiseList.push( post('https://rtex.probablyaweb.site/api/v2', payload) );
     });
 
     Promise.all( promiseList ).then( responses => {
         // filter and map responses
         const mappedResponses = responses
-            .filter(response => response.status == 'success')
-            .filter((_,idx) => !spoilers[idx])
+            .filter(response => response.status === 'success')
+            .filter((_, idx) => !spoilers[idx])
             .map((response, idx) => {
                 return {
                     attachment: `https://rtex.probablyaweb.site/api/v2/${response.filename}`,
@@ -71,8 +70,8 @@ async function latexInterpreter( sentMessage, channel ) {
             });
 
         const mappedSpoilerResponses = responses
-            .filter(response => response.status == 'success')
-            .filter((_,idx) => spoilers[idx])
+            .filter(response => response.status === 'success')
+            .filter((_, idx) => spoilers[idx])
             .map((response, idx) => {
                 return {
                     attachment: `https://rtex.probablyaweb.site/api/v2/${response.filename}`,
@@ -80,28 +79,30 @@ async function latexInterpreter( sentMessage, channel ) {
                 };
             });
 
-        let sentMessagePromises = [];
-        if(mappedResponses.length == 0 && mappedSpoilerResponses.length == 0) {
+        const sentMessagePromises = [];
+        if (mappedResponses.length === 0 && mappedSpoilerResponses.length === 0) {
             sentMessagePromises.push( channel.send('There were issue(s) parsing your LaTeX expression(s). Please edit your message with a valid LaTeX expression.') );
         } else {
-            if(mappedResponses.length > 0)
+            if (mappedResponses.length > 0) {
                 sentMessagePromises.push( channel.send({
                     files: mappedResponses
                 }));
-            if(mappedSpoilerResponses.length > 0)
+            }
+            if (mappedSpoilerResponses.length > 0) {
                 sentMessagePromises.push( channel.send({
                     files: mappedSpoilerResponses
                 }));
+            }
         }
 
         sentMessagePromises.forEach(sentMessagePromise => {
             sentMessagePromise.then( msg => {
-                msg.react('🗑') 
+                msg.react('🗑');
                 // add a listener that disappears after a minute for latex corrections
-                const eventName = `latexEdited:${sentMessage.id}`
+                const eventName = `latexEdited:${sentMessage.id}`;
                 const listener = () => {
                     msg.delete();
-                }
+                };
                 reactionListener.once(eventName, listener);
                 setTimeout(() => {
                     reactionListener.removeListener(eventName, listener);
@@ -109,12 +110,12 @@ async function latexInterpreter( sentMessage, channel ) {
             });
         });
     })
-    .catch( err => {
-        if( err ) channel.send(`The LaTeX interpreter API returned an error: \`${err}\`.`);
-    })
-    .finally(() => {
-        channel.stopTyping();
-    })
+        .catch( err => {
+            if ( err ) channel.send(`The LaTeX interpreter API returned an error: \`${err}\`.`);
+        })
+        .finally(() => {
+            channel.stopTyping();
+        });
 }
 
 exports.latexInterpreter = latexInterpreter;

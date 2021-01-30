@@ -1,7 +1,7 @@
-const Commando = require('discord.js-commando')
-const fs = require('fs')
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'))
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed')
+const Commando = require('discord.js-commando');
+const fs = require('fs');
+const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
+const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 
 module.exports = class DocumentationCommand extends Commando.Command {
     constructor(client) {
@@ -12,10 +12,9 @@ module.exports = class DocumentationCommand extends Commando.Command {
             memberName: 'documentation',
             description: 'Read the documentation for the bot.',
             userPermissions: [ defaults.admin_permission ],
-            guildOnly: true,
-        })
+            guildOnly: true
+        });
     }
-
 
     async run( msg ) {
         const embed = generateDefaultEmbed({
@@ -23,13 +22,13 @@ module.exports = class DocumentationCommand extends Commando.Command {
             title: 'Hiya!',
             clientUser: this.client.user,
             guild: msg.guild,
-            thumbnail: msg.guild.iconURL(),
+            thumbnail: msg.guild.iconURL()
         })
-        .setDescription(`I see you've decided to add me to your server! I have a bunch of commands to configure the server to your liking.
+            .setDescription(`I see you've decided to add me to your server! I have a bunch of commands to configure the server to your liking.
     Read the documentation [here](https://github.com/sriRacha21/Rutgers-kun3/tree/master/documentation/setup.md).`)
-        .addField('Have questions, feedback, or are interested in following the bot\'s development? Join the development server!:', 'https://discord.gg/YDEpNDV/');
+            .addField('Have questions, feedback, or are interested in following the bot\'s development? Join the development server!:', 'https://discord.gg/YDEpNDV/');
         // check if the server owner is still in the server
         msg.author.send( embed )
-        .then(m => msg.channel.send("Sent you a DM!"));
-	}
-}
+            .then(m => msg.channel.send('Sent you a DM!'));
+    }
+};

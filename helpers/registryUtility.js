@@ -1,9 +1,9 @@
 function getCommandByName(registry, name) {
     const command = registry.commands
-    .filter(command => command.name == name)
-    .first()
+        .filter(command => command.name === name)
+        .first();
 
-    return command
+    return command;
 }
 
-exports.getCommandByName = getCommandByName
+exports.getCommandByName = getCommandByName;
