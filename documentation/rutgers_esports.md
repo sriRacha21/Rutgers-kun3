@@ -1,8 +1,10 @@
 # Rutgers-kun and Rutgers Esports
 
-<img align="center" src="../resources/branding/chibi_rutgers-kun.png" alt="Profile Art by @J_Hangz" width="125"/>
-<img align="center" src="../resources/branding/x.png" alt="Profile Art by @J_Hangz" width="90"/>
-<img align="center" src="http://www.rutgersesports.com/wp-content/uploads/2019/01/ru_eSports-horizontal.png" alt="Profile Art by @J_Hangz" width="700"/>
+<p align="center">
+    <img src="../resources/branding/chibi_rutgers-kun.png" alt="Profile Art by @J_Hangz" width="125"/>
+    <img src="../resources/branding/x.png" alt="Profile Art by @J_Hangz" width="90"/>
+    <img src="http://www.rutgersesports.com/wp-content/uploads/2019/01/ru_eSports-horizontal.png" alt="Profile Art by @J_Hangz" width="700"/>
+</p>
 
 
 It might be a bit confusing contributing to this project as a member of Rutgers Esports since Rutgers-kun and Rutgers Esports are almost entirely separate. Hopefully this document will clear up some questions. This document may be expanded upon in the future with more information.
