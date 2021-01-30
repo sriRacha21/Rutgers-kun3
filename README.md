@@ -44,7 +44,6 @@
 * Emote, custom command, soundboard addition screening.
 * Bring up Rutgers class information (`!class 198:112`).
 
-
 ## Contributing
 
 ### Run me locally!

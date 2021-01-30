@@ -1,6 +1,7 @@
 const Commando = require('discord.js-commando');
 const bent = require('bent');
 const getJSON = bent('json');
+const getBuffer = bent('buffer');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const { reactionListener } = require('../../helpers/reactionListener');
 const xRay = require('x-ray');
@@ -11,6 +12,7 @@ const courseNonArgRegex = /(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?/i
 const courseRegex = /^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?$/i;
 const emojiCharacters = require('../../helpers/emojiCharacters');
 const logger = require('../../logger');
+const { inspect } = require('util');
 
 module.exports = class ClassCommand extends Commando.Command {
     constructor(client) {
@@ -159,10 +161,24 @@ module.exports = class ClassCommand extends Commando.Command {
                         x( classToSend.synopsisUrl, 'img', [{
                             img: '',
                             src: '@src'
-                        }])(function(err, header) {
-                            if ( err ) return;
-                            if ( header.length >= 0 && header[0] && header[0].src ) { embed.setImage(header[0].src); }
-                            if ( header.length >= 2 && header[2] && header[2].src ) { embed.setThumbnail(header[2].src); }
+                        }])(async(err, header) => {
+                            if (err) return;
+                            if (header.length >= 0 && header[0] && header[0].src) {
+                                try {
+                                    await getBuffer(header[0].src);
+                                    embed.setImage(header[0].src);
+                                } catch {
+                                    logger.log('warn', `Unable to reach resource: ${header[0].src}.`);
+                                }
+                            }
+                            if (header.length >= 2 && header[2] && header[2].src) {
+                                try {
+                                    await getBuffer(header[2].src);
+                                    embed.setThumbnail(header[2].src);
+                                } catch {
+                                    logger.log('warn', `Unable to reach resource: ${header[2].src}.`);
+                                }
+                            }
                             ClassCommand.output(classToSend, embed, section, msg, args);
                         });
                     } else { ClassCommand.output(classToSend, embed, section, msg, args); }
@@ -228,9 +244,9 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
                 });
             });
             let visited = false;
-            professorInfos.forEach( professorInfo => {
-                if ( embed.fields.length < 25 ) { embed.addField( professorInfo.name + ':', `Sections: ${professorInfo.sections.length > 0 ? `${professorInfo.sections.join(', ')}` : 'None'}` ); }
-                if ( embed.fields.length === 25 && !visited ) {
+            professorInfos.forEach(professorInfo => {
+                if (embed.fields.length < 25) { embed.addField( professorInfo.name + ':', `Sections: ${professorInfo.sections.length > 0 ? `${professorInfo.sections.join(', ')}` : 'None'}` ); }
+                if (embed.fields.length === 25 && !visited) {
                     visited = true;
                     embed.setDescription( (embed.description ? embed.description : '') + '\nResults may be truncated because there was too much output.' );
                 }
@@ -256,12 +272,11 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
             }
         }
         // send the message
-        return msg.channel.send( embed ).then( m => {
+        return msg.channel.send( embed ).then(m => {
             reactions.unshift('🗑');
             reactRecursive( m, reactions, (mr) => {
                 if ( mr.emoji.name === '🗑' ) { return; }
                 reactionListener.once(`class:${msg.author.id}:${m.id}:${mr.emoji.name}`, (command) => {
-                    // if ( emojiClassDict[mr.emoji.name] ) {} I don't remmeber why this is here
                     command.run(msg, {
                         class: emojiClassDict[mr.emoji.name],
                         seasonYear: args.seasonYear,
@@ -269,7 +284,12 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
                         level: args.level
                     }, true);
                 });
-            } );
-        });
+            });
+        })
+            .catch(err => {
+                msg.channel.send('There was a problem finding this class. This error will be automatically logged.');
+                logger.log('error', `Error with class command output: ${err}
+${inspect(embed)}`);
+            });
     }
 };
