@@ -46,7 +46,7 @@ module.exports = class ListQuotesCommand extends Commando.Command {
             clientUser: this.client.user,
             msg: msg
         })
-            .setThumbnail( user.displayAvatarURL );
+            .setThumbnail( user.displayAvatarURL() );
         const abbreviatedEmbed = generateDefaultEmbed({
             author: `Last ${quoteAbbreviatedCount} Quotes for `,
             title: user.tag,
