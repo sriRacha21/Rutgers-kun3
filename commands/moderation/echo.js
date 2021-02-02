@@ -14,8 +14,9 @@ module.exports = class EchoCommand extends Commando.Command {
             args: [
                 {
                     key: 'channel',
+                    label: 'channel or member',
                     prompt: 'Enter the name of the channel or user you want to echo into.',
-                    type: 'channel|user'
+                    type: 'channel|member'
                 },
                 {
                     key: 'message',
@@ -28,7 +29,7 @@ module.exports = class EchoCommand extends Commando.Command {
 
     async run( msg, { channel, message } ) {
         let messageToSend = '';
-        if ( channel.username ) {
+        if ( channel.user ) {
             messageToSend += `You have been sent a message by the moderators of **${msg.guild.name}**:
 
 `;
