@@ -4,7 +4,7 @@ async function getCommandList( db, guild, errMessage ) {
         // get all settings
         const settings = await db.all( 'SELECT * FROM settings' );
         // filter settings to just this guild
-        const guildSettings = settings.filter( setting => setting.guild === guild.id );
+        const guildSettings = settings.filter( setting => setting.guild === +guild.id );
         // if there are no settings at all in this guild there won't even be a row.
         if ( guildSettings.length === 0 ) {
             reject(errMessage);
