@@ -2,15 +2,15 @@ const Commando = require('discord.js-commando');
 const bent = require('bent');
 const getJSON = bent('json');
 const getBuffer = bent('buffer');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const { reactionListener } = require('../../helpers/reactionListener');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
+const { reactionListener } = require('../../helpers/utility/reactionListener');
 const xRay = require('x-ray');
 // eslint-disable-next-line new-cap
 const x = new xRay();
-const { reactRecursive } = require('../../helpers/detectChain');
+const { reactRecursive } = require('../../helpers/fun/detectChain');
 const courseNonArgRegex = /(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?/i;
 const courseRegex = /^(?:[0-9]{2}:)?([0-9]{3}):([0-9]{3}):?([A-Z0-9]{2})?$/i;
-const emojiCharacters = require('../../helpers/emojiCharacters');
+const emojiCharacters = require('../../helpers/utility/emojiCharacters');
 const logger = require('../../logger');
 const { inspect } = require('util');
 

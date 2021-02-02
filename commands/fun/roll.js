@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando');
 const { oneLine } = require('common-tags');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const { getRandomInt } = require('../../helpers/getRandom');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
+const { getRandomInt } = require('../../helpers/fun/getRandom');
 
 module.exports = class RollCommand extends Commando.Command {
     constructor(client) {

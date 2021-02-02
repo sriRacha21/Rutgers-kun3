@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const { getCommandList } = require('../../helpers/dbUtilities');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
+const { getCommandList } = require('../../helpers/utility/dbUtilities');
 
 module.exports = class ListCommandCommands extends Commando.Command {
     constructor(client) {

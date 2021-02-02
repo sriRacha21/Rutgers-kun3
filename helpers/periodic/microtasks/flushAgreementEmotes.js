@@ -1,6 +1,6 @@
 const fs = require('fs');
 const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : { err: true };
-const logger = require('../logger');
+const logger = require('../../../logger');
 
 function flushAgreementEmotes( channels, provider ) {
     logger.log('info', 'Running microtask flushAgreementEmotes.');

@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando');
-const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy');
+const { implementApprovalPolicy } = require('../../helpers/utility/implementApprovalPolicy');
 const RichEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class AddEmoteCommand extends Commando.Command {

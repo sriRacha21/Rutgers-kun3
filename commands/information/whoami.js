@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando');
 const parse = require('parse-git-config');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
 const fs = require('fs');
 const contributors = JSON.parse(fs.readFileSync('settings/bot_settings.json', 'utf-8')).contributor;
 

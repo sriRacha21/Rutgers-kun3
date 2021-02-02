@@ -1,7 +1,7 @@
 const exec = require('child_process').execSync;
 const fs = require('fs');
 const packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
-const logger = require('../logger');
+const logger = require('../../logger');
 
 function generatePresence( client, which ) {
     logger.log('info', 'Running microtask generatePresence.');

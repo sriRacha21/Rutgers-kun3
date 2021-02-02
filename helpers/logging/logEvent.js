@@ -1,4 +1,4 @@
-const { generateDefaultEmbed } = require('./generateDefaultEmbed');
+const { generateDefaultEmbed } = require('../utility/generateDefaultEmbed');
 
 function logEvent( logInfo, extras ) {
     // get fields

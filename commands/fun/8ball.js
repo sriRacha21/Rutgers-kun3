@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando');
-const { getRandomElement } = require('../../helpers/getRandom');
+const { getRandomElement } = require('../../helpers/fun/getRandom');
 
 module.exports = class EightBallCommand extends Commando.Command {
     constructor(client) {

@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
 
 module.exports = class PullRequestCommand extends Commando.Command {
     constructor(client) {

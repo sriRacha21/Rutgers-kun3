@@ -2,7 +2,7 @@
 const fs = require('fs');
 const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : { err: true };
 const permissions = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
-const logger = require('../logger');
+const logger = require('../../logger');
 const { generateDefaultEmbed } = require('./generateDefaultEmbed');
 const { oneLine } = require('common-tags');
 

@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando');
 const { oneLine } = require('common-tags');
-const { idsToValues } = require('../../helpers/idsToValues');
+const { idsToValues } = require('../../helpers/utility/idsToValues');
 const fs = require('fs');
 const isSMTPServerSetup = fs.existsSync('settings/smtp_server.json');
 

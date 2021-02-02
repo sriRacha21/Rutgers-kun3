@@ -1,7 +1,7 @@
-const { requestBreeds } = require('./requestBreeds');
+const { requestBreeds } = require('../fun/requestBreeds');
 const { getSoundsArr } = require('./sounds');
 const { getCommandByName } = require('./registryUtility');
-const logger = require('../logger');
+const logger = require('../../logger');
 
 async function setCommandFields(registry) {
     logger.log('info', 'Running microtask setCommandFields.');

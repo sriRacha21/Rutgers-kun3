@@ -1,8 +1,8 @@
 const Commando = require('discord.js-commando');
-const { implementApprovalPolicy } = require('../../helpers/implementApprovalPolicy');
+const { implementApprovalPolicy } = require('../../helpers/utility/implementApprovalPolicy');
 const RichEmbed = require('discord.js').MessageEmbed;
 const { oneLine } = require('common-tags');
-const { getCommandList } = require('../../helpers/dbUtilities');
+const { getCommandList } = require('../../helpers/utility/dbUtilities');
 const commandCountGuildLimit = 50;
 
 module.exports = class AddCommandCommand extends Commando.Command {

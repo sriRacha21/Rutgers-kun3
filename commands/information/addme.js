@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const { getRandomElement } = require('../../helpers/getRandom');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
+const { getRandomElement } = require('../../helpers/fun/getRandom');
 
 module.exports = class AddMeCommand extends Commando.Command {
     constructor(client) {

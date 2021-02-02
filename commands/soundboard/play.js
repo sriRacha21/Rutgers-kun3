@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando');
 const path = require('path');
-const { getSoundsArr } = require('../../helpers/sounds');
+const { getSoundsArr } = require('../../helpers/utility/sounds');
 
 module.exports = class PlayCommand extends Commando.Command {
     constructor(client) {

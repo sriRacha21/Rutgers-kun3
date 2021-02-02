@@ -2,7 +2,7 @@ const RichEmbed = require('discord.js').MessageEmbed;
 const { oneLine } = require('common-tags');
 const fs = require('fs');
 const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : { err: true };
-const logger = require('../logger');
+const logger = require('../../logger');
 
 function generateDefaultEmbed( requiredEmbedInfo ) {
     if (defaults.err) {

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
-const logger = require('../logger');
+const logger = require('../../../logger');
 
 function flushAgreements( guilds, provider ) {
     logger.log('info', 'Running microtask flushAgreements.');

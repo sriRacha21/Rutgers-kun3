@@ -1,4 +1,4 @@
-const logger = require('../logger');
+const logger = require('../../../logger');
 
 function flushMessagesToCache( channels, provider ) {
     logger.log('info', 'Running microtask flushMessagesToCache.');

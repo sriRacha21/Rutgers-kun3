@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando');
-const { reactionListener } = require('../../helpers/reactionListener');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { reactionListener } = require('../../helpers/utility/reactionListener');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
 
 module.exports = class ListQuotesCommand extends Commando.Command {
     constructor(client) {

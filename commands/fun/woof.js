@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando');
 const bent = require('bent');
 const getJSON = bent('json');
-const { getRandomElement } = require('../../helpers/getRandom');
+const { getRandomElement } = require('../../helpers/fun/getRandom');
 
 module.exports = class WoofCommand extends Commando.Command {
     constructor(client) {

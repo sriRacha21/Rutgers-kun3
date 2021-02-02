@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
 const { oneLine } = require('common-tags');
 
 module.exports = class DetailCommandCommand extends Commando.Command {
@@ -56,6 +56,6 @@ Run \`${msg.guild.commandPrefix}listcommand\` to see a list of all commands.` );
 
         retEmbed.addField( 'Generated at:', commandInfo.timestamp );
 
-        return msg.channel.send( retEmbed );
+        return msg.reply( retEmbed );
     }
 };

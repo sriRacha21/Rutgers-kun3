@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando');
-const { timeStrToMillis } = require('../helpers/timeStrToMillis');
+const { timeStrToMillis } = require('../helpers/utility/timeStrToMillis');
 
 class TimeArgumentType extends Commando.ArgumentType {
     constructor(client) { super(client, 'time'); }

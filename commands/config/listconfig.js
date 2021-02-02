@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
 const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
 
 module.exports = class ListConfigCommand extends Commando.Command {
     constructor(client) {

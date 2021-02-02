@@ -10,9 +10,9 @@ const getJSON = bent('json');
 // Logging
 const logger = require('../../logger');
 // Needed misc scripts
-const { isValidnetID } = require('../../helpers/isValidnetID');
+const { isValidnetID } = require('../../helpers/verification/isValidnetID');
 // Output
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
 
 module.exports = class DiagnoseCommand extends Commando.Command {
     constructor(client) {
@@ -103,8 +103,8 @@ module.exports = class DiagnoseCommand extends Commando.Command {
             startEmbed.setDescription("I think I already queued an email for this user. Let's see if it bounced.");
             await sentEmbed.edit(startEmbed);
             // Did the email bounce? Did it get suppressed?
+            startEmbed.addField('Mailgun key check:', apiKeys.mailgun === '' ? "I can't check the mailgun logs." : 'Mailgun key found! Checking mailgun logs...');
             if (apiKeys.mailgun === '') {
-                startEmbed.addField('Mailgun key check:', "I can't check the mailgun logs.");
                 startEmbed.addField('Diagnosis complete!:', 'Consider asking the user to double-check their email. No further action will taken.');
                 await startEmbed.edit(startEmbed);
                 msg.channel.stopTyping();

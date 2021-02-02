@@ -2,12 +2,12 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const smtpServer = fs.existsSync('settings/smtp_server.json') ? JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8')) : null;
-const { generateVerificationCode } = require('./getRandom');
-const { idsToValues } = require('./idsToValues');
+const { generateVerificationCode } = require('../fun/getRandom');
+const { idsToValues } = require('../utility/idsToValues');
 const { isValidnetID } = require('./isValidnetID');
 const { sendWelcomeMessage } = require('./sendWelcomeMessage');
 const { oneLine } = require('common-tags');
-const logger = require('../logger');
+const logger = require('../../logger');
 const { inspect } = require('util');
 
 async function agreeHelper( msg, guilds, settings, provider ) {
