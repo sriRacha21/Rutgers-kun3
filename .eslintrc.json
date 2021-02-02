@@ -15,6 +15,7 @@
         "array-bracket-spacing" : 0,
         "space-before-function-paren" : ["error", "never"],
         "space-in-parens": 0,
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "linebreak-style": ["error", "unix"]
     }
 }
