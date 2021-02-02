@@ -189,7 +189,7 @@ Turn on DM's from server members:`, { files: ['resources/setup-images/instructio
             });
     }
     // if the bot sent one of the messageReactions and it was a wastebin and someone else sent a wastebin, delete it
-    const botReaction = messageReaction.message.reactions.cache.find(mr => mr.emoji.name === '🗑' && mr.users.cache.find(u => u === Client.user.id));
+    const botReaction = messageReaction.message.reactions.cache.find(mr => mr.emoji.name === '🗑' && mr.users.cache.find(u => u.id === Client.user.id));
     if ( !!botReaction && botReaction.emoji.name === '🗑' && messageReaction.emoji.name === '🗑' ) { messageReaction.message.delete(); }
     // use reactionListener
     // for the class command
