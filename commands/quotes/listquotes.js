@@ -37,7 +37,7 @@ module.exports = class ListQuotesCommand extends Commando.Command {
         // get quotes of default
         const quotes = this.client.settings.get( `quotes:${user.id}` );
 
-        if ( !quotes || quotes.length === 0 ) { return msg.channel.send( 'This user has no quotes. :(' ); }
+        if ( !quotes || quotes.length === 0 ) { return msg.reply( 'This user has no quotes. :(' ); }
 
         // add quotes to embed
         const retEmbed = generateDefaultEmbed({
@@ -66,13 +66,13 @@ module.exports = class ListQuotesCommand extends Commando.Command {
 
         if ( quotes.length > quoteAbbreviatedCount && msg.channel.type !== 'dm' ) {
             msg.author.send( retEmbed );
-            msg.channel.send( abbreviatedEmbed )
+            msg.reply( abbreviatedEmbed )
                 .then( m => {
                     m.react('📧');
                     reactionListener.addListener(`listquotes:${m.id}`, (user) => {
                         user.send( retEmbed );
                     });
                 });
-        } else { return msg.channel.send( retEmbed ); }
+        } else { return msg.reply( retEmbed ); }
     }
 };

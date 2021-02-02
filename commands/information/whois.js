@@ -76,6 +76,6 @@ module.exports = class WhoIsCommand extends Commando.Command {
             if ( netIDs[user.id] ) embed.addField('Linked NetID:', netIDs[user.id]);
         }
 
-        msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

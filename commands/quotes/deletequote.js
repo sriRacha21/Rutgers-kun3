@@ -51,7 +51,7 @@ module.exports = class DeleteQuoteCommand extends Commando.Command {
 
         // set quotes back
         this.client.settings.set( `quotes:${msg.author.id}`, quotes )
-            .then( msg.channel.send(indices.length > 0
+            .then( msg.reply(indices.length > 0
                 ? `Successfully removed quotes ${indices.join(', ')}.`
                 : 'Failed to remove quotes.') );
     }

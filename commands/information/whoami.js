@@ -31,6 +31,6 @@ module.exports = class WhoAmICommand extends Commando.Command {
             .addField("I'm open source!", `I'm hosted at ${parse.sync()['remote "origin"'].url}.`)
             .addField('Feeling Generous?', 'Buy me a coffee!: https://www.buymeacoffee.com/h4K7sQj');
 
-        return msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

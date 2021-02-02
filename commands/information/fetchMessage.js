@@ -62,8 +62,8 @@ module.exports = class FetchMessageCommand extends Commando.Command {
         }
 
         if ( message.attachments.size === 1 ) { embed.setImage(message.attachments.first().proxyURL); }
-        let messagePromise = msg.channel.send( embed );
-        if ( message.attachments.size > 1 ) { messagePromise = msg.channel.send({ files: message.attachments.map(a => a.proxyURL) }); }
+        let messagePromise = msg.reply( embed );
+        if ( message.attachments.size > 1 ) { messagePromise = msg.reply({ files: message.attachments.map(a => a.proxyURL) }); }
         return messagePromise;
     }
 };

@@ -23,25 +23,25 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
     async run( msg, { toRole } ) {
         // ensure the server has verification set up
         let agreementRoles = this.client.provider.get(msg.guild, 'agreementRoles');
-        if ( !agreementRoles || agreementRoles.length === 0 ) { return msg.channel.send('This server does not have email verification set up.'); }
+        if ( !agreementRoles || agreementRoles.length === 0 ) { return msg.reply('This server does not have email verification set up.'); }
         agreementRoles = agreementRoles.filter(r => r.authenticate !== 'permission');
         // ensure the user has one of the agreement roles
         let prevRole = -1;
         msg.member.roles.cache.forEach(r => {
             if ( prevRole === -1 && agreementRoles.map(r => r.roleID).includes(r.id) ) { prevRole = r.id; }
         });
-        if ( prevRole === -1 ) { return msg.channel.send('You do not have any of the roles set up for email verification in this server.'); }
+        if ( prevRole === -1 ) { return msg.reply('You do not have any of the roles set up for email verification in this server.'); }
         // if to role is a role that the member already has stop
-        if ( msg.member.roles.cache.has(toRole.id) ) { return msg.channel.send('You already have this role.'); }
+        if ( msg.member.roles.cache.has(toRole.id) ) { return msg.reply('You already have this role.'); }
         // convert role id's to roles
         prevRole = msg.guild.roles.cache.get(prevRole);
         // toRole is already a role object
-        if ( !prevRole || !toRole ) { msg.channel.send("Uh oh. This shouldn't have happened."); } // This should be impossible
+        if ( !prevRole || !toRole ) { msg.reply("Uh oh. This shouldn't have happened."); } // This should be impossible
         // make sure both roles are in the agreementRoles arr
         const agreementRolePrev = agreementRoles.find(r => r.roleID === prevRole.id);
         const agreementRoleTo = agreementRoles.find(r => r.roleID === toRole.id);
         if ( !agreementRolePrev || !agreementRoleTo ) {
-            msg.channel.send(`Make sure you enter one of these roles: ${agreementRoles.map(r => msg.guild.roles.cache.get(r.roleID).name).join(', ')}.`);
+            msg.reply(`Make sure you enter one of these roles: ${agreementRoles.map(r => msg.guild.roles.cache.get(r.roleID).name).join(', ')}.`);
             return;
         }
         // if the previous role was not authenticated and the to role is
@@ -56,11 +56,11 @@ Please enter your netID. Your netID is a unique identifier given to you by Rutge
                         removerole: prevRole.id,
                         step: 2
                     });
-                    msg.channel.send("You've been DM'ed instructions on switching roles.");
+                    msg.reply("You've been DM'ed instructions on switching roles.");
                 })
                 .catch(err => {
                     if ( err ) {
-                        msg.channel.send(`Error: \`${err}\`
+                        msg.reply(`Error: \`${err}\`
 This may have happened because you are not accepting DM's.
 Turn on DM's from server members:`, { files: ['resources/setup-images/instructions/notif_settings.png', 'resources/setup-images/instructions/dms_on.png'] });
                     }
@@ -71,13 +71,13 @@ Turn on DM's from server members:`, { files: ['resources/setup-images/instructio
             msg.member.roles.remove(prevRole)
                 .then(m => {
                     msg.member.roles.add(toRole)
-                        .then(m => msg.channel.send(`Successfully switched your role to ${toRole.name}.`))
+                        .then(m => msg.reply(`Successfully switched your role to ${toRole.name}.`))
                         .catch(e => {
-                            if (e) { msg.channel.send(`Error adding role ${toRole.name}: ${e}. Please ensure the bot is above this role and has "Manage Roles" so it can manage it.`); }
+                            if (e) { msg.reply(`Error adding role ${toRole.name}: ${e}. Please ensure the bot is above this role and has "Manage Roles" so it can manage it.`); }
                         });
                 })
                 .catch(e => {
-                    if (e) { msg.channel.send(`Error removing role ${prevRole.name}: ${e}. Please ensure the bot is above this role and has "Manage Roles" so it can manage it.`); }
+                    if (e) { msg.reply(`Error removing role ${prevRole.name}: ${e}. Please ensure the bot is above this role and has "Manage Roles" so it can manage it.`); }
                 });
         }
     }

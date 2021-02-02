@@ -30,6 +30,6 @@ module.exports = class FollowMeCommand extends Commando.Command {
             .setImage( 'https://pbs.twimg.com/profile_images/1335401233943842817/8gxW9p1h_400x400.jpg' )
             .setURL( 'https://twitter.com/sriRachaIsSpicy' );
 
-        msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

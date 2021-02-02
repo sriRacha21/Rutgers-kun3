@@ -30,6 +30,6 @@ module.exports = class BMACCommand extends Commando.Command {
             .setURL( 'https://www.buymeacoffee.com/h4K7sQj' )
             .setThumbnail();
 
-        msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

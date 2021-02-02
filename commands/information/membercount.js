@@ -15,7 +15,7 @@ module.exports = class MemberCountCommand extends Commando.Command {
         });
     }
 
-    async run( msg, args ) {
+    async run( msg ) {
         const embed = generateDefaultEmbed({
             author: 'Member Count for',
             title: msg.guild.name,
@@ -38,6 +38,6 @@ module.exports = class MemberCountCommand extends Commando.Command {
         }
 
         // send the embed
-        msg.channel.send(embed);
+        return msg.reply(embed);
     }
 };

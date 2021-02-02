@@ -11,6 +11,11 @@ module.exports = class ClearSettingsCommand extends Commando.Command {
             examples: [ 'clear' ],
             args: [
                 {
+                    key: 'guild',
+                    prompt: 'Do you want to remove the setting for this guild?',
+                    type: 'boolean'
+                },
+                {
                     key: 'sureness',
                     prompt: oneLine`Are you sure you want to clear all
                     saved settings for your guild? (y/N)`,
@@ -23,11 +28,6 @@ module.exports = class ClearSettingsCommand extends Commando.Command {
                         'yes',
                         'no'
                     ] // TODO Consider making a confirmation type
-                },
-                {
-                    key: 'guild',
-                    prompt: 'Do you want to remove the setting for this guild?',
-                    type: 'boolean'
                 }
             ],
             argsPromptLimit: 1,
@@ -42,9 +42,9 @@ module.exports = class ClearSettingsCommand extends Commando.Command {
 
         if ( sureness ) {
             (guild ? this.client.provider.clear(msg.guild) : this.client.settings.clear())
-                .then( msg.channel.send( `Settings ${guild ? `for guild ${msg.guild.name} ` : ''}cleared.` ) );
+                .then( msg.reply( `Settings ${guild ? `for guild ${msg.guild.name} ` : ''}cleared.` ) );
         } else {
-            return msg.channel.send( 'Exiting.' );
+            return msg.reply( 'Exiting.' );
         }
     }
 };

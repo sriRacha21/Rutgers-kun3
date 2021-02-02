@@ -28,7 +28,6 @@ module.exports = class DocumentationCommand extends Commando.Command {
     Read the documentation [here](https://github.com/sriRacha21/Rutgers-kun3/tree/master/documentation/setup.md).`)
             .addField('Have questions, feedback, or are interested in following the bot\'s development? Join the development server!:', 'https://discord.gg/YDEpNDV/');
         // check if the server owner is still in the server
-        msg.author.send( embed )
-            .then(m => msg.channel.send('Sent you a DM!'));
+        return msg.reply( embed );
     }
 };

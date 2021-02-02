@@ -13,7 +13,7 @@ module.exports = class ScreenfetchCommand extends Commando.Command {
     }
 
     async run( msg ) {
-        return msg.channel.send(
+        return msg.reply(
             exec('screenfetch -nN')
                 .toString()
                 .trim()

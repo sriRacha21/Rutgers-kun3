@@ -23,6 +23,6 @@ module.exports = class PullRequestCommand extends Commando.Command {
             .setURL('https://github.com/sriRacha21/Rutgers-kun3/pulls')
             .setDescription( 'Or create an [issue](https://github.com/sriRacha21/Rutgers-kun3/issues).' );
 
-        return msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

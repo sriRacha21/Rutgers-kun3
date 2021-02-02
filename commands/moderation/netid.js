@@ -23,7 +23,7 @@ module.exports = class NetidCommand extends Commando.Command {
 
     async run( msg, { netid } ) {
         // make sure the netids file exists
-        if ( !fs.existsSync('settings/netids.json') ) { return msg.channel.send("You are not logging netID's so you cannot use this command."); }
+        if ( !fs.existsSync('settings/netids.json') ) { return msg.reply("You are not logging netID's so you cannot use this command."); }
         const userIDs = JSON.parse(fs.readFileSync('settings/netids.json', 'utf-8'));
         // iterate over whole json object <key: userID, value: netID> to find netID
         let foundUserID;
@@ -32,7 +32,7 @@ module.exports = class NetidCommand extends Commando.Command {
         }
 
         // send not found message
-        if ( !foundUserID ) { return msg.channel.send( `NetID ${netid} not found.` ); }
+        if ( !foundUserID ) { return msg.reply( `NetID ${netid} not found.` ); }
 
         // create initial embed if the user is found
         const embed = generateDefaultEmbed({
@@ -54,6 +54,10 @@ module.exports = class NetidCommand extends Commando.Command {
         const guilds = [];
         this.client.guilds.cache.forEach( guild => {
             if ( guild.members.cache.find( m => m.user.id === foundUserID ) ) { guilds.push( guild ); }
+            try {
+                guild.members.fetch(foundUserID);
+                guilds.push(guild);
+            } catch (err) {}
         });
         if ( guilds.length > 0 ) {
             embed.setDescription(`**Shared servers (${guilds.length})**:
@@ -61,6 +65,6 @@ ${guilds.map(g => g.name).join('\n')}`);
         }
 
         // send the embed
-        return msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

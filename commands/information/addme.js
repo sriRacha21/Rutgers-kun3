@@ -27,8 +27,8 @@ module.exports = class AddMeCommand extends Commando.Command {
         this.client.generateInvite()
             .then(link => {
                 embed.setURL(link);
-                msg.channel.send( embed );
+                msg.reply( embed );
             })
-            .catch(e => { if (e) msg.channel.send(`Error encountered: ${e}`); });
+            .catch(e => { if (e) msg.reply(`Error encountered: ${e}`); });
     }
 };

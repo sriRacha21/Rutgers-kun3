@@ -24,6 +24,6 @@ module.exports = class StarMeCommand extends Commando.Command {
             .setDescription(`A special thanks to:\n${contributors.map(c => `<@${c}>`).join('\n')}\nfor contributing!`)
             .setURL( 'https://github.com/sriRacha21/Rutgers-kun3/stargazers' );
 
-        msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

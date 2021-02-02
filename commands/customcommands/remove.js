@@ -32,9 +32,9 @@ module.exports = class RemoveCommandCommands extends Commando.Command {
 
     async run( msg, { key } ) {
         const result = await this.client.provider.get( msg.guild, `commands:${key}` );
-        if ( !result ) { return msg.channel.send( `No command by the name \`${key}\` was found.` ); }
+        if ( !result ) { return msg.reply( `No command by the name \`${key}\` was found.` ); }
 
         this.client.provider.remove( msg.guild, `commands:${key}` )
-            .then( msg.channel.send( `Successfully removed command \`${msg.guild.commandPrefix}${key}\`.`) );
+            .then( msg.reply( `Successfully removed command \`${msg.guild.commandPrefix}${key}\`.`) );
     }
 };

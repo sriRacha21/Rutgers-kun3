@@ -29,6 +29,6 @@ module.exports = class GetSettingCommand extends Commando.Command {
     async run( msg, { key, guild } ) {
         const value = guild ? this.client.provider.get( msg.guild, key ) : this.client.settings.get( key );
 
-        return msg.channel.send( value ? 'Value: ```' + util.inspect(value) + '\n```' : `Could not get value by key, \`${key}\`, from settings.`, { split: true } );
+        return msg.reply( value ? 'Value: ```' + util.inspect(value) + '\n```' : `Could not get value by key, \`${key}\`, from settings.`, { split: true } );
     }
 };

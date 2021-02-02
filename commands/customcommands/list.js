@@ -35,13 +35,13 @@ module.exports = class ListCommandCommands extends Commando.Command {
         try {
             keys = await getCommandList(this.client.provider.db, msg.guild, err);
         } catch (err) {
-            msg.channel.send(err);
+            msg.reply(err);
             return;
         }
 
         if ( filter ) { keys = keys.filter( key => key.includes(filter) ); }
         // perform another check on keys
-        if ( keys.length === 0 ) { return msg.channel.send( err ); }
+        if ( keys.length === 0 ) { return msg.reply( err ); }
         // prepare to return keys
         const retEmbed = generateDefaultEmbed({
             author: 'Command list for',
@@ -56,7 +56,7 @@ module.exports = class ListCommandCommands extends Commando.Command {
         retEmbed.setThumbnail(msg.guild.iconURL())
             .setDescription(description);
 
-        msg.channel.send( retEmbed )
+        msg.reply( retEmbed )
             .then( m => m.react('🗑') );
     }
 };

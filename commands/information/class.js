@@ -94,7 +94,7 @@ module.exports = class ClassCommand extends Commando.Command {
     }
 
     async run( msg, args ) {
-        if ( !args.class ) { return msg.channel.send( 'That\'s not a valid class code. Class codes are formatted as `<school code>:<subject code>:<course code>`.' ); }
+        if ( !args.class ) { return msg.reply( 'That\'s not a valid class code. Class codes are formatted as `<school code>:<subject code>:<course code>`.' ); }
         const subject = args.class[1];
         const course = args.class[2];
         const section = args.class[3];
@@ -183,7 +183,7 @@ module.exports = class ClassCommand extends Commando.Command {
                         });
                     } else { ClassCommand.output(classToSend, embed, section, msg, args); }
                 } else {
-                    return msg.channel.send( `Class could not be found.
+                    return msg.reply( `Class could not be found.
 Maybe it's not from this semester? Try requesting another semester with \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}class ${subject}:${course} '<season> <year>'\`
 Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}class 750:273 'fall 2019'\`` )
                         .then( m => m.react('🗑') );
@@ -253,7 +253,7 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
             });
         } else {
             const foundSection = classToSend.sections.find(s => s.number === section );
-            if ( !foundSection ) { return msg.channel.send( `Section ${section} could not be found.` ); }
+            if ( !foundSection ) { return msg.reply( `Section ${section} could not be found.` ); }
             embed.setDescription(`**Section ${section}**\nIndex ${foundSection.index}`);
             if ( foundSection.instructors && foundSection.instructors.length > 0 ) { embed.addField('Instructors:', foundSection.instructors.map(i => i.name).join('\n') ); }
             if ( foundSection.notes ) { embed.addField('Notes:', foundSection.notes); }
@@ -272,7 +272,7 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
             }
         }
         // send the message
-        return msg.channel.send( embed ).then(m => {
+        return msg.reply( embed ).then(m => {
             reactions.unshift('🗑');
             reactRecursive( m, reactions, (mr) => {
                 if ( mr.emoji.name === '🗑' ) { return; }
@@ -287,7 +287,7 @@ Example: \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}cla
             });
         })
             .catch(err => {
-                msg.channel.send('There was a problem finding this class. This error will be automatically logged.');
+                msg.reply('There was a problem finding this class. This error will be automatically logged.');
                 logger.log('error', `Error with class command output: ${err}
 ${inspect(embed)}`);
             });

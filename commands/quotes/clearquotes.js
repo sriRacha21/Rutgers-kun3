@@ -13,6 +13,6 @@ module.exports = class ClearQuotesCommand extends Commando.Command {
 
     async run( msg ) {
         this.client.settings.remove(`quotes:${msg.author.id}`)
-            .then( msg.channel.send( 'Your quotes have been successfully cleared.' ) );
+            .then( msg.reply( 'Your quotes have been successfully cleared.' ) );
     }
 };

@@ -59,7 +59,7 @@ module.exports = class DiagnoseCommand extends Commando.Command {
         // start typing
         msg.channel.startTyping();
         // send embed-- prepare for edits
-        const sentEmbed = await msg.channel.send(startEmbed);
+        const sentEmbed = await msg.reply(startEmbed);
         // fetch last 20 messages (needed for every step)
         if ( !user.dmChannel ) await user.createDM();
         if ( user.dmChannel.messages.cache.size < 20 ) await user.dmChannel.messages.fetch({ limit: 20 });

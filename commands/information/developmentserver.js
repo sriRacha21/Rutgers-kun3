@@ -27,6 +27,6 @@ module.exports = class DevelopmentServerCommand extends Commando.Command {
 * General small-scale bot discussion
 * Bug reports`);
 
-        msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

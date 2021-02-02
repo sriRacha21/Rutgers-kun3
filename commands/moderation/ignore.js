@@ -28,6 +28,6 @@ module.exports = class IgnoreCommand extends Commando.Command {
         const ignored = settings.get( msg.guild, `ignored:${channel.id}` );
         if ( ignored ) { settings.remove( msg.guild, `ignored:${channel.id}` ); } else { settings.set( msg.guild, `ignored:${channel.id}`, true ); }
 
-        return msg.channel.send( `Successfully ${ignored ? 'un' : ''}ignored channel ${channel}.` );
+        return msg.reply( `Successfully ${ignored ? 'un' : ''}ignored channel ${channel}.` );
     }
 };

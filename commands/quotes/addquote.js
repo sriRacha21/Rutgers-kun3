@@ -30,11 +30,11 @@ module.exports = class AddQuoteCommand extends Commando.Command {
         const settings = this.client.settings;
 
         // don't quote yourself or a bot u monkey
-        if ( msg.author.id === user.id ) { return msg.channel.send( "You can't quote yourself." ); }
-        if ( user.bot ) { return msg.channel.send( "You can't quote a bot." ); }
+        if ( msg.author.id === user.id ) { return msg.reply( "You can't quote yourself." ); }
+        if ( user.bot ) { return msg.reply( "You can't quote a bot." ); }
 
         // if the message is over 1024 letters it's not allowed
-        if ( msg.content.length > 1024 ) { return msg.channel.send('That quote is too long!'); }
+        if ( msg.content.length > 1024 ) { return msg.reply('That quote is too long!'); }
 
         // push quote to settings
         const maybeQuotes = settings.get( `quotes:${user.id}` );
@@ -42,16 +42,16 @@ module.exports = class AddQuoteCommand extends Commando.Command {
         await msg.channel.messages.fetch({ limit: 100 });
         const message = msg.channel.messages.cache.filter(message => message.author.id === user.id).last();
         // check if message could be found
-        if ( !message ) { return msg.channel.send( `${user.username}'s last message could not be found in this channel.` ); }
+        if ( !message ) { return msg.reply( `${user.username}'s last message could not be found in this channel.` ); }
         // check if there are 25 quotes already, if so remove the first one and add the last one
         while ( quotes.length >= 25 ) { quotes.shift(); }
         // make sure we include attachments
         const newQuote = message.cleanContent.concat(message.attachments ? '\n'.concat(message.attachments.map(attachment => attachment.proxyURL).join('\n')) : '');
-        if (newQuote.trim() === '') { return msg.channel.send('Unable to save quote (empty quote).'); }
+        if (newQuote.trim() === '') { return msg.reply('Unable to save quote (empty quote).'); }
         quotes.push( newQuote );
 
         // set setting after push
         settings.set( `quotes:${user.id}`, quotes )
-            .then( msg.channel.send( `Successfully saved quote for user @${user.username}!` ) );
+            .then( msg.reply( `Successfully saved quote for user @${user.username}!` ) );
     }
 };

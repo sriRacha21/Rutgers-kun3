@@ -29,8 +29,8 @@ module.exports = class RemoveSettingCommand extends Commando.Command {
         const valPromise = guild ? this.client.provider.remove( msg.guild, key ) : this.client.settings.remove( key );
 
         if ( valPromise ) {
-            valPromise.then( value => msg.channel.send( `Removed value by key, \`${key}\`, from settings.` ) )
-                .catch( e => msg.channel.send(`Could not remove value by key, \`${key}\`, from settings: ${e}`) );
-        } else { msg.channel.send(`Could not remove value by key, \`${key}\`, from settings.`); }
+            valPromise.then( value => msg.reply( `Removed value by key, \`${key}\`, from settings.` ) )
+                .catch( e => msg.reply(`Could not remove value by key, \`${key}\`, from settings: ${e}`) );
+        } else { msg.reply(`Could not remove value by key, \`${key}\`, from settings.`); }
     }
 };
