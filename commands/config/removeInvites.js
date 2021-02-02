@@ -19,10 +19,10 @@ module.exports = class RemoveInvitesCommand extends Commando.Command {
 
         if ( !settings.get( msg.guild, 'removeInvites') ) {
             settings.set( msg.guild, 'removeInvites', true );
-            msg.channel.send( 'Remove invites setting turned on.' );
+            msg.reply( 'Remove invites setting turned on.' );
         } else {
             settings.remove( msg.guild, 'removeInvites' );
-            msg.channel.send( 'Remove invites setting turned off.' );
+            msg.reply( 'Remove invites setting turned off.' );
         }
     }
 };

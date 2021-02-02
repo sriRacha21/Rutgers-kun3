@@ -1,6 +1,5 @@
 const Commando = require('discord.js-commando');
 const exec = require('child_process').execSync;
-const { loadingEdit } = require('../../helpers/loadingEdit');
 
 module.exports = class BbtCommand extends Commando.Command {
     constructor(client) {
@@ -20,6 +19,9 @@ module.exports = class BbtCommand extends Commando.Command {
     }
 
     async run( msg ) {
-        loadingEdit( msg.channel, this.client.emojis, '```\n' + exec('python3 scripts/fa1939febb310bcb6f8e9809604a4211/bbt.py').toString() + '\n```' );
+        msg.channel.startTyping();
+        const chosenBbt = exec('python3 scripts/fa1939febb310bcb6f8e9809604a4211/bbt.py').toString();
+        msg.channel.stopTyping();
+        return msg.reply(chosenBbt);
     }
 };

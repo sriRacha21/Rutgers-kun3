@@ -28,11 +28,11 @@ module.exports = class SetVolumeCommand extends Commando.Command {
 
         if ( typeof volume === 'string' ) {
             settings.remove( msg.guild, 'volume' );
-            msg.channel.send( 'Cleared volume setting.' );
+            msg.reply( 'Cleared volume setting.' );
             return;
         }
 
         settings.set( msg.guild, 'volume', volume )
-            .then( msg.channel.send( `Volume successfully set to ${volume}.` ));
+            .then( msg.reply( `Volume successfully set to ${volume}.` ));
     }
 };

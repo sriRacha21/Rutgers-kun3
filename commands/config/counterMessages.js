@@ -29,17 +29,17 @@ module.exports = class RemoveMessageCountersCommand extends Commando.Command {
         if ( args.channel ) {
             if ( !settings.get( msg.guild, `wordCounters:${msg.channel.id}`) ) {
                 settings.set( msg.guild, `wordCounters:${msg.channel.id}`, true );
-                msg.channel.send( `Word counting messages turned off for channel ${msg.channel}.` );
+                msg.reply( `Word counting messages turned off for channel ${msg.channel}.` );
             } else {
                 settings.remove( msg.guild, `wordCounters:${msg.channel.id}` );
-                msg.channel.send( `Word counting messages turned on for channel ${msg.channel}.` );
+                msg.reply( `Word counting messages turned on for channel ${msg.channel}.` );
             }
         } else if ( !settings.get( msg.guild, 'wordCounters' ) ) {
             settings.set( msg.guild, 'wordCounters', true );
-            msg.channel.send( 'Word counting messages turned off.' );
+            msg.reply( 'Word counting messages turned off.' );
         } else {
             settings.remove( msg.guild, 'wordCounters' );
-            msg.channel.send( 'Word counting messages turned on.' );
+            msg.reply( 'Word counting messages turned on.' );
         }
     }
 };

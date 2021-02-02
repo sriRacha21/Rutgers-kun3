@@ -28,10 +28,10 @@ module.exports = class SetWelcomeChannelCommand extends Commando.Command {
 
         if ( typeof welcomeChannel === 'object' ) {
             settings.set( msg.guild, 'welcomeChannel', welcomeChannel.id )
-                .then( msg.channel.send( `Welcome channel successfully set as ${welcomeChannel}.` ) );
+                .then( msg.reply( `Welcome channel successfully set as ${welcomeChannel}.` ) );
         } else if ( welcomeChannel === 'clear' ) {
             settings.remove( msg.guild, 'welcomeChannel' )
-                .then( msg.channel.send( 'Welcome channel successfully removed.' ) );
-        } else { msg.channel.send('Invalid input. Try again.'); }
+                .then( msg.reply( 'Welcome channel successfully removed.' ) );
+        } else { msg.reply('Invalid input. Try again.'); }
     }
 };

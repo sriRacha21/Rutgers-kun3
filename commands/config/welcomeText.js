@@ -33,13 +33,13 @@ Just enter \`clear\` to clear the setting.`,
 
         if ( welcomeText === 'clear' ) {
             settings.remove( msg.guild, 'welcomeText' )
-                .then( msg.channel.send( 'Welcome successfully removed.' ) );
+                .then( msg.reply( 'Welcome successfully removed.' ) );
             return;
         }
 
-        if ( !settings.get( msg.guild, 'agreementChannel' ) && !settings.get(msg.guild, 'agreementSlim') ) { return msg.channel.send( `You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.` ); }
+        if ( !settings.get( msg.guild, 'agreementChannel' ) && !settings.get(msg.guild, 'agreementSlim') ) { return msg.reply( `You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.` ); }
 
         settings.set( msg.guild, 'welcomeText', welcomeText )
-            .then( msg.channel.send( 'Welcome text successfully set.' ));
+            .then( msg.reply( 'Welcome text successfully set.' ));
     }
 };

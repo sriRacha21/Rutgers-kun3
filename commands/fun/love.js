@@ -38,7 +38,7 @@ module.exports = class LoveCommand extends Commando.Command {
             );
 
         // form calculation string
-        return msg.channel.send( oneLine`${args.one} loves ${args.two}
+        return msg.reply( oneLine`${args.one} loves ${args.two}
             ${percent}%${percent === 100 ? '! :heart:' : ''}` + `\n${this.generateProgressBar(percent)}`, {
             allowedMentions: {} // don't allow the bot to mention anyone
         });

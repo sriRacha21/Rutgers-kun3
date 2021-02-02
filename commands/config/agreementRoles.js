@@ -36,7 +36,7 @@ Just enter \`clear\` followed by \`finish\` to clear the current setting.`,
 
         if ( agreementRolesAndBools[0] === 'clear' ) {
             return this.client.provider.remove( msg.guild, 'agreementRoles' )
-                .then( msg.channel.send('Agreement roles succcessfully cleared.') );
+                .then( msg.reply('Agreement roles successfully cleared.') );
         }
 
         let failure = false;
@@ -58,9 +58,9 @@ Just enter \`clear\` followed by \`finish\` to clear the current setting.`,
                 });
             }
         });
-        if ( failure ) { return msg.channel.send( `Command could not be completed: ${failure}` ); }
+        if ( failure ) { return msg.reply( `Command could not be completed: ${failure}` ); }
 
         this.client.provider.set( msg.guild, 'agreementRoles', agreementRoleObjs )
-            .then( msg.channel.send('Agreement roles successfully set.') );
+            .then( msg.reply('Agreement roles successfully set.') );
     }
 };

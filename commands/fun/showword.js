@@ -35,8 +35,8 @@ module.exports = class ShowWordCommand extends Commando.Command {
             words.forEach(w => {
                 embed.addField(w.word, w.count);
             });
-            return msg.channel.send(embed);
+            return msg.reply(embed);
         }
-        return msg.channel.send(`No words tracked for ${user.tag}.`);
+        return msg.reply(`No words tracked for ${user.tag}.`);
     }
 };

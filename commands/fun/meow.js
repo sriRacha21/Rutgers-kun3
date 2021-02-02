@@ -1,7 +1,6 @@
 const Commando = require('discord.js-commando');
 const bent = require('bent');
 const getJSON = bent('json');
-const { loadingEdit } = require('../../helpers/loadingEdit');
 
 module.exports = class MeowCommand extends Commando.Command {
     constructor(client) {
@@ -20,11 +19,13 @@ module.exports = class MeowCommand extends Commando.Command {
     }
 
     async run( msg ) {
+        msg.channel.startTyping();
         const url = 'https://api.thecatapi.com/v1/images/search';
         getJSON(url)
             .then( res => {
-                loadingEdit( msg.channel, this.client.emojis, null, { files: [res[0].url] } );
+                msg.reply({ files: [res[0].url] });
             })
-            .catch(err => msg.channel.send( `There was an error: ${err}`));
+            .catch(err => msg.reply( `There was an error: ${err}`))
+            .finally(() => msg.channel.stopTyping());
     }
 };

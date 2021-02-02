@@ -31,10 +31,10 @@ module.exports = class SetRoleResponseCommand extends Commando.Command {
 
         if ( response === 'clear' ) {
             settings.remove( msg.guild, `roleResponse:${role.id}` );
-            return msg.channel.send( 'Successfully cleared role response.' );
+            return msg.reply( 'Successfully cleared role response.' );
         }
 
         settings.set( msg.guild, `roleResponse:${role.id}`, response )
-            .then( msg.channel.send( 'Role response successfully set.' ) );
+            .then( msg.reply( 'Role response successfully set.' ) );
     }
 };

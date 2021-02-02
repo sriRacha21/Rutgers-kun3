@@ -26,15 +26,15 @@ module.exports = class SetAgreementChannelCommand extends Commando.Command {
     async run( msg, { agreementChannel } ) {
         const settings = this.client.provider;
 
-        if ( !this.client.provider.get( msg.guild, 'agreementRoles' ) && agreementChannel !== 'clear' ) { return msg.channel.send( 'You need to set up the roles that a user can choose from when they agree to the server rules first.' ); }
-        if ( !this.client.provider.get( msg.guild, 'welcomeChannel' ) && agreementChannel !== 'clear' ) { return msg.channel.send( 'You need to set up the welcome channel first.' ); }
+        if ( !this.client.provider.get( msg.guild, 'agreementRoles' ) && agreementChannel !== 'clear' ) { return msg.reply( 'You need to set up the roles that a user can choose from when they agree to the server rules first.' ); }
+        if ( !this.client.provider.get( msg.guild, 'welcomeChannel' ) && agreementChannel !== 'clear' ) { return msg.reply( 'You need to set up the welcome channel first.' ); }
 
         if ( typeof agreementChannel === 'object' ) {
             settings.set( msg.guild, 'agreementChannel', agreementChannel.id )
-                .then( msg.channel.send( `Agreement channel successfully set as ${agreementChannel}.` ) );
+                .then( msg.reply( `Agreement channel successfully set as ${agreementChannel}.` ) );
         } else if ( agreementChannel === 'clear' ) {
             settings.remove( msg.guild, 'agreementChannel' )
-                .then( msg.channel.send( 'Agreement channel successfully removed.' ) );
-        } else { msg.channel.send('Invalid input. Try again.'); }
+                .then( msg.reply( 'Agreement channel successfully removed.' ) );
+        } else { msg.reply('Invalid input. Try again.'); }
     }
 };

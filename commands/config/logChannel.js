@@ -28,10 +28,10 @@ module.exports = class SetlogChannelCommand extends Commando.Command {
 
         if ( typeof logChannel === 'object' ) {
             settings.set( msg.guild, 'logChannel', logChannel.id )
-                .then( msg.channel.send( `Log channel successfully set as ${logChannel}.` ) );
+                .then( msg.reply( `Log channel successfully set as ${logChannel}.` ) );
         } else if ( logChannel === 'clear' ) {
             settings.remove( msg.guild, 'logChannel' )
-                .then( msg.channel.send( 'Log channel successfully removed.' ) );
-        } else { msg.channel.send('Invalid input. Try again.'); }
+                .then( msg.reply( 'Log channel successfully removed.' ) );
+        } else { msg.reply('Invalid input. Try again.'); }
     }
 };

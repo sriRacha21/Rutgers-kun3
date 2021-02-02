@@ -56,6 +56,6 @@ module.exports = class RollCommand extends Commando.Command {
         embed.addField( 'Sum:', sum, true )
             .addField( 'Average:', sum / dice, true );
 
-        return msg.channel.send( embed );
+        return msg.reply( embed );
     }
 };

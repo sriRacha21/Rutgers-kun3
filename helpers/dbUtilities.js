@@ -16,7 +16,7 @@ async function getCommandList( db, guild, errMessage ) {
         const keys = Object.keys(customCommands)
             .filter( key => key.startsWith('commands:') )
             .map( key => key.substring('commands:'.length) );
-        // resolveolve with the list of keys
+        // resolve with the list of keys
         resolve(keys);
     });
 }

@@ -60,6 +60,6 @@ module.exports = class ListConfigCommand extends Commando.Command {
         if ( unpingableRoleIDs ) { embed.addField( 'Unpingable Roles:', unpingableRoleIDs.map(role => `<@&${role}>`).join('\n') ); }
         if ( protectedRoles.length > 0 ) { embed.addField( 'Protected Roles:', protectedRoles.map(role => `<@&${role}>`).join('\n') ); }
 
-        return msg.channel.send( embed.fields.length > 0 ? embed : `No configs for this server. Set them up with \`${msg.guild.commandPrefix}help\` then run the commands under the \`config\` group.` );
+        return msg.reply( embed.fields.length > 0 ? embed : `No configs for this server. Set them up with \`${msg.guild.commandPrefix}help\` then run the commands under the \`config\` group.` );
     }
 };

@@ -2,7 +2,6 @@ const Commando = require('discord.js-commando');
 const bent = require('bent');
 const getJSON = bent('json');
 const { getRandomElement } = require('../../helpers/getRandom');
-const { loadingEdit } = require('../../helpers/loadingEdit');
 
 module.exports = class WoofCommand extends Commando.Command {
     constructor(client) {
@@ -35,6 +34,7 @@ module.exports = class WoofCommand extends Commando.Command {
     }
 
     async run( msg, args ) {
+        msg.channel.startTyping();
         // get breeds and prepare to request them
         const breeds = this.client.registry.commands
             .filter(command => command.name === 'woof' )
@@ -48,9 +48,10 @@ module.exports = class WoofCommand extends Commando.Command {
         // perform the request
         getJSON(url)
             .then( res => {
-            // return the url as a file
-                loadingEdit(msg.channel, this.client.emojis, null, { files: [res.response.url] });
+                // return the url as a file
+                msg.reply({ files: [res.response.url] });
             })
-            .catch( err => msg.channel.send( `There was an error: ${err}` ));
+            .catch( err => msg.reply( `There was an error: ${err}` ))
+            .finally(() => msg.channel.stopTyping());
     }
 };

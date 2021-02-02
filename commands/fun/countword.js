@@ -43,6 +43,6 @@ module.exports = class CountWordCommand extends Commando.Command {
 
         // set the array in the settings
         this.client.settings.set( `countword:${msg.author.id}`, arr )
-            .then( msg.channel.send( `Successfully set word \`${word}\` to be tracked.` ) );
+            .then( msg.reply( `Successfully set word \`${word}\` to be tracked.` ) );
     }
 };

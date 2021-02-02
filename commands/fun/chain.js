@@ -14,7 +14,7 @@ module.exports = class ChainCommand extends Commando.Command {
 
     async run( msg ) {
         const maybeHighscoreInfo = this.client.provider.get( msg.guild, 'chain:highscore' );
-        return msg.channel.send( maybeHighscoreInfo
+        return msg.reply( maybeHighscoreInfo
             ? generateDefaultEmbed({
                 author: `Longest chain in server ${msg.guild.name}`,
                 title: `Chain size: ${maybeHighscoreInfo.score}`,

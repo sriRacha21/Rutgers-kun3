@@ -30,10 +30,10 @@ user submitted content or \`clear\` if you want to reset the approval channel to
 
         if ( typeof approvalChannel === 'object' ) {
             settings.set( msg.guild, 'approvalChannel', approvalChannel.id )
-                .then( msg.channel.send( `Approval channel successfully set as ${approvalChannel}.` ) );
+                .then( msg.reply( `Approval channel successfully set as ${approvalChannel}.` ) );
         } else if ( approvalChannel === 'clear' ) {
             settings.remove( msg.guild, 'approvalChannel' )
-                .then( msg.channel.send( 'Approval channel successfully removed.' ) );
-        } else { msg.channel.send('Invalid input. Try again.'); }
+                .then( msg.reply( 'Approval channel successfully removed.' ) );
+        } else { msg.reply('Invalid input. Try again.'); }
     }
 };

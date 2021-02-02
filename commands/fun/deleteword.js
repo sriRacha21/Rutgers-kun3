@@ -37,6 +37,6 @@ module.exports = class DeleteWordCommand extends Commando.Command {
         if ( arr.length === 0 || arr.length === newArr.length ) { return msg.channel.send( 'This word was not being tracked.' ); }
 
         this.client.settings.set( `countword:${msg.author.id}`, newArr )
-            .then( msg.channel.send( `Successfully removed word \`${word}\` from being tracked.` ) );
+            .then( msg.reply( `Successfully removed word \`${word}\` from being tracked.` ) );
     }
 };

@@ -37,7 +37,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
     // adjust RequiredEmbedInfo to defaults
     requiredEmbedInfo.author = requiredEmbedInfo.author ? requiredEmbedInfo.author : `${type.charAt(0).toUpperCase() + type.slice(1)} add attempt by`;
     // run appropriate function, run it normally if the user has proper perms or there's no approval channel, with approval otherwise
-    if ( member.hasPermission( permission ) || !approvalChannelID ) {
+    if ( member.permissions.has( permission ) || !approvalChannelID ) {
         runHasPerms();
     } else {
         submitRequestToChannel({
@@ -54,7 +54,7 @@ function implementApprovalPolicy( approvalPolicyOptions, requiredEmbedInfo ) {
         runNoPerms();
     }
 
-    return member.hasPermission( permission );
+    return member.permissions.has( permission );
 }
 
 function submitRequestToChannel( requestSubmissionInfo, settings ) {

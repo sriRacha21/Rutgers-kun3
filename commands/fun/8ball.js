@@ -37,7 +37,7 @@ module.exports = class EightBallCommand extends Commando.Command {
             'Very doubtful.'
         ];
 
-        return msg.channel.send(`**Answering question:** ${question}
+        return msg.reply(`**Answering question:** ${question}
 **Response:** ${getRandomElement(eightBallResponses)}`);
     }
 };
