@@ -1,8 +1,9 @@
 const Commando = require('discord.js-commando');
-const parse = require('parse-git-config');
+const packageJSON = require('../../package.json');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const fs = require('fs');
-const contributors = JSON.parse(fs.readFileSync('settings/bot_settings.json', 'utf-8')).contributor;
+const contributorIDs = JSON.parse(fs.readFileSync('settings/bot_settings.json', 'utf-8')).contributor;
+const logger = require('../../logger');
 
 module.exports = class WhoAmICommand extends Commando.Command {
     constructor(client) {
@@ -16,7 +17,19 @@ module.exports = class WhoAmICommand extends Commando.Command {
     }
 
     async run( msg ) {
-        // conditionally figure out if we want to mention users or use their name depending on if they're in the server
+        // add owners
+        const owners = this.client.owners;
+        // add contributors
+        const contributors = [];
+        for (const cID of contributorIDs) {
+            try {
+                // is the contributor reachable by the bot?
+                const contributor = await this.client.users.fetch(cID);
+                contributors.push(contributor.tag);
+            } catch (err) {
+                logger.log('error', `Contributor (${cID}) not found!`, err);
+            }
+        }
 
         const embed = generateDefaultEmbed({
             author: 'Who am I?',
@@ -24,12 +37,19 @@ module.exports = class WhoAmICommand extends Commando.Command {
             clientUser: this.client.user,
             msg: msg
         })
-            .setDescription('I am a bot specially designed for the Rutgers Esports Discord, built on discord.js and Commando.')
-            .addField('Programmer:', `I was written by Arjun Srivastav, <@${this.client.owners[0].id}>.`)
-            .addField('Special Contributors:', contributors.map(c => `<@${c}>`).join('\n'))
-            .addField('Thanks!', 'API for woof command by joey#1337 hosted at https://woofbot.io/')
-            .addField("I'm open source!", `I'm hosted at ${parse.sync()['remote "origin"'].url}.`)
-            .addField('Feeling Generous?', 'Buy me a coffee!: https://www.buymeacoffee.com/h4K7sQj');
+            .setDescription('I am a bot specially designed for the Rutgers Esports Discord, built on discord.js and Commando.');
+        // add in owners if they could be found
+        if (owners && owners.length > 0) embed.addField('Programmer:', `I was written by Arjun Srivastav, ${owners.map(o => o.tag).join(', ')}.`);
+        // add in contributors if they could be found
+        if (contributors && contributors.length > 0) embed.addField('Special Contributors:', contributors.join(', '));
+        embed.addField('Thanks!', 'API for woof command by joey#1337 hosted [here](https://woofbot.io/).')
+            .addField("I'm open source!", `I'm hosted [here](${packageJSON.homepage}).`)
+            .addField('Feeling Generous?', '[Buy me a coffee!](https://www.buymeacoffee.com/h4K7sQj)')
+            .attachFiles([{
+                attachment: './resources/branding/Chibiarjun_horizontal_text.png',
+                name: 'horizontal_brand_text.png'
+            }])
+            .setImage('attachment://horizontal_brand_text.png');
 
         return msg.channel.send( embed );
     }
