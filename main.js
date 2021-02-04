@@ -19,7 +19,7 @@ const { rutgersChan } = require('./helpers/rutgersChan');
 const { reroll } = require('./helpers/reroll');
 const { checkWordCount } = require('./helpers/checkWordCount');
 const { objToEmailBody } = require('./helpers/objToEmailBody');
-const { detectChain } = require('./helpers/detectChain');
+const { detectChain, saveMsgChainTable, loadMsgChainTable } = require('./helpers/detectChain');
 const { agreeHelper } = require('./helpers/agreeHelper');
 const { flushAgreements } = require('./helpers/flushAgreements');
 const { flushAgreementEmotes } = require('./helpers/flushAgreementEmotes');
@@ -97,6 +97,8 @@ Client.on('providerReady', () => {
             logger.warn(`Channel ID ${msgAndChannel.channel} could not be found!`);
         }
     });
+    // load chains
+    loadMsgChainTable(Client.channels, Client.settings);
     // periodically flush messages in #agreement in all servers
     flushAgreements( Client.guilds.cache, Client.provider );
     // periodicially flush agreement emotes
@@ -340,6 +342,19 @@ process.on('unhandledRejection', (reason, p) => {
         logger.log('error', 'No API token was found. This may have happened because this is a build triggered from Travis-CI or you have not written an "api_keys.json" file.');
         process.exit(0);
     }
+});
+
+// unhandled exception
+process.on('uncaughtException', (err, origin) => {
+    logger.log('error', 'Uncaught exception! (error, origin):', err, origin);
+});
+
+process.on('SIGINT', () => {
+    // notify that the program is about to stop
+    logger.log('info', 'SIGINT program interruption detected. Attempting to save certain settings for next reset.');
+    // save chains
+    saveMsgChainTable(Client.settings)
+        .finally(() => process.exit(0));
 });
 
 /*        CLEAN UP        */
