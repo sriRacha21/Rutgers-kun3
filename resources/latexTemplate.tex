@@ -32,6 +32,11 @@
 % remove the definitions from amssymb
 \let\aleph\relax\let\beth\relax
 \let\gimel\relax\let\daleth\relax
+% issue #38
+\let\temp\phi
+\let\phi\varphi
+\let\varphi\temp
+% math symbols
 \DeclareMathSymbol{\aleph}{\mathord}{hebrewletters}{39}
 \DeclareMathSymbol{\beth}{\mathord}{hebrewletters}{98}\let\bet\beth
 \DeclareMathSymbol{\gimel}{\mathord}{hebrewletters}{103}
@@ -43,6 +48,7 @@
 \DeclareMathSymbol{\qof}{\mathord}{hebrewletters}{113}
 \DeclareMathSymbol{\shin}{\mathord}{hebrewletters}{152}
 
+% shorthand
 \newcommand{\bbR}{\mathbb{R}}
 \newcommand{\bigO}{\mathcal{O}}
 \newcommand{\ceil}[1]{\left\lceil{#1}\right\rceil}

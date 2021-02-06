@@ -37,7 +37,6 @@
     "ffmpeg-static": "^4.2.7",
     "node-opus": "^0.3.3",
     "nodemailer": "^6.4.17",
-    "parse-git-config": "^3.0.0",
     "sqlite": "^3.0.6",
     "string-strip-html": "^6.3.0",
     "winston": "^3.3.3",

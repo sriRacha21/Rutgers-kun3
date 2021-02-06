@@ -1,5 +1,6 @@
-const msgChainTable = {};
+let msgChainTable = {};
 const { getRandomElement } = require('./getRandom');
+const logger = require('../logger');
 
 const numberEmotes = [
     '0️⃣', '1️⃣', '2️⃣', '3️⃣',
@@ -106,5 +107,41 @@ function reactRecursive( msg, array, cb ) {
     }
 }
 
+function saveMsgChainTable(settings) {
+    // simplify to ID's only
+    const newMsgChainTable = {};
+    for (const channelID in msgChainTable) {
+        newMsgChainTable[channelID] = msgChainTable[channelID].map(e => e.id);
+    }
+
+    return settings.set('msgChainTable', newMsgChainTable)
+        .then(() => logger.log('info', 'Saving message chain table. Will attempt to load on startup.', newMsgChainTable))
+        .catch(() => logger.log('warn', 'Unable to save message chain table.'));
+}
+
+async function loadMsgChainTable(channelManager, settings) {
+    const maybeMCT = settings.get('msgChainTable');
+    const oldMsgChainTable = maybeMCT || {};
+    if (maybeMCT) {
+        logger.log('info', "Loaded msgChainTable from last reset. Resolving message ID's in table to messages.", oldMsgChainTable);
+        settings.remove('msgChainTable')
+            .then(() => logger.log('info', 'Cleared old msgChainTable from database.'));
+        for (const channelID in oldMsgChainTable) {
+            const messageIDs = oldMsgChainTable[channelID];
+            const channel = await channelManager.fetch(channelID);
+            const messages = [];
+            for (const mID of messageIDs) {
+                const message = await channel.messages.fetch(mID);
+                messages.push(message);
+            }
+            oldMsgChainTable[channelID] = messages;
+        }
+        logger.log('info', "All message ID's resolved. msgChainTable restored to original state.", oldMsgChainTable);
+    }
+    msgChainTable = oldMsgChainTable;
+}
+
 exports.detectChain = detectChain;
 exports.reactRecursive = reactRecursive;
+exports.saveMsgChainTable = saveMsgChainTable;
+exports.loadMsgChainTable = loadMsgChainTable;

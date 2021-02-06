@@ -6,6 +6,7 @@ module.exports = class AddMeCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'addme',
+            aliases: [ 'inv', 'invite' ],
             group: 'information',
             memberName: 'addme',
             description: 'Add me to another server!'

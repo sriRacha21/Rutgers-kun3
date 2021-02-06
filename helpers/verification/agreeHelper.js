@@ -195,4 +195,28 @@ If you still haven't received an email, you may have entered your netID incorrec
     }
 }
 
+function startAgreementProcess(user, guild, settings, errChannel) {
+    // this is the provider
+    const agreementRoleObjs = settings.get(guild, 'agreementRoles');
+    // turn role ID's into roles
+    const agreementRoles = idsToValues( agreementRoleObjs.filter(obj => obj.authenticate !== 'permission').map(obj => obj.roleID), guild.roles.cache );
+
+    user.author.send( `Please enter the name of the role you want to add. Roles are: ${agreementRoles.map(agreementRole => agreementRole.name).join(', ')}.` )
+        .then( () => {
+            // capture the user's user ID so we can continue the conversation. Set that we're at step 1
+            this.client.settings.set( `agree:${user.id}`, {
+                guildID: guild.id,
+                step: 1
+            });
+        })
+        .catch( err => {
+            if ( err && errChannel ) {
+                errChannel.send(`Error: \`${err}\`
+    This may have happened because you are not accepting DM's.
+    Turn on DM's from server members:`, { files: ['resources/setup-images/instructions/notif_settings.png', 'resources/setup-images/instructions/dms_on.png'] });
+            }
+        });
+}
+
 exports.agreeHelper = agreeHelper;
+exports.startAgreementProcess = startAgreementProcess;

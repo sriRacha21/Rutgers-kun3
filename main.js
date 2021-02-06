@@ -11,25 +11,25 @@ const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', d
 // read in data from JSON file containing API keys
 const apiKeys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding)) : { token: '' };
 // get methods for event helpers
-const { setCommandFields } = require('./helpers/utility/setCommandFields');
-const { latexInterpreter, getLatexMatches } = require('./helpers/utility/latexInterpreter');
-const { parseApprovalReaction } = require('./helpers/utility/implementApprovalPolicy');
-const { parseCustomCommand } = require('./helpers/utility/parseCustomCommand');
-const { rutgersChan } = require('./helpers/fun/rutgersChan');
-const { reroll } = require('./helpers/fun/reroll');
-const { checkWordCount } = require('./helpers/fun/checkWordCount');
-const { objToEmailBody } = require('./helpers/logging/objToEmailBody');
-const { detectChain } = require('./helpers/fun/detectChain');
-const { agreeHelper } = require('./helpers/verification/agreeHelper');
-const { flushAgreements } = require('./helpers/periodic/microtasks/flushAgreements');
-const { flushAgreementEmotes } = require('./helpers/periodic/microtasks/flushAgreementEmotes');
-const { flushMessagesToCache } = require('./helpers/periodic/microtasks/flushMessagesToCache');
-const { logEvent } = require('./helpers/logging/logEvent');
-const { checkAutoverify } = require('./helpers/verification/checkAutoverify');
-const { sendRoleResponse } = require('./helpers/moderation/sendRoleResponse');
-const { generatePresence } = require('./helpers/periodic/generatePresence');
-const { reactionListener } = require('./helpers/utility/reactionListener');
-const { removeInvites } = require('./helpers/moderation/removeInvites');
+const { setCommandFields } = require('./helpers/setCommandFields');
+const { latexInterpreter, getLatexMatches } = require('./helpers/latexInterpreter');
+const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy');
+const { parseCustomCommand } = require('./helpers/parseCustomCommand');
+const { rutgersChan } = require('./helpers/rutgersChan');
+const { reroll } = require('./helpers/reroll');
+const { checkWordCount } = require('./helpers/checkWordCount');
+const { objToEmailBody } = require('./helpers/objToEmailBody');
+const { detectChain, saveMsgChainTable, loadMsgChainTable } = require('./helpers/detectChain');
+const { agreeHelper } = require('./helpers/agreeHelper');
+const { flushAgreements } = require('./helpers/flushAgreements');
+const { flushAgreementEmotes } = require('./helpers/flushAgreementEmotes');
+const { flushMessagesToCache } = require('./helpers/flushMessagesToCache');
+const { logEvent } = require('./helpers/logEvent');
+const { checkAutoverify } = require('./helpers/checkAutoverify');
+const { sendRoleResponse } = require('./helpers/sendRoleResponse');
+const { generatePresence } = require('./helpers/generatePresence');
+const { reactionListener } = require('./helpers/reactionListener');
+const { removeInvites } = require('./helpers/removeInvites');
 // set up winston logging
 const logger = require('./logger');
 // detailed log of objects
@@ -97,6 +97,8 @@ Client.on('providerReady', () => {
             logger.warn(`Channel ID ${msgAndChannel.channel} could not be found!`);
         }
     });
+    // load chains
+    loadMsgChainTable(Client.channels, Client.settings);
     // periodically flush messages in #agreement in all servers
     flushAgreements( Client.guilds.cache, Client.provider );
     // periodicially flush agreement emotes
@@ -340,6 +342,19 @@ process.on('unhandledRejection', (reason, p) => {
         logger.log('error', 'No API token was found. This may have happened because this is a build triggered from Travis-CI or you have not written an "api_keys.json" file.');
         process.exit(0);
     }
+});
+
+// unhandled exception
+process.on('uncaughtException', (err, origin) => {
+    logger.log('error', 'Uncaught exception! (error, origin):', err, origin);
+});
+
+process.on('SIGINT', () => {
+    // notify that the program is about to stop
+    logger.log('info', 'SIGINT program interruption detected. Attempting to save certain settings for next reset.');
+    // save chains
+    saveMsgChainTable(Client.settings)
+        .finally(() => process.exit(0));
 });
 
 /*        CLEAN UP        */
