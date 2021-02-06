@@ -1,6 +1,6 @@
 const Commando = require('discord.js-commando');
 const packageJSON = require('../../package.json');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+const { generateDefaultEmbed } = require('../../helpers/utility/generateDefaultEmbed');
 const fs = require('fs');
 const contributorIDs = JSON.parse(fs.readFileSync('settings/bot_settings.json', 'utf-8')).contributor;
 const logger = require('../../logger');

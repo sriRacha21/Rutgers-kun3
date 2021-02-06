@@ -1,6 +1,6 @@
 let msgChainTable = {};
 const { getRandomElement } = require('./getRandom');
-const logger = require('../logger');
+const logger = require('../../logger');
 
 const numberEmotes = [
     '0️⃣', '1️⃣', '2️⃣', '3️⃣',

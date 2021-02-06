@@ -11,25 +11,26 @@ const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', d
 // read in data from JSON file containing API keys
 const apiKeys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding)) : { token: '' };
 // get methods for event helpers
-const { setCommandFields } = require('./helpers/setCommandFields');
-const { latexInterpreter, getLatexMatches } = require('./helpers/latexInterpreter');
-const { parseApprovalReaction } = require('./helpers/implementApprovalPolicy');
-const { parseCustomCommand } = require('./helpers/parseCustomCommand');
-const { rutgersChan } = require('./helpers/rutgersChan');
-const { reroll } = require('./helpers/reroll');
-const { checkWordCount } = require('./helpers/checkWordCount');
-const { objToEmailBody } = require('./helpers/objToEmailBody');
-const { detectChain, saveMsgChainTable, loadMsgChainTable } = require('./helpers/detectChain');
-const { agreeHelper } = require('./helpers/agreeHelper');
-const { flushAgreements } = require('./helpers/flushAgreements');
-const { flushAgreementEmotes } = require('./helpers/flushAgreementEmotes');
-const { flushMessagesToCache } = require('./helpers/flushMessagesToCache');
-const { logEvent } = require('./helpers/logEvent');
-const { checkAutoverify } = require('./helpers/checkAutoverify');
-const { sendRoleResponse } = require('./helpers/sendRoleResponse');
-const { generatePresence } = require('./helpers/generatePresence');
-const { reactionListener } = require('./helpers/reactionListener');
-const { removeInvites } = require('./helpers/removeInvites');
+const { setCommandFields } = require('./helpers/utility/setCommandFields');
+const { latexInterpreter, getLatexMatches } = require('./helpers/utility/latexInterpreter');
+const { parseApprovalReaction } = require('./helpers/utility/implementApprovalPolicy');
+const { parseCustomCommand } = require('./helpers/utility/parseCustomCommand');
+const { rutgersChan } = require('./helpers/fun/rutgersChan');
+const { reroll } = require('./helpers/fun/reroll');
+const { checkWordCount } = require('./helpers/fun/checkWordCount');
+const { objToEmailBody } = require('./helpers/logging/objToEmailBody');
+const { detectChain, saveMsgChainTable, loadMsgChainTable } = require('./helpers/fun/detectChain');
+const { agreeHelper } = require('./helpers/verification/agreeHelper');
+const { membershipScreenAgree } = require('./helpers/verification/membershipScreenAgree');
+const { flushAgreements } = require('./helpers/periodic/microtasks/flushAgreements');
+const { flushAgreementEmotes } = require('./helpers/periodic/microtasks/flushAgreementEmotes');
+const { flushMessagesToCache } = require('./helpers/periodic/microtasks/flushMessagesToCache');
+const { logEvent } = require('./helpers/logging/logEvent');
+const { checkAutoverify } = require('./helpers/verification/checkAutoverify');
+const { sendRoleResponse } = require('./helpers/moderation/sendRoleResponse');
+const { generatePresence } = require('./helpers/periodic/generatePresence');
+const { reactionListener } = require('./helpers/utility/reactionListener');
+const { removeInvites } = require('./helpers/moderation/removeInvites');
 // set up winston logging
 const logger = require('./logger');
 // detailed log of objects
@@ -118,7 +119,7 @@ Client.on('message', msg => {
         if ( agreementChannel === msg.channel.id ) {
             // ESCAPE and give the user their role if they entered the autoverify code
             if ( checkAutoverify( msg, Client.provider ) ) return;
-            if ( (!msg.webhookID && msg.author.id === Client.user.id) || (msg.member && !msg.member.hasPermission(defaults.admin_permission)) ) {
+            if ( (!msg.webhookID && msg.author.id === Client.user.id) || (msg.member && !msg.member.permissions.has(defaults.admin_permission)) ) {
                 if ( msg.content !== `${msg.guild.commandPrefix}agree` ) {
                     msg.channel.send(`Please make sure you send \`${msg.guild.commandPrefix}agree\`. You sent \`${msg.cleanContent}\`.`)
                         .then(m => setTimeout(() => { m.delete(); }, 10000));
@@ -216,7 +217,18 @@ Client.on('guildCreate', guild => {
 Client.on('guildMemberUpdate', (oldM, newM) => {
     if ( newM.user.bot ) { return; }
 
+    // send role response
     sendRoleResponse(oldM, newM, Client.provider);
+    // try to find agreement channel for error channel
+    const agreementChannelID = Client.provider.get(newM.guild, 'agreementChannel');
+    // check for membership screen agreement
+    if (oldM.pending && !newM.pending) {
+        Client.channels.fetch(agreementChannelID)
+            .then(agreementChannel => {
+                membershipScreenAgree(newM, Client.settings, Client.provider, agreementChannel);
+            })
+            .catch(() => {}); // no action required if there is no agreement channel. This is probably just a server without agreement.
+    };
 });
 
 /*        LOGGING        */
@@ -345,9 +357,11 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 // unhandled exception
-process.on('uncaughtException', (err, origin) => {
-    logger.log('error', 'Uncaught exception! (error, origin):', err, origin);
-});
+if (!apiKeys.testing) {
+    process.on('uncaughtException', (err, origin) => {
+        logger.log('error', 'Uncaught exception! (error, origin):', err, origin);
+    });
+}
 
 process.on('SIGINT', () => {
     // notify that the program is about to stop

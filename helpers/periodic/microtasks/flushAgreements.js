@@ -21,7 +21,7 @@ function flushAgreements( guilds, provider ) {
             maybeAgreementChannel.messages.fetch({ limit: 100 })
                 .then( messages => {
                     messages
-                        .filter( msg => !msg.webhookID && (msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission))) )
+                        .filter( msg => !msg.webhookID && (msg.author.bot || (msg.member && !msg.member.permissions.has(defaults.admin_permission))) )
                         .forEach( message => message.delete()
                             .catch(err => {
                                 if (err) {

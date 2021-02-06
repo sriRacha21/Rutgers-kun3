@@ -43,6 +43,6 @@ If you want to designate this as the agreement channel please use \`${msg.guild.
 
         // begin user verification process
         // ask the user what role they want to add if there is more than one role configured
-        startAgreementProcess(msg.author, msg.guild, this.client.provider, msg.channel);
+        startAgreementProcess(msg.author, msg.guild, this.client.settings, this.client.provider, msg.channel);
     }
 };
