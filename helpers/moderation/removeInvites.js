@@ -26,7 +26,7 @@ function removeInvites( msg, client ) {
                 client.fetchInvite(inviteMatch)
                     .then( invite => {
                         if ( universalInvOverrides.includes(invite.guild.id) ) { return; }
-                        if ( !msg.member.hasPermission(defaults.trusted_permission) ) {
+                        if ( !msg.member.permissions.has(defaults.trusted_permission) ) {
                             msg.delete();
                             msg.author.send(`Sending server invites is not allowed in ${msg.guild.name}.`);
                         }
