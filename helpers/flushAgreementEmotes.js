@@ -43,7 +43,7 @@ function flushAgreementEmotes( channels, provider ) {
             // message and channel are guaranteed to be filled
             message.reactions.cache.forEach(async mr => {
                 // if the message reaction is not the agreement setup slim emote, leave
-                if(mr.emoji.id !== agreementSetupSlimEmote) return;
+                if (mr.emoji.id !== agreementSetupSlimEmote) return;
 
                 await mr.fetch();
                 await mr.remove();
