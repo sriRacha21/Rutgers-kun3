@@ -2,7 +2,9 @@ const { sendWelcomeMessage } = require('./sendWelcomeMessage');
 
 function checkAutoverify( msg, settings ) {
     const autoverify = settings.get( msg.guild, 'autoverify' );
-    const permRole = settings.get( msg.guild, 'agreementRoles' ).find(ar => ar.authenticate === 'permission');
+    const agreementRoles = settings.get( msg.guild, 'agreementRoles' );
+    if (!agreementRoles) return;
+    const permRole = agreementRoles.find(ar => ar.authenticate === 'permission');
     if ( autoverify ) {
         autoverify.forEach(av => {
             const phrase = av.phrase;
