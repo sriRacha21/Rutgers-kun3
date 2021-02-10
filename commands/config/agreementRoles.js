@@ -36,7 +36,7 @@ Just enter \`clear\` followed by \`finish\` to clear the current setting.`,
 
         if ( agreementRolesAndBools[0] === 'clear' ) {
             return this.client.provider.remove( msg.guild, 'agreementRoles' )
-                .then( msg.channel.send('Agreement roles succcessfully cleared.') );
+                .then( msg.channel.send('Agreement roles successfully cleared.') );
         }
 
         let failure = false;

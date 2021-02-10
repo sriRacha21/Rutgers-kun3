@@ -19,9 +19,9 @@ module.exports = class AddSoundCommand extends Commando.Command {
                     key: 'name',
                     type: 'string',
                     prompt: 'Set a name for the sound.',
-                    error: 'The name of the file must be alphanumeric and less than or equal to 20 characters.',
+                    error: 'The name of the file must be alphanumeric and less than or equal to 30 characters.',
                     validate: str => {
-                        const matches = str.match(/([a-z]|[0-9]){1,20}/g);
+                        const matches = str.match(/([a-z]|[0-9]|[()_-]){1,30}/g);
                         return matches ? matches[0].length === str.length : false;
                     },
                     parse: str => `${str.toLowerCase()}.mp3`
