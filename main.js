@@ -341,6 +341,14 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
     }, extras);
 });
 
+Client.on('interactionCreate', interaction => {
+    if (interaction.commandName === 'helloworld' ) return interaction.reply('hiya!');
+    if (interaction.commandName === 'hellobingus') return interaction.reply('https://i.kym-cdn.com/photos/images/original/001/920/667/c87.gif');
+    return interaction.reply('You just used a slash command!', {
+        ephemeral: true
+    });
+});
+
 Client.on('unknownCommand', msg => {
 });
 
