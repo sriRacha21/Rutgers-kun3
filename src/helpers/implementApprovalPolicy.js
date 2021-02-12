@@ -1,7 +1,10 @@
 /* eslint-disable prefer-const */
 const fs = require('fs');
-const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : { err: true };
-const permissions = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
+const path = require('path');
+const defaultsPath = path.join(__dirname, '../settings/default_settings.json');
+const permissionsPath = path.join(__dirname, '../settings/permissions_settings.json');
+const defaults = fs.existsSync(defaultsPath) ? JSON.parse(fs.readFileSync(defaultsPath, 'utf-8')) : { err: true };
+const permissions = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 const logger = require('../logger');
 const { generateDefaultEmbed } = require('./generateDefaultEmbed');
 const { oneLine } = require('common-tags');

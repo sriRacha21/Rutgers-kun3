@@ -1,8 +1,11 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
-const defaultSettings = fs.existsSync('settings/defaultSettings.json') ? JSON.parse(fs.readFileSync('settings/defaultSettings.json', 'utf-8')) : { err: true };
+const path = require('path');
+const defaultsPath = path.join(__dirname, '../settings/default_settings.json');
+const permissionsPath = path.join(__dirname, '../settings/permissions_settings.json');
+const defaultSettings = fs.existsSync(defaultsPath) ? JSON.parse(fs.readFileSync(defaultsPath, 'utf-8')) : { err: true };
 const logger = require('../../logger');
-const permissions = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
+const permissions = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 
 module.exports = class Command extends Commando.Command {
     constructor(client) {

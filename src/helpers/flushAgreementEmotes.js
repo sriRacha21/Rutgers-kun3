@@ -1,5 +1,7 @@
 const fs = require('fs');
-const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : { err: true };
+const path = require('path');
+const defaultsPath = path.join(__dirname, '../settings/default_settings.json');
+const defaults = fs.existsSync(defaultsPath) ? JSON.parse(fs.readFileSync(defaultsPath, 'utf-8')) : { err: true };
 const logger = require('../logger');
 
 function flushAgreementEmotes( channels, provider ) {

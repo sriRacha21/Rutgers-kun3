@@ -5,11 +5,14 @@ const sqlite = require('sqlite');
 const path = require('path');
 // prepare to read in data from JSON files
 const fs = require('fs');
-const defaults = fs.existsSync('settings/default_settings.json') ? JSON.parse(fs.readFileSync('settings/default_settings.json', 'utf-8')) : { err: true };
+const defaultSettingsPath = path.join(__dirname, 'settings/default_settings.json');
+const defaults = fs.existsSync(defaultSettingsPath) ? JSON.parse(fs.readFileSync(defaultSettingsPath, 'utf-8')) : { err: true };
 // read in data from JSON file containing default settings for the bot (ClientOptions object)
-const ClientOptions = JSON.parse(fs.readFileSync('settings/bot_settings.json', defaults.encoding));
+const botSettingsPath = path.join(__dirname, 'settings/bot_settings.json');
+const ClientOptions = JSON.parse(fs.readFileSync(botSettingsPath, defaults.encoding));
 // read in data from JSON file containing API keys
-const apiKeys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding)) : { token: '' };
+const apiKeysPath = path.join(__dirname, 'settings/api_keys.json');
+const apiKeys = fs.existsSync(apiKeysPath) ? JSON.parse(fs.readFileSync(apiKeysPath, defaults.encoding)) : { token: '' };
 // get methods for event helpers
 const { setCommandFields } = require('./helpers/setCommandFields');
 const { latexInterpreter, getLatexMatches } = require('./helpers/latexInterpreter');
@@ -335,8 +338,6 @@ Client.on('unknownCommand', msg => {
 // unhandled promise rejection stacktrace
 process.on('unhandledRejection', (reason, p) => {
     logger.warn(`Unhandled Rejection at: Promise ${inspect(p)}\nreason: ${reason}`);
-    console.log('Promise name: ', p);
-    console.log('Reason:', reason.name);
     // if there's no API key it's probably Travis-CI
     if (reason.name === 'Error [TOKEN_INVALID]') { // this feels wrong :(
         logger.log('error', 'No API token was found. This may have happened because this is a build triggered from Travis-CI or you have not written an "api_keys.json" file.');
@@ -347,6 +348,8 @@ process.on('unhandledRejection', (reason, p) => {
 // unhandled exception
 process.on('uncaughtException', (err, origin) => {
     logger.log('error', 'Uncaught exception! (error, origin):', err, origin);
+    console.log('Error:', err);
+    console.log('Origin:', origin);
 });
 
 process.on('SIGINT', () => {

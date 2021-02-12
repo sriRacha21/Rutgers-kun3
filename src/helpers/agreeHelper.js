@@ -1,7 +1,9 @@
 // sending emails
 const nodemailer = require('nodemailer');
 const fs = require('fs');
-const smtpServer = fs.existsSync('settings/smtp_server.json') ? JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8')) : null;
+const path = require('path');
+const smtpServerPath = path.join(__dirname, '../settings/smtp_server.json');
+const smtpServer = fs.existsSync(smtpServerPath) ? JSON.parse(fs.readFileSync(smtpServerPath, 'utf-8')) : null;
 const { generateVerificationCode } = require('./getRandom');
 const { idsToValues } = require('./idsToValues');
 const { isValidnetID } = require('./isValidnetID');
