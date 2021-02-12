@@ -32,8 +32,7 @@ module.exports = class AddSoundCommand extends Commando.Command {
                     type: 'sound',
                     prompt: 'Attach a sound file. .mp3\'s only.'
                 }
-            ],
-            argsPromptLimit: 0
+            ]
         });
     }
 

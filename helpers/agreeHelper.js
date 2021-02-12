@@ -14,10 +14,7 @@ async function agreeHelper( msg, guilds, settings, provider ) {
     const agreementObj = settings.get( `agree:${msg.author.id}` );
 
     // ensure the SMTP server is setup
-    if ( !smtpServer ) {
-        logger.log( 'error', 'SMTP server is not setup! Please follow the readme to use this properly.' );
-        return;
-    }
+    if ( !smtpServer ) return;
 
     // ensure the user is in DM
     if ( msg.guild ) { return; }
