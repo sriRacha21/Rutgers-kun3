@@ -56,6 +56,7 @@ module.exports = class ListCommandCommands extends Commando.Command {
             const embed = generateDefaultEmbed({
                 author: 'Command list for ',
                 title: msg.guild.name,
+                thumbnail: msg.guild.iconURL(),
                 clientUser: this.client.user,
                 msg: msg,
                 page: {
