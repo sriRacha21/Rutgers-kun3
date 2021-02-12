@@ -27,7 +27,12 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
         .setColor( defaults.richembed_color )
         .setTimestamp();
 
-    if ( requiredEmbedInfo.author ) { startingEmbed.setAuthor( author, authorThumbnail ); }
+    if (requiredEmbedInfo.page) {
+        const { current, total } = requiredEmbedInfo.page;
+        startingEmbed.setFooter(`Requested by ${msg.author.tag} (Page ${current}/${total})`);
+    }
+
+    if (requiredEmbedInfo.author) { startingEmbed.setAuthor( author, authorThumbnail ); }
 
     return startingEmbed;
 }

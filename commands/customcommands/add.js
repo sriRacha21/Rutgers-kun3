@@ -3,7 +3,7 @@ const { implementApprovalPolicy } = require('../../helpers/implementApprovalPoli
 const RichEmbed = require('discord.js').MessageEmbed;
 const { oneLine } = require('common-tags');
 const { getCommandList } = require('../../helpers/dbUtilities');
-const commandCountGuildLimit = 50;
+const commandCountGuildLimit = 100;
 
 module.exports = class AddCommandCommand extends Commando.Command {
     constructor(client) {

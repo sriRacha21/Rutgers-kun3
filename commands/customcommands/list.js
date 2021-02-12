@@ -1,12 +1,13 @@
 const Commando = require('discord.js-commando');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const { getCommandList } = require('../../helpers/dbUtilities');
+const Pagination = require('discord-paginationembed');
 
 module.exports = class ListCommandCommands extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'listcommand',
-            aliases: [ 'listcommands', 'lcc' ],
+            aliases: [ 'listcommands', 'lcc', 'cc', 'customcommands', 'customcommand' ],
             group: 'customcommands',
             memberName: 'list',
             description: 'List all custom commands in a guild.',
@@ -42,21 +43,36 @@ module.exports = class ListCommandCommands extends Commando.Command {
         if ( filter ) { keys = keys.filter( key => key.includes(filter) ); }
         // perform another check on keys
         if ( keys.length === 0 ) { return msg.channel.send( err ); }
-        // prepare to return keys
-        const retEmbed = generateDefaultEmbed({
-            author: 'Command list for',
-            title: msg.guild.name,
-            clientUser: this.client.user,
-            msg: msg
-        });
         // add keys to embed's description
-        let description = '';
-        keys.forEach(( key ) => { description += `${msg.guild.commandPrefix}${key}\n`; });
-        // clean up embed
-        retEmbed.setThumbnail(msg.guild.iconURL())
-            .setDescription(description);
+        const commands = [];
+        keys.forEach(( key ) => commands.push(`${msg.guild.commandPrefix}${key}`));
+        const commandsSize = commands.length;
+        // new embed for each 20 commands
+        const commandsPerPage = 20;
+        let nextCommands = commands.splice(0, commandsPerPage);
+        const embeds = [];
+        let i = 0;
+        while (nextCommands.length > 0) {
+            const embed = generateDefaultEmbed({
+                author: 'Command list for ',
+                title: msg.guild.name,
+                clientUser: this.client.user,
+                msg: msg,
+                page: {
+                    current: ++i,
+                    total: Math.ceil(commandsSize / commandsPerPage)
+                }
+            });
+            embed.setDescription(nextCommands.join('\n'));
+            embeds.push(embed);
+            nextCommands = commands.splice(0, commandsPerPage);
+        }
 
-        msg.channel.send( retEmbed )
-            .then( m => m.react('🗑') );
+        // send embeds
+        new Pagination.Embeds()
+            .setArray(embeds)
+            .setAuthorizedUsers([msg.author.id])
+            .setChannel(msg.channel)
+            .build();
     }
 };

@@ -32,10 +32,14 @@ module.exports = class SoundsCommand extends Commando.Command {
 
         while (nextSounds.length > 0) {
             const templateEmbed = generateDefaultEmbed({
-                author: `Sounds in soundboard (Page ${++i}/${Math.ceil(soundsSize / soundsPerPage)})`,
+                author: 'Sounds in soundboard',
                 title: `${soundsSize} sounds found`,
                 clientUser: this.client.user,
-                msg: msg
+                msg: msg,
+                page: {
+                    current: ++i,
+                    total: Math.ceil(soundsSize / soundsPerPage)
+                }
             });
             embeds.push(templateEmbed.setDescription(nextSounds.map(s => `\`${s}\``).join(', ')));
             nextSounds = sounds.splice(0, soundsPerPage);
