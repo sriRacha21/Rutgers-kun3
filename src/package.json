@@ -9,9 +9,6 @@
     "lint": "eslint .",
     "postinstall": "husky install"
   },
-  "lint-staged": {
-    "*.js": "eslint --cache --fix"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sriRacha21/Rutgers-kun3.git"
