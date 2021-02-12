@@ -196,8 +196,7 @@ Turn on DM's from server members:`, { files: ['resources/setup-images/instructio
     // use reactionListener
     // for the class command
     reactionListener.emit(`class:${user.id}:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'));
-    // for the listquotes command
-    if ( messageReaction.emoji.name === '📧' ) { reactionListener.emit(`listquotes:${messageReaction.message.id}`, user); }
+    // for approvals
     parseApprovalReaction( Client.provider, Client.users.cache, messageReaction );
 });
 
@@ -337,7 +336,6 @@ process.on('unhandledRejection', (reason, p) => {
     logger.warn(`Unhandled Rejection at: Promise ${inspect(p)}\nreason: ${reason}`);
     console.log('Promise name:', p);
     console.log('Reason:', reason.name);
-    console.log('Token used:', apiKeys.token);
     // if there's no API key it's probably Travis-CI
     if (reason.name === 'Error [TOKEN_INVALID]') { // this feels wrong :(
         logger.log('error', 'No API token was found. This may have happened because this is a build triggered from Travis-CI or you have not written an "api_keys.json" file.');
