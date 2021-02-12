@@ -4,7 +4,7 @@
   "description": "A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports discord server.",
   "main": "main.js",
   "scripts": {
-    "run": "node main.js",
+    "start": "node main.js",
     "test": "node main.js",
     "lint": "eslint .",
     "postinstall": "husky install"
