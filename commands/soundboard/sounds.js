@@ -49,6 +49,9 @@ module.exports = class SoundsCommand extends Commando.Command {
             .setArray(embeds)
             .setAuthorizedUsers([msg.author.id])
             .setChannel(msg.channel)
-            .build();
+            .build()
+            .catch(err => {
+                if (err) msg.channel.send(`I do not have the required permissions to create a paginated embed here. \`\`\`js\n${err}\n\`\`\``);
+            });
     }
 };
