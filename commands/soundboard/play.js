@@ -28,7 +28,7 @@ module.exports = class PlayCommand extends Commando.Command {
         if ( !msg.member ) { return msg.channel.send( 'You must run this in a server and connected to a voice channel.' ); }
         // Check if user is in voice channel, if not reply
         if ( !msg.member.voice.channel ) { return msg.channel.send( 'You must join a voice channel first.' ); }
-        if ( !getSoundsArr().includes(filename) ) { return msg.channel.send( 'That is not a valid sound file. Make sure to pick one from the list.' ); }
+        if ( !getSoundsArr().includes(filename) ) { return msg.channel.send( `That is not a valid sound file. Make sure to pick one from the list (\`${msg.guild.commandPrefix}sounds\`)` ); }
 
         // get volume
         const volume = settings.get( msg.guild, 'volume' );
