@@ -197,7 +197,7 @@ Turn on DM's from server members:`, { files: ['resources/setup-images/instructio
     // for the class command
     reactionListener.emit(`class:${user.id}:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'));
     // for the listquotes command
-    if ( messageReaction.emoji === '📧' ) { reactionListener.emit(`listquotes:${messageReaction.message.id}`, user); }
+    if ( messageReaction.emoji.name === '📧' ) { reactionListener.emit(`listquotes:${messageReaction.message.id}`, user); }
     parseApprovalReaction( Client.provider, Client.users.cache, messageReaction );
 });
 
@@ -335,8 +335,9 @@ Client.on('unknownCommand', msg => {
 // unhandled promise rejection stacktrace
 process.on('unhandledRejection', (reason, p) => {
     logger.warn(`Unhandled Rejection at: Promise ${inspect(p)}\nreason: ${reason}`);
-    console.log('Promise name: ', p);
+    console.log('Promise name:', p);
     console.log('Reason:', reason.name);
+    console.log('Token used:', apiKeys.token);
     // if there's no API key it's probably Travis-CI
     if (reason.name === 'Error [TOKEN_INVALID]') { // this feels wrong :(
         logger.log('error', 'No API token was found. This may have happened because this is a build triggered from Travis-CI or you have not written an "api_keys.json" file.');
@@ -347,6 +348,8 @@ process.on('unhandledRejection', (reason, p) => {
 // unhandled exception
 process.on('uncaughtException', (err, origin) => {
     logger.log('error', 'Uncaught exception! (error, origin):', err, origin);
+    console.log('Error:', err);
+    console.log('Origin:', origin);
 });
 
 process.on('SIGINT', () => {
