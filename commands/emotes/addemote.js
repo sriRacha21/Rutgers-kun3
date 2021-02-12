@@ -23,7 +23,6 @@ module.exports = class AddEmoteCommand extends Commando.Command {
                     prompt: 'Attach a static image or gif.'
                 }
             ],
-            argsPromptLimit: 0,
             throttling: {
                 usages: 1,
                 duration: 10
@@ -40,7 +39,7 @@ module.exports = class AddEmoteCommand extends Commando.Command {
                 runHasPerms: () => {
                     msg.guild.emojis.create( image.proxyURL, name, { reason: `Created by ${this.client.user.tag}.` } )
                         .then( msg.react('👍') )
-                        .catch( e => { if (e) { msg.channel.send(`Emoji ${name} could not be added to the server: \`${e}\``); } });
+                        .catch( e => { if (e) { msg.channel.send(`Emoji ${name} could not be added to the server:\n\`${e}\``); } });
                 },
                 settings: this.client.provider,
                 attachments: [ image ],

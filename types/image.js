@@ -3,23 +3,23 @@ const Commando = require('discord.js-commando');
 class ImageArgumentType extends Commando.ArgumentType {
     constructor(client) { super(client, 'image'); }
 
-    isEmpty( val, msg ) {
-        const result = msg.attachments.size === 0;
+    isEmpty( _, __, ___, currentMessage ) {
+        const result = currentMessage.attachments.size === 0;
         return result;
     }
 
-    validate( val, msg ) {
-        const filename = msg.attachments.first().name;
+    validate( _, __, ___, currentMessage ) {
+        const filename = currentMessage.attachments.first().name;
         const endsWithValid = filename.endsWith('.png') ||
         filename.endsWith('.gif') ||
         filename.endsWith('.jpg') ||
         filename.endsWith('.jpeg');
-        const result = msg.attachments.first() && endsWithValid;
+        const result = currentMessage.attachments.first() && endsWithValid;
         return result;
     }
 
-    parse( val, msg ) {
-        const result = msg.attachments.first();
+    parse( _, __, ___, currentMessage ) {
+        const result = currentMessage.attachments.first();
         return result;
     }
 }
