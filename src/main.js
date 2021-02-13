@@ -12,7 +12,7 @@ const botSettingsPath = path.join(__dirname, '../settings/bot_settings.json');
 const ClientOptions = JSON.parse(fs.readFileSync(botSettingsPath, defaults.encoding));
 // read in data from JSON file containing API keys
 const apiKeysPath = path.join(__dirname, '../settings/api_keys.json');
-const apiKeys = fs.existsSync(apiKeysPath) ? JSON.parse(fs.readFileSync(apiKeysPath, defaults.encoding)) : { token: 'NjcwMjk4ODEzMjg5OTg4MTE3.XisWag.lh4vx5Rl4KiU-7kRp0yH5X5FyZI' };
+const apiKeys = fs.existsSync(apiKeysPath) ? JSON.parse(fs.readFileSync(apiKeysPath, defaults.encoding)) : { token: '' };
 // get methods for event helpers
 const { setCommandFields } = require('./helpers/setCommandFields');
 const { latexInterpreter, getLatexMatches } = require('./helpers/latexInterpreter');
