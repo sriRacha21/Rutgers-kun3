@@ -37,6 +37,7 @@ module.exports = class FetchMessageCommand extends Commando.Command {
                 return;
             }
             if ( !fetchedMessage ) return;
+            fetchedMessage.reactions.cache.forEach(r => r.fetch() && r.users.fetch());
             message = fetchedMessage;
         } else {
             message = args.message;
