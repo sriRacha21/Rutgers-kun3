@@ -1,8 +1,8 @@
-const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+import Commando, { CommandoClient } from 'discord.js-commando';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
 
-module.exports = class BMACCommand extends Commando.Command {
-    constructor(client) {
+export default class BMACCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'bmac',
             aliases: [ 'buymeacoffee', 'coffee', 'payme' ],

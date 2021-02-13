@@ -9,7 +9,7 @@ function generatePresence( client, which ) {
     logger.log('info', 'Running microtask generatePresence.');
 
     const names = [
-        `${getNumLines()} lines of code!`,
+        // `${getNumLines()} lines of code!`,
         `Version ${packageJSON.version}`,
         `${client.commandPrefix}whoami`,
         'DM me "addme" to add me to your server!',

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node out/main.js",
-    "test": "npm start",
+    "test": "tsc && npm start",
     "lint": "eslint .",
     "postinstall": "husky install"
   },
