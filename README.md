@@ -48,15 +48,15 @@
 
 ### Run me locally!
 1. Clone me somewhere you feel comfortable keeping Github projects: `git clone https://github.com/sriRacha21/Rutgers-kun3.git`
-2. Navigate to the `settings` folder within the project.
+2. Navigate to the `src/settings` folder within the project.
 3. Edit `api_keys.json.dist` and replace the "your token here text" with your API token (surrounded by double quotation marks), obtained from the Discord developer portal. Rename the file to `api_keys.json`.
 4. Edit `email_logging.json.dist` and rename it `email_logging.json`. If you are forking the project, you can edit this file to email you on errors. **(OPTIONAL)**
 5. Edit `smtp_server.json.dist` with your SMTP server's details. Rename the file to `smtp_server.json`. **(OPTIONAL)**
 6. Rename `netids.json.dist` to `netids.json` to start recording netID's (to check if a user is already verified). **(OPTIONAL)**
 7. Rename `default_settings.json.dist` to `default_settings.json`. Adjust properties in file as needed (you probably want to change the agrement setup slim emote to the ID of an emote the bot can access.)
-8. `cd` to root directory of the project.
+8. `cd` to `src/` directory of the project.
 9. `npm install`
-10. `node main.js`
+10. `cd .. && npm start`
 
 ### Linting
 * Rutger-kun uses ESLint to maintain and enforce code quality.
