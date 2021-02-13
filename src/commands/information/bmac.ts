@@ -1,4 +1,4 @@
-import Commando, { CommandoClient } from 'discord.js-commando';
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
 
 export default class BMACCommand extends Commando.Command {
@@ -12,7 +12,7 @@ export default class BMACCommand extends Commando.Command {
         });
     }
 
-    async run( msg ) {
+    async run(msg: CommandoMessage): Promise<any> {
         const embedInfo = {
             title: 'Buy me a Coffee?',
             clientUser: this.client.user,

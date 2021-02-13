@@ -1,9 +1,9 @@
-const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const { getRandomElement } = require('../../helpers/getRandom');
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
+import { getRandomElement } from '../../helpers/getRandom';
 
-module.exports = class AddMeCommand extends Commando.Command {
-    constructor(client) {
+export default class AddMeCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'addme',
             aliases: [ 'inv', 'invite' ],
@@ -13,7 +13,7 @@ module.exports = class AddMeCommand extends Commando.Command {
         });
     }
 
-    async run( msg ) {
+    async run(msg: CommandoMessage): Promise<any> {
         const embed = generateDefaultEmbed({
             author: 'Aww do you like me that much?',
             title: 'Add me to another server!',
@@ -23,7 +23,10 @@ module.exports = class AddMeCommand extends Commando.Command {
         });
 
         const emote = msg.guild && msg.guild.emojis.cache.size > 0 ? getRandomElement(msg.guild.emojis.cache.array()) : getRandomElement(this.client.emojis.cache.array());
-        embed.setThumbnail(emote.url);
+
+        if (emote) {
+            embed.setThumbnail(emote.url);
+        }
 
         this.client.generateInvite()
             .then(link => {

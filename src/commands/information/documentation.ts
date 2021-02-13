@@ -1,12 +1,12 @@
-const Commando = require('discord.js-commando');
-const fs = require('fs');
-const path = require('path');
-const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json');
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import fs from 'fs';
+import path from 'path';
+const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json'); // fix this by importing json
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
 
 module.exports = class DocumentationCommand extends Commando.Command {
-    constructor(client) {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'documentation',
             aliases: ['docs', 'doc'],
@@ -18,7 +18,7 @@ module.exports = class DocumentationCommand extends Commando.Command {
         });
     }
 
-    async run(msg) {
+    async run(msg: CommandoMessage): Promise<any> {
         const embed = generateDefaultEmbed({
             author: `Rutgers-kun has been added to ${msg.guild.name}!`,
             title: 'Hiya!',

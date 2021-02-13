@@ -1,8 +1,9 @@
-const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+import { GuildMember } from 'discord.js';
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
 
-module.exports = class FollowMeCommand extends Commando.Command {
-    constructor(client) {
+export default class FollowMeCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'followme',
             aliases: [ 'follow', 'twitter' ],
@@ -12,7 +13,7 @@ module.exports = class FollowMeCommand extends Commando.Command {
         });
     }
 
-    async run( msg ) {
+    async run(msg: CommandoMessage): Promise<any> {
         const embedInfo = {
             title: 'Follow me on Twitter!',
             clientUser: this.client.user,
@@ -21,8 +22,19 @@ module.exports = class FollowMeCommand extends Commando.Command {
 
         const author = this.client.owners[0];
         if ( msg.guild ) {
-            const authorInGuild = await msg.guild.members.fetch(author.id);
-            if ( authorInGuild ) { embedInfo.title = `Follow @${authorInGuild.user.tag} on Twitter!`; }
+
+            let authorInGuild: GuildMember = null;
+            try {
+                authorInGuild = await msg.guild.members.fetch(author.id);
+            } catch (error) {
+                console.log(error);
+            }
+
+            if ( authorInGuild ) {
+                embedInfo.title = `Follow @${authorInGuild.user.tag} on Twitter!`;
+            } else {
+                embedInfo.title = 'Follow @sriRachaIsSpicy on Twitter!';
+            }
         }
 
         const embed = generateDefaultEmbed(embedInfo)
