@@ -1,8 +1,10 @@
 const Commando = require('discord.js-commando');
-const packageJSON = require('../../package.json');
+const packageJSON = require('../../../package.json');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const fs = require('fs');
-const contributorIDs = JSON.parse(fs.readFileSync('settings/bot_settings.json', 'utf-8')).contributor;
+const path = require('path');
+const botSettingsPath = path.join(__dirname, '../../settings/bot_settings.json');
+const contributorIDs = JSON.parse(fs.readFileSync(botSettingsPath, 'utf-8')).contributor;
 const logger = require('../../logger');
 
 module.exports = class WhoAmICommand extends Commando.Command {

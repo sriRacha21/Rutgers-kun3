@@ -1,5 +1,4 @@
 const Commando = require('discord.js-commando');
-const { reactionListener } = require('../../helpers/reactionListener');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 
 module.exports = class ListQuotesCommand extends Commando.Command {
@@ -67,10 +66,26 @@ module.exports = class ListQuotesCommand extends Commando.Command {
         if ( quotes.length > quoteAbbreviatedCount && msg.channel.type !== 'dm' ) {
             msg.author.send( retEmbed );
             msg.channel.send( abbreviatedEmbed )
-                .then( m => {
-                    m.react('📧');
-                    reactionListener.addListener(`listquotes:${m.id}`, (user) => {
-                        user.send( retEmbed );
+                .then(async m => {
+                    await m.react('📧');
+                    const collector = m.createReactionCollector(reaction => {
+                        return reaction.emoji.name === '📧';
+                    }, { time: 60 * 60 * 1000 });
+                    collector.on('collect', (_, user) => {
+                        user.send(retEmbed)
+                            .catch(err => {
+                                if (err) {
+                                    msg.channel.send('I cannot send messages to you for some reason.')
+                                        .then(errorMessage => {
+                                            setTimeout(() => errorMessage.delete(), 15000);
+                                        });
+                                }
+                            });
+                    });
+                    collector.on('end', () => {
+                        m.reactions.cache.forEach(r => {
+                            if (r.emoji.name === '📧') r.remove();
+                        });
                     });
                 });
         } else { return msg.channel.send( retEmbed ); }

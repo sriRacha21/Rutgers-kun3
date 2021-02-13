@@ -2,7 +2,9 @@ const Commando = require('discord.js-commando');
 const { oneLine } = require('common-tags');
 const { idsToValues } = require('../../helpers/idsToValues');
 const fs = require('fs');
-const isSMTPServerSetup = fs.existsSync('settings/smtp_server.json');
+const path = require('path');
+const smtpServerPath = path.join(__dirname, '../settings/smtp_server.json');
+const isSMTPServerSetup = fs.existsSync(smtpServerPath);
 
 module.exports = class AgreeCommand extends Commando.Command {
     constructor(client) {

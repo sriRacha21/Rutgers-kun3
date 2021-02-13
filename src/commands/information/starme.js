@@ -1,7 +1,9 @@
 const Commando = require('discord.js-commando');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const fs = require('fs');
-const contributors = JSON.parse(fs.readFileSync('settings/bot_settings.json', 'utf-8')).contributor;
+const path = require('path');
+const botSettingsPath = path.join(__dirname, '../../settings/bot_settings.json');
+const contributors = JSON.parse(fs.readFileSync(botSettingsPath, 'utf-8')).contributor;
 
 module.exports = class StarMeCommand extends Commando.Command {
     constructor(client) {

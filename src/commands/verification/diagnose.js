@@ -1,7 +1,9 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
 // JSON parsing
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
+const path = require('path');
+const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
+const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 const apiKeys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding)) : { mailgun: '' };
 const { domain } = fs.existsSync('settings/smtp_server.json') ? JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8')) : { host: null, port: null, domain: null, username: null, password: null };
 // Requests

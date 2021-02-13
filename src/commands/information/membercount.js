@@ -1,7 +1,9 @@
 const Commando = require('discord.js-commando');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const fs = require('fs');
-const defaults = JSON.parse(fs.readFileSync('settings/permissions_settings.json', 'utf-8'));
+const path = require('path');
+const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
+const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 
 module.exports = class MemberCountCommand extends Commando.Command {
     constructor(client) {

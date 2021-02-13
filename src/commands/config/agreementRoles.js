@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
 const path = require('path');
-const permissionsPath = path.join(__dirname, '../settings/permissions_settings.json');
+const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 const { oneLine } = require('common-tags');
 
@@ -38,7 +38,7 @@ Just enter \`clear\` followed by \`finish\` to clear the current setting.`,
 
         if ( agreementRolesAndBools[0] === 'clear' ) {
             return this.client.provider.remove( msg.guild, 'agreementRoles' )
-                .then( msg.channel.send('Agreement roles succcessfully cleared.') );
+                .then( msg.channel.send('Agreement roles successfully cleared.') );
         }
 
         let failure = false;
