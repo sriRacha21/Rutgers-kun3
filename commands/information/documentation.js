@@ -29,6 +29,6 @@ module.exports = class DocumentationCommand extends Commando.Command {
             .addField('Have questions, feedback, or are interested in following the bot\'s development? Join the development server!:', 'https://discord.gg/YDEpNDV/');
         // check if the server owner is still in the server
         msg.author.send( embed )
-            .then(m => msg.channel.send('Sent you a DM!'));
+            .then(() => msg.channel.send('Sent you a DM!'));
     }
 };

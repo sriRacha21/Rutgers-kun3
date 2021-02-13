@@ -15,6 +15,10 @@
         "array-bracket-spacing" : 0,
         "space-before-function-paren" : ["error", "never"],
         "space-in-parens": 0,
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "no-unused-vars": ["error", {
+            "varsIgnorePattern": "^_+.*$",
+            "argsIgnorePattern": "^_+.*$"
+        }]
     }
 }

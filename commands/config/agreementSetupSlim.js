@@ -46,7 +46,7 @@ module.exports = class Command extends Commando.Command {
         // react to the message
         const emote = defaultSettings.agreementSetupSlimEmote;
         message.react(emote)
-            .then(mr => {
+            .then(() => {
                 this.client.provider.set( msg.guild, 'agreementSlim', {
                     message: message.id,
                     emote: emote,

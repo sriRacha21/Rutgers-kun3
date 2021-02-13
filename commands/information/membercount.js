@@ -15,7 +15,7 @@ module.exports = class MemberCountCommand extends Commando.Command {
         });
     }
 
-    async run( msg, args ) {
+    async run( msg ) {
         const embed = generateDefaultEmbed({
             author: 'Member Count for',
             title: msg.guild.name,

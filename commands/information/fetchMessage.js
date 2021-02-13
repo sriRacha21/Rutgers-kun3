@@ -38,7 +38,7 @@ module.exports = class FetchMessageCommand extends Commando.Command {
             }
             if ( !fetchedMessage ) return;
             // fetchedMessage.reactions.cache.forEach(async r => await r.fetch() && await r.users.fetch());
-            for (const [emoji, r] of fetchedMessage.reactions.cache) {
+            for (const [_, r] of fetchedMessage.reactions.cache) {
                 await r.fetch();
                 await r.users.fetch();
             }

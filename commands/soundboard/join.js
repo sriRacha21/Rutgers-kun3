@@ -11,7 +11,7 @@ module.exports = class JoinCommand extends Commando.Command {
         });
     }
 
-    async run( msg, args ) {
+    async run( msg ) {
         // Check if user is typing in text channel in server, if not reply
         if ( !msg.member ) { return msg.reply( 'You must run this in a server and connected to a voice channel.' ); }
         // Check if user is in voice channel, if not reply

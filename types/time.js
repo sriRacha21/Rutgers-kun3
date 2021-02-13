@@ -4,7 +4,7 @@ const { timeStrToMillis } = require('../helpers/timeStrToMillis');
 class TimeArgumentType extends Commando.ArgumentType {
     constructor(client) { super(client, 'time'); }
 
-    validate( val, msg, arg ) {
+    validate( val, _, arg ) {
         if ( val.includes('.') ) return false; // no decimals allowed!!!
 
         const millis = timeStrToMillis(val);
@@ -18,7 +18,7 @@ class TimeArgumentType extends Commando.ArgumentType {
         }, true);
     }
 
-    parse( val, msg ) {
+    parse( val ) {
         return timeStrToMillis(val);
     }
 }

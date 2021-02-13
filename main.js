@@ -49,7 +49,7 @@ Client.on('error', (error) => {
     logger.log('error', `<b>Error</b>: ${error.name}: ${error.message}
 Stacktrace: ${error.stack}`);
 });
-Client.on('commandError', (command, err, message, args, fromPattern, result) => {
+Client.on('commandError', (command, err, message, args, fromPattern, _) => {
     const emailBody = {
         command: `${command.groupID}:${command.memberName} or ${command.name}`,
         error: `${err.name}: ${err.message}`,
@@ -170,7 +170,7 @@ Client.on('messageReactionAdd', (messageReaction, user) => {
         messageReaction.users.remove(user);
         user.send(`In order to add the ${toRole.name} role you need to be authenticated through 2-step email verification.
 Please enter your netID. Your netID is a unique identifier given to you by Rutgers that you use to sign in to all your Rutgers services. It is generally your initials followed by a few numbers.`)
-            .then(m => {
+            .then(() => {
                 Client.settings.set(`agree:${user.id}`, {
                     guildID: messageReaction.message.guild.id,
                     roleID: agreementSlim.role,
@@ -328,7 +328,7 @@ Client.on('messageUpdate', (oMsg, nMsg) => {
     }, extras);
 });
 
-Client.on('unknownCommand', msg => {
+Client.on('unknownCommand', () => {
 });
 
 // unhandled promise rejection stacktrace

@@ -48,7 +48,7 @@ module.exports = class RoleSwitchCommand extends Commando.Command {
         if ( agreementRolePrev.authenticate === 'false' && agreementRoleTo.authenticate === 'true' ) {
             msg.author.send(`In order to switch to ${toRole.name} you need to be authenticated through 2-step email verification.
 Please enter your netID. Your netID is a unique identifier given to you by Rutgers that you use to sign in to all your Rutgers services. It is generally your initials followed by a few numbers.`)
-                .then(m => {
+                .then(() => {
                     this.client.settings.set(`agree:${msg.author.id}`, {
                         guildID: msg.guild.id,
                         roleID: toRole.id,
@@ -69,9 +69,9 @@ Turn on DM's from server members:`, { files: ['resources/setup-images/instructio
             // any other case
             // just remove the prev role and add the to role
             msg.member.roles.remove(prevRole)
-                .then(m => {
+                .then(() => {
                     msg.member.roles.add(toRole)
-                        .then(m => msg.channel.send(`Successfully switched your role to ${toRole.name}.`))
+                        .then(() => msg.channel.send(`Successfully switched your role to ${toRole.name}.`))
                         .catch(e => {
                             if (e) { msg.channel.send(`Error adding role ${toRole.name}: ${e}. Please ensure the bot is above this role and has "Manage Roles" so it can manage it.`); }
                         });
