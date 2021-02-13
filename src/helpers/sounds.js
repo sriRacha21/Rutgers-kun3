@@ -1,7 +1,8 @@
 const exec = require('child_process').execSync;
+const path = require('path');
 
 function getSoundsArr( humanReadable ) {
-    const command = 'ls sounds';
+    const command = `ls ${path.join(__dirname, '../sounds/')}`;
 
     const soundsArr = exec(command)
         .toString()

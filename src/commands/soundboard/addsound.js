@@ -43,7 +43,7 @@ module.exports = class AddSoundCommand extends Commando.Command {
                 submissionName: name,
                 member: msg.member,
                 runHasPerms: () => {
-                    const filename = path.join(process.cwd(), 'sounds', name );
+                    const filename = path.join(__dirname, '../../sounds', name );
                     const file = fs.createWriteStream(filename);
                     // write file to sounds folder
                     https.get( sound.proxyURL, res => res.pipe(file) );
