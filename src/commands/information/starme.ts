@@ -1,12 +1,12 @@
-const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const fs = require('fs');
-const path = require('path');
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
+import fs from 'fs';
+import path from 'path';
 const botSettingsPath = path.join(__dirname, '../../../settings/bot_settings.json');
 const contributors = JSON.parse(fs.readFileSync(botSettingsPath, 'utf-8')).contributor;
 
-module.exports = class StarMeCommand extends Commando.Command {
-    constructor(client) {
+export default class StarMeCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'starme',
             aliases: ['star'],
@@ -16,7 +16,7 @@ module.exports = class StarMeCommand extends Commando.Command {
         });
     }
 
-    async run(msg) {
+    async run(msg: CommandoMessage): Promise<any> {
         const embed = generateDefaultEmbed({
             title: 'Star my repository!',
             thumbnail: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png',

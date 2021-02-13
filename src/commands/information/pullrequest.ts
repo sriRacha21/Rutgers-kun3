@@ -1,8 +1,8 @@
-const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
 
-module.exports = class PullRequestCommand extends Commando.Command {
-    constructor(client) {
+export default class PullRequestCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'pullrequest',
             aliases: [ 'pr' ],
@@ -12,7 +12,7 @@ module.exports = class PullRequestCommand extends Commando.Command {
         });
     }
 
-    async run( msg ) {
+    async run(msg: CommandoMessage) {
         const embed = generateDefaultEmbed({
             author: 'Have a suggestion?',
             title: 'Make a pull request!',

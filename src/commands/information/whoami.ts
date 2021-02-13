@@ -1,14 +1,14 @@
-const Commando = require('discord.js-commando');
-const packageJSON = require('../../../package.json');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const fs = require('fs');
-const path = require('path');
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import packageJSON from '../../../package.json';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
+import fs from 'fs';
+import path from 'path';
 const botSettingsPath = path.join(__dirname, '../../../settings/bot_settings.json');
 const contributorIDs = JSON.parse(fs.readFileSync(botSettingsPath, 'utf-8')).contributor;
-const logger = require('../../logger');
+import logger from '../../logger';
 
-module.exports = class WhoAmICommand extends Commando.Command {
-    constructor(client) {
+export default class WhoAmICommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'whoami',
             group: 'information',
@@ -18,7 +18,7 @@ module.exports = class WhoAmICommand extends Commando.Command {
         });
     }
 
-    async run(msg) {
+    async run(msg: CommandoMessage) {
         // add owners
         const owners = this.client.owners;
         // add contributors

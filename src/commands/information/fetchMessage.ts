@@ -1,8 +1,8 @@
-const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
 
-module.exports = class FetchMessageCommand extends Commando.Command {
-    constructor(client) {
+export default class FetchMessageCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'fetchmessage',
             group: 'information',
@@ -21,7 +21,7 @@ module.exports = class FetchMessageCommand extends Commando.Command {
         });
     }
 
-    async run( msg, args, fromPattern ) {
+    async run(msg: CommandoMessage, args: object | string | string[], fromPattern ) {
         let message;
 
         if ( fromPattern ) {

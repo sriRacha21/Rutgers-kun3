@@ -1,8 +1,8 @@
-const Commando = require('discord.js-commando');
-const exec = require('child_process').execSync;
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { execSync } from 'child_process';
 
-module.exports = class ScreenfetchCommand extends Commando.Command {
-    constructor(client) {
+export default class ScreenfetchCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'screenfetch',
             group: 'information',
@@ -12,9 +12,9 @@ module.exports = class ScreenfetchCommand extends Commando.Command {
         });
     }
 
-    async run( msg ) {
+    async run(msg: CommandoMessage) {
         return msg.channel.send(
-            exec('screenfetch -nN')
+            execSync('screenfetch -nN')
                 .toString()
                 .trim()
                 .split('\n')

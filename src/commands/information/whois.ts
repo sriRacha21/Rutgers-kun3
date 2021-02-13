@@ -1,9 +1,9 @@
-const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const fs = require('fs');
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
+import fs from 'fs';
 
-module.exports = class WhoIsCommand extends Commando.Command {
-    constructor(client) {
+export default class WhoIsCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'whois',
             aliases: ['who', 'avatar', 'av'],
@@ -21,9 +21,9 @@ module.exports = class WhoIsCommand extends Commando.Command {
         });
     }
 
-    async run(msg, { user }) {
+    async run(msg: CommandoMessage, { user }) {
         // parse netIDs from file
-        const netIDsFile = fs.readFileSync('../settings/netids.json');
+        const netIDsFile = fs.readFileSync('../../../settings/netids.json');
         const netIDs = JSON.parse(netIDsFile.toString());
 
         if (user === 'none') { user = msg.author; }

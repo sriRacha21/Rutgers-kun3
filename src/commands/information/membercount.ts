@@ -1,12 +1,12 @@
-const Commando = require('discord.js-commando');
-const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
-const fs = require('fs');
-const path = require('path');
+import Commando, { CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
+import fs from 'fs';
+import path from 'path';
 const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 
-module.exports = class MemberCountCommand extends Commando.Command {
-    constructor(client) {
+export default class MemberCountCommand extends Commando.Command {
+    constructor(client: CommandoClient) {
         super(client, {
             name: 'membercount',
             aliases: ['mc'],
@@ -17,7 +17,7 @@ module.exports = class MemberCountCommand extends Commando.Command {
         });
     }
 
-    async run(msg, args) {
+    async run(msg: CommandoMessage): Promise<any> {
         const embed = generateDefaultEmbed({
             author: 'Member Count for',
             title: msg.guild.name,

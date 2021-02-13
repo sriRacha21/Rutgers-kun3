@@ -5,7 +5,7 @@ const permissionsPath = path.join(__dirname, '../../../settings/permissions_sett
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 import { generateDefaultEmbed } from '../../helpers/generateDefaultEmbed';
 
-module.exports = class DocumentationCommand extends Commando.Command {
+export default class DocumentationCommand extends Commando.Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'documentation',
