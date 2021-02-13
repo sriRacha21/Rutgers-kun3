@@ -3,7 +3,7 @@ const packageJSON = require('../../../package.json');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const fs = require('fs');
 const path = require('path');
-const botSettingsPath = path.join(__dirname, '../../settings/bot_settings.json');
+const botSettingsPath = path.join(__dirname, '../../../settings/bot_settings.json');
 const contributorIDs = JSON.parse(fs.readFileSync(botSettingsPath, 'utf-8')).contributor;
 const logger = require('../../logger');
 
@@ -18,7 +18,7 @@ module.exports = class WhoAmICommand extends Commando.Command {
         });
     }
 
-    async run( msg ) {
+    async run(msg) {
         // add owners
         const owners = this.client.owners;
         // add contributors
@@ -53,6 +53,6 @@ module.exports = class WhoAmICommand extends Commando.Command {
             }])
             .setImage('attachment://horizontal_brand_text.png');
 
-        return msg.channel.send( embed );
+        return msg.channel.send(embed);
     }
 };

@@ -1,7 +1,7 @@
 const bent = require('bent');
 const fs = require('fs');
 const path = require('path');
-const template = fs.readFileSync(path.join(__dirname, '../resources/latexTemplate.tex')).toString();
+const template = fs.readFileSync(path.join(__dirname, '../../resources/latexTemplate.tex')).toString();
 const { reactionListener } = require('./reactionListener');
 
 function getLatexMatches( msgContent ) {

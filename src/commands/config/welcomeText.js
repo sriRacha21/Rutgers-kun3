@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
 const path = require('path');
-const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
+const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 const { oneLine } = require('common-tags');
 
@@ -14,7 +14,7 @@ module.exports = class SetWelcomeTextCommand extends Commando.Command {
             description: oneLine`Configure the message that will be sent when a user joins the server. Use \`[guild]\` to replace that
 part of the text with the guild name and \`[user]\` to replace that part of the text with a string mentioning the joining user. 
 Just enter \`clear\` to clear the setting.`,
-            userPermissions: [ defaults.admin_permission ],
+            userPermissions: [defaults.admin_permission],
             guildOnly: true,
             args: [
                 {
@@ -30,18 +30,18 @@ Just enter \`clear\` to clear the setting.`,
         });
     }
 
-    async run( msg, { welcomeText } ) {
+    async run(msg, { welcomeText }) {
         const settings = this.client.provider;
 
-        if ( welcomeText === 'clear' ) {
-            settings.remove( msg.guild, 'welcomeText' )
-                .then( msg.channel.send( 'Welcome successfully removed.' ) );
+        if (welcomeText === 'clear') {
+            settings.remove(msg.guild, 'welcomeText')
+                .then(msg.channel.send('Welcome successfully removed.'));
             return;
         }
 
-        if ( !settings.get( msg.guild, 'agreementChannel' ) && !settings.get(msg.guild, 'agreementSlim') ) { return msg.channel.send( `You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.` ); }
+        if (!settings.get(msg.guild, 'agreementChannel') && !settings.get(msg.guild, 'agreementSlim')) { return msg.channel.send(`You need to set an agreement channel first with \`${msg.guild.commandPrefix}setagreementchannel\`.`); }
 
-        settings.set( msg.guild, 'welcomeText', welcomeText )
-            .then( msg.channel.send( 'Welcome text successfully set.' ));
+        settings.set(msg.guild, 'welcomeText', welcomeText)
+            .then(msg.channel.send('Welcome text successfully set.'));
     }
 };

@@ -2,21 +2,21 @@ const Commando = require('discord.js-commando');
 const { generateDefaultEmbed } = require('../../helpers/generateDefaultEmbed');
 const fs = require('fs');
 const path = require('path');
-const botSettingsPath = path.join(__dirname, '../../settings/bot_settings.json');
+const botSettingsPath = path.join(__dirname, '../../../settings/bot_settings.json');
 const contributors = JSON.parse(fs.readFileSync(botSettingsPath, 'utf-8')).contributor;
 
 module.exports = class StarMeCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'starme',
-            aliases: [ 'star' ],
+            aliases: ['star'],
             group: 'information',
             memberName: 'starme',
             description: 'Star my repository!'
         });
     }
 
-    async run( msg ) {
+    async run(msg) {
         const embed = generateDefaultEmbed({
             title: 'Star my repository!',
             thumbnail: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png',
@@ -24,8 +24,8 @@ module.exports = class StarMeCommand extends Commando.Command {
             msg: msg
         })
             .setDescription(`A special thanks to:\n${contributors.map(c => `<@${c}>`).join('\n')}\nfor contributing!`)
-            .setURL( 'https://github.com/sriRacha21/Rutgers-kun3/stargazers' );
+            .setURL('https://github.com/sriRacha21/Rutgers-kun3/stargazers');
 
-        msg.channel.send( embed );
+        msg.channel.send(embed);
     }
 };

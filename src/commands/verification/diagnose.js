@@ -2,10 +2,10 @@ const Commando = require('discord.js-commando');
 const fs = require('fs');
 // JSON parsing
 const path = require('path');
-const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
+const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
-const apiKeys = fs.existsSync('settings/api_keys.json') ? JSON.parse(fs.readFileSync('settings/api_keys.json', defaults.encoding)) : { mailgun: '' };
-const { domain } = fs.existsSync('settings/smtp_server.json') ? JSON.parse(fs.readFileSync('settings/smtp_server.json', 'utf-8')) : { host: null, port: null, domain: null, username: null, password: null };
+const apiKeys = fs.existsSync('../settings/api_keys.json') ? JSON.parse(fs.readFileSync('../settings/api_keys.json', defaults.encoding)) : { mailgun: '' };
+const { domain } = fs.existsSync('../settings/smtp_server.json') ? JSON.parse(fs.readFileSync('../settings/smtp_server.json', 'utf-8')) : { host: null, port: null, domain: null, username: null, password: null };
 // Requests
 const bent = require('bent');
 const getJSON = bent('json');
@@ -23,7 +23,7 @@ module.exports = class DiagnoseCommand extends Commando.Command {
             group: 'verification',
             memberName: 'diagnose',
             description: 'Diagnose issues with server verification.',
-            userPermissions: [ defaults.admin_permission ],
+            userPermissions: [defaults.admin_permission],
             guildOnly: true,
             args: [
                 {
@@ -41,7 +41,7 @@ module.exports = class DiagnoseCommand extends Commando.Command {
         });
     }
 
-    async run( msg, { member, netID } ) {
+    async run(msg, { member, netID }) {
         // check if server has verification of any kind
         const settings = this.client.provider;
         const globalSettings = this.client.settings;
@@ -63,8 +63,8 @@ module.exports = class DiagnoseCommand extends Commando.Command {
         // send embed-- prepare for edits
         const sentEmbed = await msg.channel.send(startEmbed);
         // fetch last 20 messages (needed for every step)
-        if ( !user.dmChannel ) await user.createDM();
-        if ( user.dmChannel.messages.cache.size < 20 ) await user.dmChannel.messages.fetch({ limit: 20 });
+        if (!user.dmChannel) await user.createDM();
+        if (user.dmChannel.messages.cache.size < 20) await user.dmChannel.messages.fetch({ limit: 20 });
         const lastTwenty = user.dmChannel.messages.cache.last(20).reverse();
         // no setting-- user may have not started process or is already in server
         if (!agreeObj) {
@@ -79,7 +79,7 @@ module.exports = class DiagnoseCommand extends Commando.Command {
             }
 
             // Was a dmChannel even opened? Do we share any messages?
-            if ( user.dmChannel.messages.cache.size === 0 ) {
+            if (user.dmChannel.messages.cache.size === 0) {
                 const suggestion = user.lastMessage ? `Looks like their last message sent in the server was: ${user.lastMessage.cleanContent}.` : '';
                 startEmbed.addField('Diagnosis complete!:', `I did not DM this user. It appears they may not have started the verification process. No further action will be taken.\n${suggestion}`);
                 await sentEmbed.edit(startEmbed);
@@ -89,7 +89,7 @@ module.exports = class DiagnoseCommand extends Commando.Command {
                 startEmbed.addField('DM Check:', "**Yes**, the user did receive a DM from me.\nThat's not supposed to happen.");
             }
             await sentEmbed.edit(startEmbed);
-        } else if ( agreeObj.step === 1 || agreeObj.step === 2 ) {
+        } else if (agreeObj.step === 1 || agreeObj.step === 2) {
             // Diagnose user DM's
             startEmbed.setDescription(`I think I DM'ed this user already. Here are my last ${lastTwenty.length} messages with ${user.tag}. Please scan them for anything that might look off:`);
             await sentEmbed.edit(startEmbed);
@@ -100,7 +100,7 @@ module.exports = class DiagnoseCommand extends Commando.Command {
             startEmbed.addField('Diagnosis complete!:', "My DM's with this user are above. Please scan them and see if anything looks off.");
 
             await sentEmbed.edit(startEmbed);
-        } else if ( agreeObj.step === 3 ) {
+        } else if (agreeObj.step === 3) {
             // prep embed
             startEmbed.setDescription("I think I already queued an email for this user. Let's see if it bounced.");
             await sentEmbed.edit(startEmbed);

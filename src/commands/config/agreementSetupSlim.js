@@ -1,8 +1,8 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
 const path = require('path');
-const defaultsPath = path.join(__dirname, '../../settings/default_settings.json');
-const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
+const defaultsPath = path.join(__dirname, '../../../settings/default_settings.json');
+const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json');
 const defaultSettings = fs.existsSync(defaultsPath) ? JSON.parse(fs.readFileSync(defaultsPath, 'utf-8')) : { err: true };
 const logger = require('../../logger');
 const permissions = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
@@ -15,7 +15,7 @@ module.exports = class Command extends Commando.Command {
             group: 'config',
             memberName: 'agreementsetupslim',
             description: 'Run this command to run a slim version of the agreement setup. Uses emote reaction to serve roles.',
-            userPermissions: [ permissions.admin_permission ],
+            userPermissions: [permissions.admin_permission],
             args: [
                 {
                     key: 'role',
@@ -33,10 +33,10 @@ module.exports = class Command extends Commando.Command {
         });
     }
 
-    async run( msg, { role, message }) {
-        if (defaultSettings.err) { logger.log('error', 'No defaultSettings.json file was found. Unintended behavior may occur. Make sure you rename settings/defaultSettings.json.dist to settings/defaultSettings.json.'); }
+    async run(msg, { role, message }) {
+        if (defaultSettings.err) { logger.log('error', 'No defaultSettings.json file was found. Unintended behavior may occur. Make sure you rename ../settings/defaultSettings.json.dist to ../settings/defaultSettings.json.'); }
         // check for default settings
-        if ( !defaultSettings || !defaultSettings.agreementSetupSlimEmote ) { return msg.channel.send('There are no default settings! Add a `defaultSettings.json` into the settings folder and give it a `agreementSetupSlimEmote` field with the value being the ID for the emote you want to use for the emote reaction.'); }
+        if (!defaultSettings || !defaultSettings.agreementSetupSlimEmote) { return msg.channel.send('There are no default settings! Add a `defaultSettings.json` into the settings folder and give it a `agreementSetupSlimEmote` field with the value being the ID for the emote you want to use for the emote reaction.'); }
         // keep the message in settings so we can retrieve it from cache
         const messagesToCache = this.client.settings.get('messagesToCache') ? this.client.settings.get('messagesToCache') : [];
         if (messagesToCache.filter(m => m.channel === message.channel.id && m.message === message.id).length === 0) {
@@ -50,7 +50,7 @@ module.exports = class Command extends Commando.Command {
         const emote = defaultSettings.agreementSetupSlimEmote;
         message.react(emote)
             .then(mr => {
-                this.client.provider.set( msg.guild, 'agreementSlim', {
+                this.client.provider.set(msg.guild, 'agreementSlim', {
                     message: message.id,
                     emote: emote,
                     role: role.id

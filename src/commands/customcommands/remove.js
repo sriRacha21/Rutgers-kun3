@@ -1,14 +1,14 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
 const path = require('path');
-const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
+const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 
 module.exports = class RemoveCommandCommands extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'removecommand',
-            aliases: [ 'deletecommand' ],
+            aliases: ['deletecommand'],
             group: 'customcommands',
             memberName: 'remove',
             description: 'Remove a command from the guild.',
@@ -17,7 +17,7 @@ module.exports = class RemoveCommandCommands extends Commando.Command {
                 'removecommand',
                 'removecommand arjun'
             ],
-            userPermissions: [ defaults.moderator_permission ],
+            userPermissions: [defaults.moderator_permission],
             args: [
                 {
                     key: 'key',
@@ -32,11 +32,11 @@ module.exports = class RemoveCommandCommands extends Commando.Command {
         });
     }
 
-    async run( msg, { key } ) {
-        const result = await this.client.provider.get( msg.guild, `commands:${key}` );
-        if ( !result ) { return msg.channel.send( `No command by the name \`${key}\` was found.` ); }
+    async run(msg, { key }) {
+        const result = await this.client.provider.get(msg.guild, `commands:${key}`);
+        if (!result) { return msg.channel.send(`No command by the name \`${key}\` was found.`); }
 
-        this.client.provider.remove( msg.guild, `commands:${key}` )
-            .then( msg.channel.send( `Successfully removed command \`${msg.guild.commandPrefix}${key}\`.`) );
+        this.client.provider.remove(msg.guild, `commands:${key}`)
+            .then(msg.channel.send(`Successfully removed command \`${msg.guild.commandPrefix}${key}\`.`));
     }
 };

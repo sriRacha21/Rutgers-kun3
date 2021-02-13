@@ -2,13 +2,13 @@ const RichEmbed = require('discord.js').MessageEmbed;
 const { oneLine } = require('common-tags');
 const fs = require('fs');
 const path = require('path');
-const defaultsPath = path.join(__dirname, '../settings/default_settings.json');
+const defaultsPath = path.join(__dirname, '../../settings/default_settings.json');
 const defaults = fs.existsSync(defaultsPath) ? JSON.parse(fs.readFileSync(defaultsPath, 'utf-8')) : { err: true };
 const logger = require('../logger');
 
-function generateDefaultEmbed( requiredEmbedInfo ) {
+function generateDefaultEmbed(requiredEmbedInfo) {
     if (defaults.err) {
-        logger.log('error', 'No default_settings.json file was found. Unintended behavior may occur. Make sure you rename settings/default_settings.json.dist to settings/default_settings.json.');
+        logger.log('error', 'No default_settings.json file was found. Unintended behavior may occur. Make sure you rename ../settings/default_settings.json.dist to ../settings/default_settings.json.');
         return;
     }
 
@@ -22,11 +22,11 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
     const startingEmbed = requiredEmbedInfo.startingEmbed ? requiredEmbedInfo.startingEmbed : new RichEmbed();
 
     startingEmbed
-        .setTitle( title )
-        .setThumbnail( thumbnail )
-        .setFooter( oneLine`${msg ? `Requested by ${msg.author.tag}${guild ? ` in ${guild.name}` : ''}` : clientUser.tag}`
-            , msg ? msg.author.displayAvatarURL() : clientUser.displayAvatarURL() )
-        .setColor( defaults.richembed_color )
+        .setTitle(title)
+        .setThumbnail(thumbnail)
+        .setFooter(oneLine`${msg ? `Requested by ${msg.author.tag}${guild ? ` in ${guild.name}` : ''}` : clientUser.tag}`
+            , msg ? msg.author.displayAvatarURL() : clientUser.displayAvatarURL())
+        .setColor(defaults.richembed_color)
         .setTimestamp();
 
     if (requiredEmbedInfo.page) {
@@ -34,7 +34,7 @@ function generateDefaultEmbed( requiredEmbedInfo ) {
         startingEmbed.setFooter(`Requested by ${msg.author.tag} (Page ${current}/${total})`);
     }
 
-    if (requiredEmbedInfo.author) { startingEmbed.setAuthor( author, authorThumbnail ); }
+    if (requiredEmbedInfo.author) { startingEmbed.setAuthor(author, authorThumbnail); }
 
     return startingEmbed;
 }

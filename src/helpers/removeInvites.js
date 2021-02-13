@@ -1,13 +1,13 @@
 const logger = require('../logger');
 const fs = require('fs');
 const path = require('path');
-const permissionsPath = path.join(__dirname, '../settings/permissions_settings.json');
+const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 
-function removeInvites( msg, client ) {
-    if ( !msg.guild ) { return; }
+function removeInvites(msg, client) {
+    if (!msg.guild) { return; }
 
-    const removeInvites = client.provider.get( msg.guild, 'removeInvites' );
+    const removeInvites = client.provider.get(msg.guild, 'removeInvites');
 
     const universalInvOverrides = [
         '143013824679641088', // rutgers esports
@@ -21,20 +21,20 @@ function removeInvites( msg, client ) {
         '692027761081974925' // RU economics
     ];
 
-    if ( removeInvites ) {
-        const inviteMatches = msg.content.match( /discord(app)?.(gg|com)\/(invite\/)?([a-z]|[A-Z]|[0-9])+/gi );
-        if ( inviteMatches ) {
-            inviteMatches.forEach( inviteMatch => {
+    if (removeInvites) {
+        const inviteMatches = msg.content.match(/discord(app)?.(gg|com)\/(invite\/)?([a-z]|[A-Z]|[0-9])+/gi);
+        if (inviteMatches) {
+            inviteMatches.forEach(inviteMatch => {
                 client.fetchInvite(inviteMatch)
-                    .then( invite => {
-                        if ( universalInvOverrides.includes(invite.guild.id) ) { return; }
-                        if ( !msg.member.hasPermission(defaults.trusted_permission) ) {
+                    .then(invite => {
+                        if (universalInvOverrides.includes(invite.guild.id)) { return; }
+                        if (!msg.member.hasPermission(defaults.trusted_permission)) {
                             msg.delete();
                             msg.author.send(`Sending server invites is not allowed in ${msg.guild.name}.`);
                         }
                     })
-                    .catch( err => {
-                        if ( err ) { logger.log( 'warn', `Unable to resolve invite ${inviteMatch}. Error: ${err}` ); }
+                    .catch(err => {
+                        if (err) { logger.log('warn', `Unable to resolve invite ${inviteMatch}. Error: ${err}`); }
                     });
             });
         }

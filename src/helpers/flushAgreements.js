@@ -1,17 +1,17 @@
 const fs = require('fs');
 const path = require('path');
-const permissionsPath = path.join(__dirname, '../settings/permissions_settings.json');
+const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 const logger = require('../logger');
 
-function flushAgreements( guilds, provider ) {
+function flushAgreements(guilds, provider) {
     logger.log('info', 'Running microtask flushAgreements.');
-    if ( guilds ) {
-        guilds.forEach( guild => {
+    if (guilds) {
+        guilds.forEach(guild => {
             // attempt to get agreement channel from settings
-            const maybeAgreementChannelID = provider.get( guild, 'agreementChannel' );
+            const maybeAgreementChannelID = provider.get(guild, 'agreementChannel');
             // skip this guild if its agreement channel does not exist
-            if ( !maybeAgreementChannelID ) { return; }
+            if (!maybeAgreementChannelID) { return; }
             // convert channel id to channel
             const maybeAgreementChannel = guild.channels.resolve(maybeAgreementChannelID);
             if (!maybeAgreementChannel) {
@@ -21,10 +21,10 @@ function flushAgreements( guilds, provider ) {
             }
             // flush if it does
             maybeAgreementChannel.messages.fetch({ limit: 100 })
-                .then( messages => {
+                .then(messages => {
                     messages
-                        .filter( msg => !msg.webhookID && (msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission))) )
-                        .forEach( message => message.delete()
+                        .filter(msg => !msg.webhookID && (msg.author.bot || (msg.member && !msg.member.hasPermission(defaults.admin_permission))))
+                        .forEach(message => message.delete()
                             .catch(err => {
                                 if (err) {
                                     logger.warn(`Couldn't delete message in the agreement channel of guild ${message.guild.name}.`);
@@ -36,7 +36,7 @@ function flushAgreements( guilds, provider ) {
                 });
         });
     }
-    setTimeout(flushAgreements, 15000, guilds, provider );
+    setTimeout(flushAgreements, 15000, guilds, provider);
 }
 
 exports.flushAgreements = flushAgreements;

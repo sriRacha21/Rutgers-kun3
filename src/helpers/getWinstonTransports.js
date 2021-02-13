@@ -5,16 +5,16 @@ require('winston-mail');
 // import for reading in emails for transports
 const fs = require('fs');
 const path = require('path');
-const smtpServerPath = path.join(__dirname, '../settings/smtp_server.json');
+const smtpServerPath = path.join(__dirname, '../../settings/smtp_server.json');
 const { host, port, domain, username, password } = fs.existsSync(smtpServerPath) ? JSON.parse(fs.readFileSync(smtpServerPath, 'utf-8')) : {};
-const emails = fs.existsSync('settings/email_logging.json') ? JSON.parse(fs.readFileSync('settings/email_logging.json', 'utf-8')) : null;
+const emails = fs.existsSync('../settings/email_logging.json') ? JSON.parse(fs.readFileSync('../settings/email_logging.json', 'utf-8')) : null;
 
 function getWinstonTransports() {
     const transports = [];
 
     // put all logs in files
-    for ( const level in winston.config.npm.levels ) {
-        if ( level === 'silly' ) { continue; }
+    for (const level in winston.config.npm.levels) {
+        if (level === 'silly') { continue; }
 
         transports.push(new winston.transports.DailyRotateFile({
             filename: `logs/${level}-%DATE%.log`,
@@ -24,10 +24,10 @@ function getWinstonTransports() {
     }
 
     // email errors
-    if ( host ) {
-        for ( const level in emails ) {
+    if (host) {
+        for (const level in emails) {
             const email = emails[level].email;
-            if ( email ) {
+            if (email) {
                 transports.push(new winston.transports.Mail({
                     to: email,
                     from: `winston-error@${domain}`, // think about making this configurable

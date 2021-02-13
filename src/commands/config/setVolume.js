@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
 const path = require('path');
-const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
+const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 
 module.exports = class SetVolumeCommand extends Commando.Command {
@@ -12,7 +12,7 @@ module.exports = class SetVolumeCommand extends Commando.Command {
             memberName: 'volume',
             description: 'Set the volume of the bot in voice channels in this server. Default is 10. (0-100)',
             guildOnly: true,
-            userPermissions: [ defaults.admin_permission ],
+            userPermissions: [defaults.admin_permission],
             args: [
                 {
                     key: 'volume',
@@ -25,16 +25,16 @@ module.exports = class SetVolumeCommand extends Commando.Command {
         });
     }
 
-    async run( msg, { volume } ) {
+    async run(msg, { volume }) {
         const settings = this.client.provider;
 
-        if ( typeof volume === 'string' ) {
-            settings.remove( msg.guild, 'volume' );
-            msg.channel.send( 'Cleared volume setting.' );
+        if (typeof volume === 'string') {
+            settings.remove(msg.guild, 'volume');
+            msg.channel.send('Cleared volume setting.');
             return;
         }
 
-        settings.set( msg.guild, 'volume', volume )
-            .then( msg.channel.send( `Volume successfully set to ${volume}.` ));
+        settings.set(msg.guild, 'volume', volume)
+            .then(msg.channel.send(`Volume successfully set to ${volume}.`));
     }
 };

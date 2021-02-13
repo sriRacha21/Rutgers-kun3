@@ -1,13 +1,13 @@
 const fs = require('fs');
 const path = require('path');
-const defaultsPath = path.join(__dirname, '../settings/default_settings.json');
+const defaultsPath = path.join(__dirname, '../../settings/default_settings.json');
 const defaults = fs.existsSync(defaultsPath) ? JSON.parse(fs.readFileSync(defaultsPath, 'utf-8')) : { err: true };
 const logger = require('../logger');
 
-function flushAgreementEmotes( channels, provider ) {
+function flushAgreementEmotes(channels, provider) {
     logger.log('info', 'Running microtask flushAgreementEmotes.');
     // check for default settings
-    if ( defaults.err || !defaults.agreementSetupSlimEmote ) {
+    if (defaults.err || !defaults.agreementSetupSlimEmote) {
         logger.log('warn', 'There are no default settings! Add a `default_settings.json` into the settings folder and give it a `agreementSetupSlimEmote` field with the value being the ID for the emote you want to use for the emote reaction.');
     }
 
@@ -22,12 +22,12 @@ function flushAgreementEmotes( channels, provider ) {
     } else {
         channelMessages.forEach(async channelMessage => {
             // malformed object
-            if ( !channelMessage.channel || !channelMessage.message ) return;
+            if (!channelMessage.channel || !channelMessage.message) return;
             const channelID = channelMessage.channel;
             const messageID = channelMessage.message;
             const channel = channels.resolve(channelID);
             // unable to find channel
-            if ( !channel || channel.type !== 'text' ) {
+            if (!channel || channel.type !== 'text') {
                 logger.log('warn', `Unable to fetch channel with ID ${channelID}`);
                 return;
             }
@@ -54,7 +54,7 @@ function flushAgreementEmotes( channels, provider ) {
         });
     }
 
-    setTimeout(flushAgreementEmotes, nextMicrotask, channels, provider );
+    setTimeout(flushAgreementEmotes, nextMicrotask, channels, provider);
 }
 
 exports.flushAgreementEmotes = flushAgreementEmotes;

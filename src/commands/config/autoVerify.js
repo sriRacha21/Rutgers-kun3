@@ -1,7 +1,7 @@
 const Commando = require('discord.js-commando');
 const fs = require('fs');
 const path = require('path');
-const permissionsPath = path.join(__dirname, '../../settings/permissions_settings.json');
+const permissionsPath = path.join(__dirname, '../../../settings/permissions_settings.json');
 const defaults = JSON.parse(fs.readFileSync(permissionsPath, 'utf-8'));
 
 module.exports = class SetAutoVerifyCommand extends Commando.Command {
@@ -11,7 +11,7 @@ module.exports = class SetAutoVerifyCommand extends Commando.Command {
             group: 'config',
             memberName: 'autoverify',
             description: 'Configure a word or phrase that can be used to bypass the verification process.',
-            userPermissions: [ defaults.admin_permission ],
+            userPermissions: [defaults.admin_permission],
             guildOnly: true,
             args: [
                 {
@@ -29,26 +29,26 @@ module.exports = class SetAutoVerifyCommand extends Commando.Command {
         });
     }
 
-    async run( msg, { phrase, role } ) {
+    async run(msg, { phrase, role }) {
         const settings = this.client.provider;
 
-        if ( role === 'clear' ) {
-            settings.remove( msg.guild, 'autoverify' )
-                .then( msg.channel.send('Autoverify phrase successfully cleared.') );
+        if (role === 'clear') {
+            settings.remove(msg.guild, 'autoverify')
+                .then(msg.channel.send('Autoverify phrase successfully cleared.'));
             return;
         }
 
-        if ( !settings.get( msg.guild, 'agreementChannel' ) ) { return msg.channel.send( `You need to designate an agreement channel with \`${msg.guild.commandPrefix}setagreementchannel\` first.` ); }
+        if (!settings.get(msg.guild, 'agreementChannel')) { return msg.channel.send(`You need to designate an agreement channel with \`${msg.guild.commandPrefix}setagreementchannel\` first.`); }
 
-        if ( !settings.get( msg.guild, 'agreementRoles' ) ) { return msg.channel.send( `You need to designate agreement roles with \`${msg.guild.commandPrefix}setagreementroles\` first.` ); }
+        if (!settings.get(msg.guild, 'agreementRoles')) { return msg.channel.send(`You need to designate agreement roles with \`${msg.guild.commandPrefix}setagreementroles\` first.`); }
 
         // check if the passed role is marked as true in the agreement roles
         const agreementRoles = settings.get(msg.guild, 'agreementRoles');
-        if ( !agreementRoles.filter(r => r.authenticate === 'true').map(r => r.roleID).includes(role.id) ) { return msg.channel.send( `The role you are passing must be marked as requiring verification (\`true\`). Check your configs. (\`${msg.guild.commandPrefix}configs\`)` ); }
+        if (!agreementRoles.filter(r => r.authenticate === 'true').map(r => r.roleID).includes(role.id)) { return msg.channel.send(`The role you are passing must be marked as requiring verification (\`true\`). Check your configs. (\`${msg.guild.commandPrefix}configs\`)`); }
 
         const autoverify = settings.get(msg.guild, 'autoverify');
         let avProm;
-        if ( autoverify ) {
+        if (autoverify) {
             autoverify.push({
                 phrase: phrase,
                 role: role.id
@@ -62,6 +62,6 @@ module.exports = class SetAutoVerifyCommand extends Commando.Command {
                 }
             ]);
         }
-        avProm.then( msg.channel.send( 'Autoverify phrase successfully set.' ) );
+        avProm.then(msg.channel.send('Autoverify phrase successfully set.'));
     }
 };
