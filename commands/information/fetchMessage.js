@@ -62,7 +62,8 @@ module.exports = class FetchMessageCommand extends Commando.Command {
         if ( !fromPattern ) { embed.addField('Source:', `[Jump!](${message.url})`); }
         if (message.reactions.cache.size <= 5) {
             message.reactions.cache.forEach(r => {
-                embed.addField(`${r.emoji} used ${r.count} times by:`, r.users.cache.size > 0 ? r.users.cache.map(u => `<@${u.id}>`).join(', ') : 'N/A');
+                const usersField = r.users.cache.size > 0 ? r.users.cache.map(u => `<@${u.id}>`).join(', ') : 'N/A';
+                embed.addField(`${r.emoji} used ${r.count} times by:`, usersField.length <= 1024 ? usersField : 'Too many users!');
             });
         }
 
