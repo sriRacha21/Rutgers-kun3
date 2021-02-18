@@ -47,7 +47,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
             try {
                 guildMember = await msg.guild.members.fetch(user);
             } catch (err) {}
-            if ( guildMember && guildMember.roles.size > 1 ) { embed.addField('Roles:', guildMember.roles.array().slice(1).join('\n')); }
+            if ( guildMember && guildMember.roles.cache.size > 1 ) { embed.addField('Roles:', guildMember.roles.cache.array().slice(1).join('\n')); }
         }
 
         // is a bot?
