@@ -42,7 +42,6 @@ module.exports = class ListConfigCommand extends Commando.Command {
         const wordCountMessages = settings.get( guild, 'wordCounters' );
         const agreementRoles = settings.get( guild, 'agreementRoles' );
         const protectedRoles = settings.get( guild, 'protectedRoles' ) ? settings.get( guild, 'protectedRoles' ) : [];
-        const muteRoleID = settings.get( guild, 'muteRole' );
         const unpingableRoleIDs = settings.get( guild, 'unpingableRoles' );
 
         // generate embed
@@ -65,7 +64,6 @@ module.exports = class ListConfigCommand extends Commando.Command {
         embed.addField( 'Removing invites?:', removeInvites ? 'On' : 'Off' );
         // embed.addField( 'Detecting haikus?:', haiku ? 'Off' : 'On' )
         embed.addField( 'Word Count Messages?:', !wordCountMessages ? 'On' : 'Off' );
-        if ( muteRoleID ) { embed.addField( 'Mute role:', `<@&${muteRoleID}>` ); }
         if ( agreementRoles && agreementRoles.length > 0 ) { embed.addField( 'Agreement Roles:', agreementRoles.map(role => `<@&${role.roleID}>, ${role.authenticate}`).join('\n') ); }
         if ( unpingableRoleIDs ) { embed.addField( 'Unpingable Roles:', unpingableRoleIDs.map(role => `<@&${role}>`).join('\n') ); }
         if ( protectedRoles.length > 0 ) { embed.addField( 'Protected Roles:', protectedRoles.map(role => `<@&${role}>`).join('\n') ); }
