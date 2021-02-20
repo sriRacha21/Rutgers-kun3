@@ -65,6 +65,8 @@ module.exports = class FetchMessageCommand extends Commando.Command {
                 const usersField = r.users.cache.size > 0 ? r.users.cache.map(u => `<@${u.id}>`).join(', ') : 'N/A';
                 embed.addField(`${r.emoji} used ${r.count} times by:`, usersField.length <= 1024 ? usersField : 'Too many users!');
             });
+        } else {
+            embed.addField('Reactions used:', message.reactions.cache.map(r => r.emoji).join(', '));
         }
 
         if ( message.attachments.size === 1 ) { embed.setImage(message.attachments.first().proxyURL); }
