@@ -128,13 +128,21 @@ async function loadMsgChainTable(channelManager, settings) {
             .then(() => logger.log('info', 'Cleared old msgChainTable from database.'));
         for (const channelID in oldMsgChainTable) {
             const messageIDs = oldMsgChainTable[channelID];
-            const channel = await channelManager.fetch(channelID);
-            const messages = [];
-            for (const mID of messageIDs) {
-                const message = await channel.messages.fetch(mID);
-                messages.push(message);
+            try {
+                const channel = await channelManager.fetch(channelID);
+                const messages = [];
+                for (const mID of messageIDs) {
+                    try {
+                        const message = await channel.messages.fetch(mID);
+                        messages.push(message);
+                    } catch (e) {
+                        logger.log('warn', `Couldn't fetch message ${mID}.`);
+                    }
+                }
+                oldMsgChainTable[channelID] = messages;
+            } catch (e) {
+                logger.log('warn', `Couldn't fetch message ${channelID}.`);
             }
-            oldMsgChainTable[channelID] = messages;
         }
         logger.log('info', "All message ID's resolved. msgChainTable restored to original state.", oldMsgChainTable);
     }
