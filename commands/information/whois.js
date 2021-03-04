@@ -34,7 +34,7 @@ module.exports = class WhoIsCommand extends Commando.Command {
             title: user.tag,
             clientUser: this.client.user,
             msg: msg,
-            thumbnail: user.displayAvatarURL({dynamic: true})
+            thumbnail: user.displayAvatarURL({ dynamic: true })
         });
         embed.addField('Tag:', user)
             .addField('User ID:', user.id);
