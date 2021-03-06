@@ -12,6 +12,8 @@ function checkWordCount( msg, settings ) {
         // init vars
         if ( wordCountInfo.word ) { word = wordCountInfo.word; } else { throw new Error('word is a required field.'); }
         if ( wordCountInfo.count >= 0 ) { count = wordCountInfo.count; } else { throw new Error('count is a required field.'); }
+        // escape regex special chars
+        word = escapeRegExp(word);
 
         const regex = new RegExp(`\\b${word}\\b`, 'gi');
         const msgContent = msg.cleanContent.toLowerCase();
@@ -24,6 +26,12 @@ function checkWordCount( msg, settings ) {
     });
 
     settings.set(`countword:${msg.author.id}`, wordCounts);
+}
+
+// Thanks Stackoverflow !
+// https://stackoverflow.com/a/6969486
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
 exports.checkWordCount = checkWordCount;
