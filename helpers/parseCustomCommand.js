@@ -14,7 +14,21 @@ function parseCustomCommand( commandName, appends, settings, channel ) {
 
         const text = (cText + ' ' + appends.join(' ')).trim();
 
-        if ( text !== '' && commandInfo.attachment ) { msgSendPromise = channel.send( text, { files: [commandInfo.attachment] } ); } else if ( text !== '' && !commandInfo.attachment ) { msgSendPromise = channel.send( text ); } else if ( text === '' && commandInfo.attachment ) { msgSendPromise = channel.send( { files: [commandInfo.attachment] } ); } else { throw new Error('Illegal arguments for parseCustomCommand'); }
+        if ( text !== '' && commandInfo.attachment ) {
+            msgSendPromise = channel.send( text, {
+                files: [commandInfo.attachment],
+                disableMentions: 'all'
+            });
+        } else if ( text !== '' && !commandInfo.attachment ) {
+            msgSendPromise = channel.send( text, {
+                disableMentions: 'all'
+            });
+        } else if ( text === '' && commandInfo.attachment ) {
+            msgSendPromise = channel.send( {
+                files: [commandInfo.attachment],
+                disableMentions: 'all'
+            });
+        } else { throw new Error('Illegal arguments for parseCustomCommand'); }
     }
     if ( msgSendPromise ) {
         msgSendPromise
