@@ -41,8 +41,9 @@
     "sqlite": "^3.0.6",
     "string-strip-html": "^6.3.0",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0",
+    "winston-daily-rotate-file": "4.5.2",
     "winston-mail": "^2.0.0",
+    "winston-transport": "^4.4.0",
     "x-ray": "^2.3.4"
   },
   "devDependencies": {
