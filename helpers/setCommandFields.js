@@ -15,6 +15,7 @@ async function setCommandFields(registry) {
 async function setWoofCommandFields(registry) {
     /*  Set woof command oneOf array to available breeds and set details    */
     const woofCommand = getCommandByName(registry, 'woof');
+    if (woofCommand === undefined) { return; }
 
     const firstWoofArg = woofCommand
         .argsCollector
