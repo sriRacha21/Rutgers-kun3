@@ -20,7 +20,13 @@ async function setWoofCommandFields(registry) {
         .argsCollector
         .args[0];
 
-    const breeds = (await requestBreeds()).map( str => str.toLowerCase() );
+    const maybeBreeds = await requestBreeds();
+    if (maybeBreeds === undefined) {
+        logger.log('error', "Couldn't reach dog API gateway. Unloading command.");
+        woofCommand.unload();
+        return;
+    }
+    const breeds = maybeBreeds.map( str => str.toLowerCase() );
 
     woofCommand.details = `Output a picture of a cute dog chosen at random. Available breeds are: ${breeds.join(', ')}. Choosing a breed is optional.`;
     firstWoofArg.oneOf = breeds;

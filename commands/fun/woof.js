@@ -37,7 +37,7 @@ module.exports = class WoofCommand extends Commando.Command {
     async run( msg, args ) {
         // get breeds and prepare to request them
         const breeds = this.client.registry.commands
-            .filter(command => command.name === 'woof' )
+            .filter(command => command.name === 'woof')
             .first()
             .argsCollector
             .args[0]
