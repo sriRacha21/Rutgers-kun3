@@ -2,10 +2,10 @@
   "name": "rutgers-kun3",
   "version": "3.4.0",
   "description": "A complete rewrite of the Rutgers-kun Discord bot built for the Rutgers Esports discord server.",
-  "main": "shard.js",
+  "main": "main.js",
   "scripts": {
-    "run": "node shard.js",
-    "test": "node shard.js",
+    "run": "node main.js",
+    "test": "node main.js",
     "lint": "eslint .",
     "postinstall": "husky install"
   },
