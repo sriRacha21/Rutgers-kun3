@@ -124,3 +124,4 @@ settings.sqlite3
 
 # pem files
 *.pem
+.DS_Store
