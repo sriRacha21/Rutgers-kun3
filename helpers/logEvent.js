@@ -17,7 +17,8 @@ function logEvent( logInfo, extras ) {
     // set log channel
     if ( !channel ) { channel = guild.channels.resolve(logChannelID); }
     if ( !channel ) {
-        logger.log('error', `The log channel could not be found in guild **${guild.name}**.`);
+        logger.log('warn', `The log channel could not be found in guild ${guild.name}.`);
+        if (guild.owner) guild.owner.send(`The log channel could not be found in your guild, **${guild.name}**. Use \`${guild.commandPrefix}setlogchannel\` in your server to set this.`);
         return;
     }
     // get default embed

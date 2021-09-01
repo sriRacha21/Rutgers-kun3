@@ -10,7 +10,11 @@ function sendWelcomeMessage( guild, user, welcomeChannel, text ) {
     // if channel cannot be found turn to systemchannel
     channel = channel || guild.systemChannel;
     // if channel cannot be found log the event.
-    logger.log('error', `Welcome ${channel} could not be found. Consider asking the owner to reset.`);
+    if ( !channel ) {
+        logger.log('warn', `Welcome ${channel} could not be found. Consider asking the owner to reset.`);
+        guild.owner.send(`The welcome channel could not be found in your guild, **${guild.name}**. Use \`${guild.commandPrefix}setlogchannel\` in your server to set this.`);
+        return;
+    }
     // output welcome message text to a channel
     const welcomeText = text
         ? text
