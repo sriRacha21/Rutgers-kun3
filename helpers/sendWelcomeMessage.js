@@ -1,3 +1,5 @@
+const logger = require('../logger');
+
 function sendWelcomeMessage( guild, user, welcomeChannel, text ) {
     // leave if there is no welcome channel
     if (!welcomeChannel) return;
@@ -6,7 +8,9 @@ function sendWelcomeMessage( guild, user, welcomeChannel, text ) {
     // turn id into channel
     channel = guild.channels.resolve( welcomeChannel );
     // if channel cannot be found turn to systemchannel
-    // channel = channel ? channel : guild.systemChannel
+    channel = channel || guild.systemChannel;
+    // if channel cannot be found log the event.
+    logger.log('error', `Welcome ${channel} could not be found. Consider asking the owner to reset.`);
     // output welcome message text to a channel
     const welcomeText = text
         ? text

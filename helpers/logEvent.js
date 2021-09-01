@@ -1,4 +1,5 @@
 const { generateDefaultEmbed } = require('./generateDefaultEmbed');
+const logger = require('../logger');
 
 function logEvent( logInfo, extras ) {
     // get fields
@@ -15,6 +16,10 @@ function logEvent( logInfo, extras ) {
     if ( !logChannelID ) { return; }
     // set log channel
     if ( !channel ) { channel = guild.channels.resolve(logChannelID); }
+    if ( !channel ) {
+        logger.log('error', `The log channel could not be found in guild **${guild.name}**.`);
+        return;
+    }
     // get default embed
     const embed = generateDefaultEmbed( embedInfo );
     if (timestamp) { embed.setTimestamp(timestamp); }
