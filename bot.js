@@ -192,7 +192,27 @@ Turn on DM's from server members:`, { files: ['resources/setup-images/instructio
     }
     // if the bot sent one of the messageReactions and it was a wastebin and someone else sent a wastebin, delete it
     const botReaction = messageReaction.message.reactions.cache.find(mr => mr.emoji.name === '🗑' && mr.users.cache.find(u => u.id === Client.user.id));
-    if ( !!botReaction && botReaction.emoji.name === '🗑' && messageReaction.emoji.name === '🗑' ) { messageReaction.message.delete(); }
+    if ( !!botReaction && botReaction.emoji.name === '🗑' && messageReaction.emoji.name === '🗑' ) {
+        // log the deletion event
+        const startEmbed = new RichEmbed();
+        startEmbed.addField( 'In channel:', messageReaction.message.channel );
+        logEvent({
+            embedInfo: {
+                author: 'Message deleted by',
+                title: user.tag,
+                clientUser: Client.user,
+                authorThumbnail: messageReaction.message.guild.iconURL(),
+                thumbnail: user.displayAvatarURL(),
+                startingEmbed: startEmbed
+            },
+            guild: messageReaction.message.guild,
+            settings: Client.provider,
+            attachments: messageReaction.message.attachments.map(a => a.proxyURL),
+            timestamp: messageReaction.message.createdAt
+        });
+        // delete the message
+        messageReaction.message.delete();
+    }
     // use reactionListener
     // for the class command
     reactionListener.emit(`class:${user.id}:${messageReaction.message.id}:${messageReaction.emoji.name}`, Client.registry.commands.get('class'));
