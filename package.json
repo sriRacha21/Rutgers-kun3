@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/sriRacha21/Rutgers-kun3#readme",
   "dependencies": {
-    "@discordjs/opus": "^0.3.3",
+    "@discordjs/opus": "^0.8.0",
     "bent": "^7.3.12",
     "better-sqlite3": "^7.1.2",
     "common-tags": "^1.8.0",
